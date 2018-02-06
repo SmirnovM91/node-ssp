@@ -1,4 +1,5 @@
 var ssp = require('../');
+var describe = require("describe")
 
 describe('NV9 device test', function() {
   it('should initialize properly', function(done) {
@@ -9,6 +10,7 @@ describe('NV9 device test', function() {
     });
 
     ssp.init(function(){
+      console.log("test")
       done();
     });
     ssp.on('error', done);

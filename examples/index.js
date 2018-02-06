@@ -2,20 +2,22 @@
 
 var ssp = require('../');
 var notes = {
-  1:"200KZT",
-  2:"500KZT",
-  3:"1000KZT",
-  4:"2000KZT",
-  5:"5000KZT",
-  6:"10000KZT"
+  1:"1USD",
+  2:"2USD",
+  3:"5USD",
+  4:"10USD",
+  5:"20USD",
+  6:"50USD",
+  7:"100USD"
 };
 ssp = new ssp({
 //  device: '/dev/ttyACM0', //device address
-  type: "nv10usb", //device type
+  type: "nv200", //device type
   currencies:[0,1,1,1,1,0] //currencies types acceptable. Here all but 200KZT
 });
 
 ssp.init(function(){
+  console.log("init")
   ssp.on('ready', function(){
     console.log("Device is ready");
     ssp.enable();
