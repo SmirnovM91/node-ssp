@@ -31,7 +31,7 @@ module.exports = {
     "poll_with_ack": 0x56,
     "event_ack": 0x57,
     "payout_amount": function () {
-        this.sequence = 0x80;
+        this.sequence = 0x00;
         return 0x33;
     }
 };
