@@ -11,7 +11,7 @@ var notes = {
   7:"100USD"
 };
 ssp = new ssp({
-//  device: '/dev/ttyACM0', //device address
+    device: 'COM1', //device address
   type: "nv200", //device type
   currencies:[1,1,1,1,1,1] //currencies types acceptable. Here all but 200KZT
 });
