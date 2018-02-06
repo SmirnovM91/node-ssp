@@ -2,84 +2,84 @@
 
 var ssp = require('../');
 var notes = {
-  1:"1USD",
-  2:"2USD",
-  3:"5USD",
-  4:"10USD",
-  5:"20USD",
-  6:"50USD",
-  7:"100USD"
+    1: "1USD",
+    2: "2USD",
+    3: "5USD",
+    4: "10USD",
+    5: "20USD",
+    6: "50USD",
+    7: "100USD"
 };
 ssp = new ssp({
     device: 'COM1', //device address
-  type: "nv200", //device type
-  currencies:[1,1,1,1,1,1] //currencies types acceptable. Here all but 200KZT
+    type: "nv200", //device type
+    currencies: [1, 1, 1, 1, 1, 1] //currencies types acceptable. Here all but 200KZT
 });
 
-ssp.init(function(){
-  console.log("init")
-  ssp.on('ready', function(){
-    console.log("Device is ready");
-    ssp.enable();
-    ssp.commands.payout_amount(0x0A, 0x55, 0x53, 0x68, 0x58)
-  });
-  ssp.on('read_note', function(note){
-    if(note>0) {
-      console.log("GOT",notes[note]);
-      if(note === 3) {
-        // suddenly we decided that we don't need 1000 KZT
-          ssp.commands.exec("reject_banknote");
-      }
-    }
-  });
-  ssp.on('disable', function(){
-    console.log("disabled");
-  });
-  ssp.on('note_cleared_from_front', function(note){
-    console.log("note_cleared_from_front");
-  });
-  ssp.on('note_cleared_to_cashbox', function(note){
-    console.log("note_cleared_to_cashbox");
-  });
-  ssp.on('credit_note', function(note){
-    console.log("CREDIT",notes[note]);
-  });
-  ssp.on("safe_note_jam", function(note){
-    console.log("Jammed",note);
-    //TODO: some notifiaction, recording, etc.
-  });
-  ssp.on("unsafe_note_jam", function(note){
-    console.log("Jammed inside",note);
-    //TODO: some notifiaction, recording, etc.
-  });
-  ssp.on("fraud_attempt", function(note){
-    console.log("Fraud!",note);
-    //TODO: some notifiaction, recording, etc.
-  });
-  ssp.on("stacker_full", function(note){
-    console.log("I'm full, do something!");
-    ssp.disable();
-    //TODO: some notifiaction, recording, etc.
-  });
-  ssp.on("note_rejected", function(reason){
-    console.log("Rejected!",reason);
-  });
-  ssp.on("error", function(err){
-    console.log(err.code, err.message);
-  });
+ssp.init(function () {
+    console.log("init")
+    ssp.on('ready', function () {
+        console.log("Device is ready");
+        ssp.enable();
+        ssp.commands.payout_amount(0x0A, [0x55, 0x53, 0x68], 0x58)
+    });
+    ssp.on('read_note', function (note) {
+        if (note > 0) {
+            console.log("GOT", notes[note]);
+            if (note === 3) {
+                // suddenly we decided that we don't need 1000 KZT
+                ssp.commands.exec("reject_banknote");
+            }
+        }
+    });
+    ssp.on('disable', function () {
+        console.log("disabled");
+    });
+    ssp.on('note_cleared_from_front', function (note) {
+        console.log("note_cleared_from_front");
+    });
+    ssp.on('note_cleared_to_cashbox', function (note) {
+        console.log("note_cleared_to_cashbox");
+    });
+    ssp.on('credit_note', function (note) {
+        console.log("CREDIT", notes[note]);
+    });
+    ssp.on("safe_note_jam", function (note) {
+        console.log("Jammed", note);
+        //TODO: some notifiaction, recording, etc.
+    });
+    ssp.on("unsafe_note_jam", function (note) {
+        console.log("Jammed inside", note);
+        //TODO: some notifiaction, recording, etc.
+    });
+    ssp.on("fraud_attempt", function (note) {
+        console.log("Fraud!", note);
+        //TODO: some notifiaction, recording, etc.
+    });
+    ssp.on("stacker_full", function (note) {
+        console.log("I'm full, do something!");
+        ssp.disable();
+        //TODO: some notifiaction, recording, etc.
+    });
+    ssp.on("note_rejected", function (reason) {
+        console.log("Rejected!", reason);
+    });
+    ssp.on("error", function (err) {
+        console.log(err.code, err.message);
+    });
 });
 
 process.on('SIGINT', function () {
-  process.exit(0);
+    process.exit(0);
 });
 
 process.on('uncaughtException', function (err) {
-  console.log(err.stack);
-  setTimeout(function () {
-    process.exit(1);
-  }, 500);
+    console.log(err.stack);
+    setTimeout(function () {
+        process.exit(1);
+    }, 500);
 });
 
 process.on('exit', function () {
-  ssp.port && ssp.port.isOpened && ssp.disable();
+    ssp.port && ssp.port.isOpened && ssp.disable();
 });
