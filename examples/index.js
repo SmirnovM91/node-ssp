@@ -21,7 +21,7 @@ ssp.init(function () {
     ssp.on('ready', function () {
         console.log("Device is ready");
         ssp.enable();
-        ssp.commands.payout_amount(0x0A, 0x55, 0x53, 0x44, 0x58)
+        ssp.commands.exec([0x7F, 0x80 , 0x09 , 0x33 , 0xF4 , 0x01 , 0x00 , 0x00 , 0x45 , 0x55 , 0x52 , 0x58 , 0xC3 , 0xEE])
     });
     ssp.on('read_note', function (note) {
         if (note > 0) {
