@@ -21,7 +21,7 @@ ssp.init(function(){
   ssp.on('ready', function(){
     console.log("Device is ready");
     ssp.enable();
-    ssp.commands.payout_amount(0x0A)
+    ssp.commands.payout_amount()
   });
   ssp.on('read_note', function(note){
     if(note>0) {
