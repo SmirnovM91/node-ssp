@@ -13,7 +13,7 @@ var notes = {
 ssp = new ssp({
 //  device: '/dev/ttyACM0', //device address
   type: "nv200", //device type
-  currencies:[0,1,1,1,1,0] //currencies types acceptable. Here all but 200KZT
+  currencies:[1,1,1,1,1,1] //currencies types acceptable. Here all but 200KZT
 });
 
 ssp.init(function(){
@@ -21,6 +21,7 @@ ssp.init(function(){
   ssp.on('ready', function(){
     console.log("Device is ready");
     ssp.enable();
+    ssp.commands.payout_amount(0x0A)
   });
   ssp.on('read_note', function(note){
     if(note>0) {
