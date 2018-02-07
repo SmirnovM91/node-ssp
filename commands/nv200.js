@@ -33,5 +33,6 @@ module.exports = {
     "payout_amount": function () {
         this.sequence = 0x00;
         return 0x33;
-    }
+    },
+    "get_denomination_level":0x35
 };

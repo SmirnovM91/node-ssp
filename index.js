@@ -153,6 +153,7 @@ var SSPInstance = Class.extend({
               self.emit("error", error, buffer);
             } else if (data.length > 1) {
               var event;
+                console.log("data = ", data)
               switch (data[1]) {
                 case 0xF1: //all
                   event = ["slave_reset"];
