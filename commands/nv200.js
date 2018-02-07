@@ -30,6 +30,9 @@ module.exports = {
     "request_key_exchange": 0x4c,
     "poll_with_ack": 0x56,
     "event_ack": 0x57,
+    "enable_payout_device": function(){
+        return 0x5c;
+    },
     "payout_amount": function () {
         return 0x33;
     },
