@@ -22,11 +22,10 @@ ssp.init(function () {
     ssp.on('ready', function () {
         console.log("Device is ready");
         ssp.enable();
-        ssp.commands.get_denomination_level(ssp.commands.toBytesInt32(100), 0x55, 0x53, 0x44)
-        // ssp.commands.get_denomination_level(5,858368)
 
-        console.log(ssp.commands.toBytesInt32(5))
-        ssp.commands.payout_amount(ssp.commands.toBytesInt32(100), 0x55, 0x53, 0x44, 0x58)
+        ssp.commands.get_denomination_level(ssp.commands.toBytesInt32(50), 0x55, 0x53, 0x44)
+
+        ssp.commands.payout_amount(ssp.commands.toBytesInt32(50), 0x55, 0x53, 0x44, 0x58)
     });
     ssp.on('read_note', function (note) {
         if (note > 0) {

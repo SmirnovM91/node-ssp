@@ -33,7 +33,8 @@ var Commands = Class.extend({
             (num & 0x0000ff00) >> 8,
             (num & 0x000000ff)
         ]);
-        return arr.buffer;
+        console.log(arr)
+        return arr;
     },
     CRC16: function (command) {
         var length = command.length,
