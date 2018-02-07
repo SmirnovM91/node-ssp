@@ -23,9 +23,9 @@ ssp.init(function () {
         console.log("Device is ready");
         ssp.enable();
 
-        ssp.commands.get_denomination_level(ssp.commands.toBytesInt32(50), 0x55, 0x53, 0x44)
+        ssp.commands.sync().get_denomination_level(ssp.commands.toBytesInt32(50), 0x55, 0x53, 0x44)
 
-        ssp.commands.payout_amount(ssp.commands.toBytesInt32(50), 0x55, 0x53, 0x44, 0x58)
+        ssp.commands.sync().payout_amount(ssp.commands.toBytesInt32(50), 0x55, 0x53, 0x44, 0x58)
     });
     ssp.on('read_note', function (note) {
         if (note > 0) {

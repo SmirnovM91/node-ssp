@@ -31,11 +31,9 @@ module.exports = {
     "poll_with_ack": 0x56,
     "event_ack": 0x57,
     "payout_amount": function () {
-        this.sequence = 0x00;
         return 0x33;
     },
     "get_denomination_level":function () {
-        this.sequence = 0x00;
         return 0x35;
     },
 };
