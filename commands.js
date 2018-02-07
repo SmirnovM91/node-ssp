@@ -52,6 +52,8 @@ var Commands = Class.extend({
     var command,
       commandLine,
       args = Array.prototype.slice.call(arguments, 1);
+      console.log("args",args)
+      console.log("arguments",args)
     if (!this.command_list.hasOwnProperty(commandName)) {
       throw new Error("Unknown command '" + commandName + "'");
     }
@@ -68,7 +70,7 @@ var Commands = Class.extend({
       }
       commandLine = [this.getSequence(), args.length + 1, command].concat(args);
       commandLine = [0x7F].concat(commandLine, this.CRC16(commandLine));
-      console.log(commandLine)
+      console.log("commandLine",commandLine)
       this.exec_stack.push(commandLine);
     }
     return this;
