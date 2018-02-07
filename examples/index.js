@@ -21,9 +21,9 @@ ssp.init(function () {
     ssp.on('ready', function () {
         console.log("Device is ready");
         ssp.enable();
-        ssp.commands.sync().get_denomination_level(0xF4, 0x01, 0x00, 0x00, 0x55, 0x53, 0x44)
+        ssp.commands.sync().get_denomination_level(0xc8, 0x00, 0x00, 0x00, 0x55, 0x53, 0x44)
         ssp.commands.sync().enable_payout_device()
-        ssp.commands.sync().payout_amount(0xD0, 0x05, 0x00, 0x00, 0x55, 0x53, 0x44, 0x58)
+        ssp.commands.sync().payout_amount(0xc8, 0x00, 0x00, 0x00, 0x55, 0x53, 0x44, 0x58)
         // ssp.commands.sync().smart_empty();
         // ssp.commands.sync().cashbox_payout_operation_data();
 
