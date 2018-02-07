@@ -18,12 +18,15 @@ ssp = new ssp({
 
 ssp.init(function () {
     console.log("init")
+
     ssp.on('ready', function () {
         console.log("Device is ready");
         ssp.enable();
-        ssp.commands.get_denomination_level(0xF4, 0x01, 0x00, 0x00, 0x55, 0x53, 0x44)
+        ssp.commands.get_denomination_level(ssp.commands.toBytesInt32(100), 0x55, 0x53, 0x44)
         // ssp.commands.get_denomination_level(5,858368)
-        ssp.commands.payout_amount(0xF4, 0x01, 0x00, 0x00, 0x55, 0x53, 0x44, 0x58)
+
+        console.log(ssp.commands.toBytesInt32(5))
+        ssp.commands.payout_amount(ssp.commands.toBytesInt32(100), 0x55, 0x53, 0x44, 0x58)
     });
     ssp.on('read_note', function (note) {
         if (note > 0) {

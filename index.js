@@ -355,7 +355,7 @@ var SSPInstance = Class.extend({
             return c === 1 ? p += Math.pow(2, i) : p;
           }, 0);
           port.on('data', function (buffer) {
-              console.log("buffere = ", buffer)
+              console.log("buffer = ", buffer)
             var ix = 0;
             do {
               var len = buffer[2] + 5;

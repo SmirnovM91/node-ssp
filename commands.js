@@ -26,6 +26,11 @@ var Commands = Class.extend({
     getSequence: function () {
         return this.ID | (this.sequence = (this.sequence === this.sequenceNumber ? 0x00 : this.sequenceNumber));
     },
+    toBytesInt32: function (num) {
+        num &= 0xFFFFFFFF;
+        var hex = num.toString(16).toUpperCase();
+        return ("00000000" + hex).slice(-4);
+    },
     CRC16: function (command) {
         var length = command.length,
             seed = 0xFFFF,
