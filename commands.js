@@ -27,9 +27,13 @@ var Commands = Class.extend({
         return this.ID | (this.sequence = (this.sequence === this.sequenceNumber ? 0x00 : this.sequenceNumber));
     },
     toBytesInt32: function (num) {
-        num &= 0xFFFFFFFF;
-        var hex = num.toString(16).toUpperCase();
-        return ("00000000" + hex).slice(-4);
+        var arr = new Uint8Array([
+            (num & 0xff000000) >> 24,
+            (num & 0x00ff0000) >> 16,
+            (num & 0x0000ff00) >> 8,
+            (num & 0x000000ff)
+        ]);
+        return arr.buffer;
     },
     CRC16: function (command) {
         var length = command.length,
