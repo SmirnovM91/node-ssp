@@ -30,12 +30,10 @@ module.exports = {
     "request_key_exchange": 0x4c,
     "poll_with_ack": 0x56,
     "event_ack": 0x57,
-    "payout_amount": function (array, currency) {
-        console.log(array, currency)
+    "payout_amount": function () {
         return 0x33;
     },
-    "get_denomination_level": function (array, currency) {
-        console.log(array, currency)
+    "get_denomination_level": function () {
         return 0x35;
     },
 };
