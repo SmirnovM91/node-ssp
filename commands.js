@@ -52,8 +52,7 @@ var Commands = Class.extend({
         var command,
             commandLine,
             args = Array.prototype.slice.call(arguments, 1);
-        console.log("args", args)
-        console.log("arguments", args)
+        console.log("arguments", arguments)
         if (!this.command_list.hasOwnProperty(commandName)) {
             throw new Error("Unknown command '" + commandName + "'");
         }
