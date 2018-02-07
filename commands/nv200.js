@@ -36,4 +36,10 @@ module.exports = {
     "get_denomination_level": function () {
         return 0x35;
     },
+    "smart_empty":function() {
+        return 0x52
+    },
+    "cashbox_payout_operation_data":function(){
+        return 0x53
+    }
 };
