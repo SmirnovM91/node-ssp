@@ -99,11 +99,14 @@ var Commands = Class.extend({
             });
         }
     },
-    parseHexString: function (str) {
+    parseHexString: function (str, count) {
         console.log(str)
         var a = [];
         for (var i = 0, len = str.length; i < len; i += 2) {
             a.unshift(parseInt(str.substr(i, 2), 16));
+        }
+        for(var i = length; i < count; i++){
+            a.push(0)
         }
         return a;
     }

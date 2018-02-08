@@ -43,13 +43,13 @@ var SSPInstance = Class.extend({
             var keyPair = forge.pki.rsa.generateKeyPair(64);
             var generatorKey = keyPair.privateKey.p;
             var modulusKey = keyPair.privateKey.q;
-            var generatorArray = commands.parseHexString(generatorKey.toString(16))
-            var modulusArray = commands.parseHexString(modulusKey.toString(16))
+            var generatorArray = commands.parseHexString(generatorKey.toString(16), 8)
+            var modulusArray = commands.parseHexString(modulusKey.toString(16), 8)
             commands.set_generator.apply(this, generatorArray)
             commands.set_modulus.apply(this, modulusArray)
             var hostIntKey = getRandomInt(5) ^ generatorKey % modulusKey
 
-            var hostIntArray = commands.parseHexString(hostIntKey.toString(16))
+            var hostIntArray = commands.parseHexString(hostIntKey.toString(16), 8)
             commands.request_key_exchange.apply(this, hostIntArray)
             console.log(generatorArray)
             console.log(modulusArray)
