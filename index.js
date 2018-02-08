@@ -43,17 +43,15 @@ var SSPInstance = Class.extend({
             var keyPair = forge.pki.rsa.generateKeyPair(64);
             var generatorKey = keyPair.privateKey.p;
             var modulusKey = keyPair.privateKey.q;
-            var generatorArray = commands.parseHexString(generatorKey.toString(16), 8)
-            var modulusArray = commands.parseHexString(modulusKey.toString(16), 8)
-            commands.set_generator.apply(this, generatorArray)
-            commands.set_modulus.apply(this, modulusArray)
             var hostIntKey = getRandomInt(5) ^ generatorKey % modulusKey
 
+            var generatorArray = commands.parseHexString(generatorKey.toString(16), 8)
+            var modulusArray = commands.parseHexString(modulusKey.toString(16), 8)
             var hostIntArray = commands.parseHexString(hostIntKey.toString(16), 8)
+
+            commands.set_generator.apply(this, generatorArray)
+            commands.set_modulus.apply(this, modulusArray)
             commands.request_key_exchange.apply(this, hostIntArray)
-            console.log(generatorArray)
-            console.log(modulusArray)
-            console.log(hostIntArray)
         }
         commands.exec("enable", function () {
             cb && cb();
@@ -133,7 +131,6 @@ var SSPInstance = Class.extend({
             port.open(function (err) {
                 function parseBuffer(buffer) {
                     var data, buf, error, crc;
-                    console.log(buffer)
                     if (buffer[0] === 0x7F) {
                         buf = buffer.toJSON();
                         if (buf.data) {
@@ -384,6 +381,7 @@ var SSPInstance = Class.extend({
                     }, 0);
                     port.on('data', function (buffer) {
                         var ix = 0;
+                        console.log(buffer)
                         do {
                             var len = buffer[2] + 5;
                             var buf = new Buffer(len);
