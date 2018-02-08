@@ -134,6 +134,7 @@ var SSPInstance = Class.extend({
                 function parseBuffer(buffer) {
                     var data, buf, error, crc;
                     if (buffer[0] === 0x7F) {
+                        console.log("reply", buffer)
                         buf = buffer.toJSON();
                         if (buf.data) {
                             buf = buf.data;
