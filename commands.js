@@ -26,20 +26,10 @@ var Commands = Class.extend({
     getSequence: function () {
         return this.ID | (this.sequence = (this.sequence === this.sequenceNumber ? 0x00 : this.sequenceNumber));
     },
-    toBytesInt32: function (num) {
-        var arr = new Uint8Array([
-            (num & 0xff000000) >> 24,
-            (num & 0x00ff0000) >> 16,
-            (num & 0x0000ff00) >> 8,
-            (num & 0x000000ff)
-        ]);
-        console.log(arr)
-        return arr;
-    },
     CRC16: function (command) {
         var length = command.length,
             seed = 0xFFFF,
-            poly = 0x11021,
+            poly = 0x8005,
             crc = seed;
 
 
