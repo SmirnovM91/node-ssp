@@ -39,7 +39,7 @@ var Commands = Class.extend({
     CRC16: function (command) {
         var length = command.length,
             seed = 0xFFFF,
-            poly = 0x8408,
+            poly = 0x8005,
             crc = seed;
 
 
@@ -78,10 +78,8 @@ var Commands = Class.extend({
                 command = this.command_list[commandName];
             }
             commandLine = [this.getSequence(), args.length + 1, command].concat(args);
-            console.log("commandLine", commandLine)
-
             commandLine = [0x7F].concat(commandLine, this.CRC16(commandLine));
-            console.log("CRC16", this.CRC16(commandLine))
+            console.log("commandLine", commandLine)
             this.exec_stack.push(commandLine);
         }
         return this;
