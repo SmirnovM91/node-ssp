@@ -102,7 +102,7 @@ var Commands = Class.extend({
     parseHexString: function (str) {
         var a = [];
         for (var i = 0, len = str.length; i < len; i += 2) {
-            a.push(str.substr(i, 2));
+            a.push(parseInt(str.substr(i, 2)).toString(16));
         }
         return a;
     }
