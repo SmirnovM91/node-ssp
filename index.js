@@ -122,7 +122,7 @@ var SSPInstance = Class.extend({
                 parity: options.parity,
                 parser: serialport.parsers.raw
             }, false);
-            console.log(this.port.isOpen())
+            console.log(port.isOpen())
 
             self.port = port;
             commands = self.commands = new Commands(port, options.type, options.sspID, options.sequence);
