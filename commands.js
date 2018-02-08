@@ -89,7 +89,7 @@ var Commands = Class.extend({
             cb && cb();
         } else {
             var buf = new Buffer(this.exec_stack.shift()), self = this;
-            console.log("buf",buf)
+            console.log("buf", buf)
             this.client.write(buf, function () {
                 self.client.drain(function () {
                     setTimeout(function () {
@@ -98,7 +98,18 @@ var Commands = Class.extend({
                 });
             });
         }
+    },
+    parseHexString: function (str) {
+        var result = [];
+        while (str.length >= 8) {
+            result.push(parseInt(str.substring(0, 8), 16));
+
+            str = str.substring(8, str.length);
+        }
+
+        return result;
     }
+
 });
 
 module.exports = Commands;

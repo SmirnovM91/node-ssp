@@ -3,7 +3,9 @@ var serialport = require('serialport'),
     fs = require('fs'),
     EventEmitter = require('events').EventEmitter,
     Commands = require('./commands'),
-    Class = require('./class');
+    Class = require('./class'),
+    forge = require('node-forge');
+
 
 var SSPInstance = Class.extend({
     options: {},
@@ -368,10 +370,20 @@ var SSPInstance = Class.extend({
                             ix += len;
                         } while (ix < buffer.length);
                     });
+
+                    var negotiateKeys = function(){
+                        var keyPair = forge.pki.rsa.generateKeyPair(64);
+                        var generatorKey = keyPair.privateKey.p;
+                        var modulusKey = keyPair.privateKey.q;
+                        var array = commands.parseHexString(generatorKey.toString(16))
+                        console.log(array)
+                        commands.set_generator.apply(this. array)
+                    }
                     //wait a bit for port buffer to empty
                     setTimeout(function () {
                         commands.sync().enable_higher_protocol()
                             .set_channel_inhibits(low, 0x00);
+                        negotiateKeys()
                         if (enableOnInit) {
                             cb && cb();
                             self.enable(function () {

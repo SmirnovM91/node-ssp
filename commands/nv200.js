@@ -30,7 +30,7 @@ module.exports = {
     "request_key_exchange": 0x4c,
     "poll_with_ack": 0x56,
     "event_ack": 0x57,
-    "enable_payout_device": function(){
+    "enable_payout_device": function () {
         this.sequence = 0x80;
         return 0x5c;
     },
@@ -38,11 +38,11 @@ module.exports = {
         this.sequence = 0x80;
         return 0x33;
     },
-    "get_denomination_route": function(){
+    "get_denomination_route": function () {
         this.sequence = 0x80;
         return 0x3C;
     },
-    "set_denomination_route": function(){
+    "set_denomination_route": function () {
         this.sequence = 0x80;
         return 0x3B;
     },
@@ -50,10 +50,10 @@ module.exports = {
         this.sequence = 0x80;
         return 0x35;
     },
-    "smart_empty":function() {
+    "smart_empty": function () {
         return 0x52
     },
-    "cashbox_payout_operation_data":function(){
+    "cashbox_payout_operation_data": function () {
         return 0x53
     }
 };

@@ -32,6 +32,7 @@
   "homepage": "https://github.com/soulman-is-good/node-ssp",
   "dependencies": {
     "crc": "^3.5.0",
+    "node-forge": "^0.7.1",
     "serialport": "^3.0.0"
   }
 }
