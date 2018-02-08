@@ -86,6 +86,8 @@ var SSPInstance = Class.extend({
         }
         cb = cb || function () {
             };
+
+        console.log(this.port.isOpen())
         if (this.port && this.port.isOpen()) {
             this.port.close(function () {
                 initializeDevice();
