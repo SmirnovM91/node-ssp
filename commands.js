@@ -29,7 +29,7 @@ var Commands = Class.extend({
     CRC16: function (command) {
         var length = command.length,
             seed = 0xFFFF,
-            poly = 0x8005,
+            poly = 0x1021,
             crc = seed;
 
 
