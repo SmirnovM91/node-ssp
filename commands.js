@@ -89,7 +89,7 @@ var Commands = Class.extend({
             cb && cb();
         } else {
             var buf = new Buffer(this.exec_stack.shift()), self = this;
-            console.log("buf", buf)
+            console.log("command buffer", buf)
             this.client.write(buf, function () {
                 self.client.drain(function () {
                     setTimeout(function () {
