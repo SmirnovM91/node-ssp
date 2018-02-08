@@ -134,11 +134,11 @@ var SSPInstance = Class.extend({
                 function parseBuffer(buffer) {
                     var data, buf, error, crc;
                     if (buffer[0] === 0x7F) {
-                        console.log("reply", buffer)
                         buf = buffer.toJSON();
                         if (buf.data) {
                             buf = buf.data;
                         }
+                        console.log("buf.data", buf)
                         data = buf.slice(3, 3 + buffer[2]);
                         crc = self.commands.CRC16(buf.slice(1, buf[2] + 3));
                         if (buf[buf.length - 2] !== crc[0] && buf[buf.length - 1] !== crc[1]) {
