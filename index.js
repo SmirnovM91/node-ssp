@@ -6,7 +6,6 @@ var serialport = require('serialport'),
     Class = require('./class'),
     forge = require('node-forge');
 
-
 var SSPInstance = Class.extend({
     options: {},
     port: null,
@@ -375,9 +374,12 @@ var SSPInstance = Class.extend({
                         var keyPair = forge.pki.rsa.generateKeyPair(64);
                         var generatorKey = keyPair.privateKey.p;
                         var modulusKey = keyPair.privateKey.q;
-                        var array = commands.parseHexString(generatorKey.toString(16))
-                        console.log(array)
-                        commands.set_generator.apply(this. array)
+                        var generatorArray = commands.parseHexString(generatorKey.toString(16))
+                        var modulusArray = commands.parseHexString(modulusKey.toString(16))
+                        console.log(generatorArray)
+                        console.log(modulusArray)
+                        commands.set_generator.apply(this. generatorArray)
+                        commands.set_modulus.apply(this. modulusArray)
                     }
                     //wait a bit for port buffer to empty
                     setTimeout(function () {

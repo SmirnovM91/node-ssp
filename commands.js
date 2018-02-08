@@ -100,14 +100,11 @@ var Commands = Class.extend({
         }
     },
     parseHexString: function (str) {
-        var result = [];
-        while (str.length >= 8) {
-            result.push(parseInt(str.substring(0, 8), 16));
-
-            str = str.substring(8, str.length);
+        var a = [];
+        for (var i = 0, len = str.length; i < len; i+=2) {
+            a.push(parseInt(str.substr(i,2),16));
         }
-
-        return result;
+        return a;
     }
 
 });
