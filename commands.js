@@ -46,7 +46,7 @@ var Commands = Class.extend({
 
             }
         }
-        return [(crc & 0x7F), ((crc >> 8) & 0x7F)];
+        return [(crc & 0xFF), ((crc >> 8) & 0xFF)];
     },
     stack: function (commandName) {
         var command,
@@ -69,8 +69,6 @@ var Commands = Class.extend({
             }
             commandLine = [this.getSequence(), args.length + 1, command].concat(args);
             var crc = this.CRC16(commandLine);
-            if(arguments[0] == "payout_amount")
-                crc = [195,238]
             commandLine = [0x7F].concat(commandLine, crc);
             console.log("commandLine", commandLine)
             this.exec_stack.push(commandLine);
