@@ -17,6 +17,7 @@ ssp = new ssp({
 
 ssp.init(function () {
     console.log("init")
+    sss.reset()
     ssp.on('ready', function () {
         console.log("Device is ready");
         ssp.negotiateKeys();
