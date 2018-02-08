@@ -34,9 +34,11 @@ module.exports = {
         return 0x5c;
     },
     "payout_amount": function () {
+        this.sequence = 0x80;
         return 0x33;
     },
     "get_denomination_level": function () {
+        this.sequence = 0x80;
         return 0x35;
     },
     "smart_empty":function() {
