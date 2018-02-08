@@ -56,7 +56,7 @@ var Commands = Class.extend({
 
             }
         }
-        return [(crc & 0xFF), ((crc >> 8) & 0xFF)];
+        return [(crc & 0x7F), ((crc >> 8) & 0x7F)];
     },
     stack: function (commandName) {
         var command,
