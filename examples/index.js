@@ -20,10 +20,10 @@ ssp.init(function () {
     ssp.on('ready', function () {
         console.log("Device is ready");
         ssp.enable();
-        ssp.commands.sync().enable()
-        ssp.commands.enable_payout_device()
-        ssp.commands.get_denomination_route(0x64, 0x00, 0x00, 0x00, 0x55, 0x53, 0x44)
-        ssp.commands.set_denomination_route(0x01, 0x64, 0x00, 0x00, 0x00, 0x55, 0x53, 0x44)
+        // ssp.commands.sync().enable()
+        // ssp.commands.enable_payout_device()
+        // ssp.commands.get_denomination_route(0x64, 0x00, 0x00, 0x00, 0x55, 0x53, 0x44)
+        // ssp.commands.set_denomination_route(0x01, 0x64, 0x00, 0x00, 0x00, 0x55, 0x53, 0x44)
         // ssp.commands.get_denomination_level(0x64, 0x00, 0x00, 0x00, 0x55, 0x53, 0x44)
         // ssp.commands.payout_amount(0x64, 0x00, 0x00, 0x00, 0x55, 0x53, 0x44, 0x58)
         // ssp.commands.sync().smart_empty();

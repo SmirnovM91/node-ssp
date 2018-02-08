@@ -35,10 +35,29 @@ var SSPInstance = Class.extend({
             self.pollID = setTimeout(function () {
                 commands.exec("poll", wait);
             }, 400);
-        };
+        }
+        var getRandomInt = function(max) {
+            return Math.floor(Math.random() * Math.floor(max));
+        }
+        var negotiateKeys = function(){
+            var keyPair = forge.pki.rsa.generateKeyPair(64);
+            var generatorKey = keyPair.privateKey.p;
+            var modulusKey = keyPair.privateKey.q;
+            var generatorArray = commands.parseHexString(generatorKey.toString(16))
+            var modulusArray = commands.parseHexString(modulusKey.toString(16))
+            console.log(generatorArray)
+            console.log(modulusArray)
+            commands.set_generator.apply(this, generatorArray)
+            commands.set_modulus.apply(this, modulusArray)
+            var hostIntKey = getRandomInt(5) ^ generatorArray % modulusArray
+
+            var hostIntArray = commands.parseHexString(hostIntKey.toString(16))
+            commands.request_key_exchange.apply(this, hostIntArray)
+        }
         commands.exec("enable", function () {
             cb && cb();
             wait();
+            negotiateKeys()
         });
     },
     disable: function (cb) {
@@ -370,22 +389,10 @@ var SSPInstance = Class.extend({
                         } while (ix < buffer.length);
                     });
 
-                    var negotiateKeys = function(){
-                        var keyPair = forge.pki.rsa.generateKeyPair(64);
-                        var generatorKey = keyPair.privateKey.p;
-                        var modulusKey = keyPair.privateKey.q;
-                        var generatorArray = commands.parseHexString(generatorKey.toString(16))
-                        var modulusArray = commands.parseHexString(modulusKey.toString(16))
-                        console.log(generatorArray)
-                        console.log(modulusArray)
-                        commands.set_generator.apply(this, generatorArray)
-                        commands.set_modulus.apply(this, modulusArray)
-                    }
                     //wait a bit for port buffer to empty
                     setTimeout(function () {
                         commands.sync().enable_higher_protocol()
                             .set_channel_inhibits(low, 0x00);
-                        negotiateKeys()
                         if (enableOnInit) {
                             cb && cb();
                             self.enable(function () {
