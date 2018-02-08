@@ -10,7 +10,7 @@ var notes = {
     6: "100USD"
 };
 ssp = new ssp({
-    // device: 'COM1', //device address
+    device: 'COM1', //device address
     type: "nv200", //device type
     currencies: [1, 1, 1, 1, 1, 1] //currencies types acceptable. Here all but 100USD
 });
