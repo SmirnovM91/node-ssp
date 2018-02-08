@@ -105,7 +105,7 @@ var Commands = Class.extend({
         for (var i = 0, len = str.length; i < len; i += 2) {
             a.unshift(parseInt(str.substr(i, 2), 16));
         }
-        for(var i = length; i < count; i++){
+        for(var i = a.length; i < count; i++){
             a.push(0)
         }
         return a;
