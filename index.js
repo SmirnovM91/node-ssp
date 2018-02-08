@@ -378,8 +378,8 @@ var SSPInstance = Class.extend({
                         var modulusArray = commands.parseHexString(modulusKey.toString(16))
                         console.log(generatorArray)
                         console.log(modulusArray)
-                        commands.set_generator.apply(this. generatorArray)
-                        commands.set_modulus.apply(this. modulusArray)
+                        commands.set_generator.apply(this, generatorArray)
+                        commands.set_modulus.apply(this, modulusArray)
                     }
                     //wait a bit for port buffer to empty
                     setTimeout(function () {
