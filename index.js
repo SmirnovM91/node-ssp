@@ -29,6 +29,25 @@ var SSPInstance = Class.extend({
             throw new Error("Unknown device type '" + options.type + "'");
         }
     },
+    negotiateKeys: function(){
+        var commands = this.commands, self = this;
+        var getRandomInt = function(max) {
+            return Math.floor(Math.random() * Math.floor(max));
+        }
+
+        var keyPair = forge.pki.rsa.generateKeyPair(64);
+        var generatorKey = keyPair.privateKey.p;
+        var modulusKey = keyPair.privateKey.q;
+        var hostIntKey = getRandomInt(5) ^ generatorKey % modulusKey
+
+        var generatorArray = commands.parseHexString(generatorKey.toString(16), 8)
+        var modulusArray = commands.parseHexString(modulusKey.toString(16), 8)
+        var hostIntArray = commands.parseHexString(hostIntKey.toString(16), 8)
+
+        commands.set_generator.apply(this, generatorArray)
+        commands.set_modulus.apply(this, modulusArray)
+        commands.request_key_exchange.apply(this, hostIntArray)
+    },
     enable: function (cb) {
         var commands = this.commands, self = this;
         var wait = function () {
@@ -36,27 +55,9 @@ var SSPInstance = Class.extend({
                 commands.exec("poll", wait);
             }, 400);
         }
-        var getRandomInt = function(max) {
-            return Math.floor(Math.random() * Math.floor(max));
-        }
-        var negotiateKeys = function(){
-            var keyPair = forge.pki.rsa.generateKeyPair(64);
-            var generatorKey = keyPair.privateKey.p;
-            var modulusKey = keyPair.privateKey.q;
-            var hostIntKey = getRandomInt(5) ^ generatorKey % modulusKey
-
-            var generatorArray = commands.parseHexString(generatorKey.toString(16), 8)
-            var modulusArray = commands.parseHexString(modulusKey.toString(16), 8)
-            var hostIntArray = commands.parseHexString(hostIntKey.toString(16), 8)
-
-            commands.set_generator.apply(this, generatorArray)
-            commands.set_modulus.apply(this, modulusArray)
-            commands.request_key_exchange.apply(this, hostIntArray)
-        }
         commands.exec("enable", function () {
             cb && cb();
             wait();
-            negotiateKeys()
         });
     },
     disable: function (cb) {

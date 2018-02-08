@@ -19,8 +19,9 @@ ssp.init(function () {
     console.log("init")
     ssp.on('ready', function () {
         console.log("Device is ready");
-        ssp.enable();
+        ssp.negotiateKeys();
         ssp.commands.sync().enable()
+        ssp.enable();
         // ssp.commands.enable_payout_device()
         // ssp.commands.get_denomination_route(0x64, 0x00, 0x00, 0x00, 0x55, 0x53, 0x44)
         // ssp.commands.set_denomination_route(0x01, 0x64, 0x00, 0x00, 0x00, 0x55, 0x53, 0x44)
