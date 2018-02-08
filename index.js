@@ -45,14 +45,15 @@ var SSPInstance = Class.extend({
             var modulusKey = keyPair.privateKey.q;
             var generatorArray = commands.parseHexString(generatorKey.toString(16))
             var modulusArray = commands.parseHexString(modulusKey.toString(16))
-            console.log(generatorArray)
-            console.log(modulusArray)
             commands.set_generator.apply(this, generatorArray)
             commands.set_modulus.apply(this, modulusArray)
-            var hostIntKey = getRandomInt(5) ^ generatorArray % modulusArray
+            var hostIntKey = getRandomInt(5) ^ generatorKey % modulusKey
 
             var hostIntArray = commands.parseHexString(hostIntKey.toString(16))
             commands.request_key_exchange.apply(this, hostIntArray)
+            console.log(generatorArray)
+            console.log(modulusArray)
+            console.log(hostIntArray)
         }
         commands.exec("enable", function () {
             cb && cb();
