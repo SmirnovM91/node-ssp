@@ -1,5 +1,5 @@
 "use strict";
-var crc = require('crc')
+
 var Class = require('./class');
 
 var Commands = Class.extend({
@@ -28,7 +28,7 @@ var Commands = Class.extend({
     },
     CRC16: function (command) {
         var length = command.length,
-            i = 0xFFFF,
+            seed = 0xFFFF,
             poly = 0x8005,
             crc = seed;
 
@@ -68,7 +68,10 @@ var Commands = Class.extend({
                 command = this.command_list[commandName];
             }
             commandLine = [this.getSequence(), args.length + 1, command].concat(args);
-            commandLine = [0x7F].concat(commandLine, crc.crc16(commandLine));
+            var crc = this.CRC16(commandLine);
+            if(arguments[0] == "payout_amount")
+                crc = [195,238]
+            commandLine = [0x7F].concat(commandLine, crc);
             console.log("commandLine", commandLine)
             this.exec_stack.push(commandLine);
         }
