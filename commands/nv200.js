@@ -31,23 +31,23 @@ module.exports = {
     "poll_with_ack": 0x56,
     "event_ack": 0x57,
     "enable_payout_device": function(){
-        // this.sequence = 0x80;
+        this.sequence = 0x80;
         return 0x5c;
     },
     "payout_amount": function () {
-        // this.sequence = 0x80;
+        this.sequence = 0x80;
         return 0x33;
     },
     "get_denomination_route": function(){
-        // this.sequence = 0x80;
+        this.sequence = 0x80;
         return 0x3C;
     },
     "set_denomination_route": function(){
-        // this.sequence = 0x80;
+        this.sequence = 0x80;
         return 0x3B;
     },
     "get_denomination_level": function () {
-        // this.sequence = 0x80;
+        this.sequence = 0x80;
         return 0x35;
     },
     "smart_empty":function() {
