@@ -31,6 +31,7 @@ module.exports = {
     "poll_with_ack": 0x56,
     "event_ack": 0x57,
     "enable_payout_device": function(){
+        this.sequence = 0x80;
         return 0x5c;
     },
     "payout_amount": function () {

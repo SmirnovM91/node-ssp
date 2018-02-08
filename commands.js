@@ -68,7 +68,7 @@ var Commands = Class.extend({
                 command = this.command_list[commandName];
             }
             commandLine = [this.getSequence(), args.length + 1, command].concat(args);
-            var crc = [];//this.CRC16(commandLine);
+            var crc = this.CRC16(commandLine);
             commandLine = [0x7F].concat(commandLine, crc);
             console.log("commandLine", commandLine)
             this.exec_stack.push(commandLine);
