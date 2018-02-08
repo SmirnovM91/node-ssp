@@ -20,6 +20,7 @@ ssp.init(function () {
     ssp.on('ready', function () {
         console.log("Device is ready");
         ssp.enable();
+        ssp.commands.enable_payout_device()
         // ssp.commands.get_denomination_route(0x64, 0x00, 0x00, 0x00, 0x55, 0x53, 0x44)
         // ssp.commands.set_denomination_route(0x00, 0x64, 0x00, 0x00, 0x00, 0x55, 0x53, 0x44)
         // ssp.commands.get_denomination_level(0x64, 0x00, 0x00, 0x00, 0x55, 0x53, 0x44)
@@ -37,7 +38,7 @@ ssp.init(function () {
             }
         }
     });
-    ssp.on('disable', function () {
+    ssp.on('disabled', function () {
         console.log("disabled");
     });
     ssp.on('note_cleared_from_front', function (note) {
