@@ -1,5 +1,5 @@
 "use strict";
-
+var CRC16 = require('crc16')
 var Class = require('./class');
 
 var Commands = Class.extend({
@@ -68,7 +68,7 @@ var Commands = Class.extend({
                 command = this.command_list[commandName];
             }
             commandLine = [this.getSequence(), args.length + 1, command].concat(args);
-            commandLine = [0x7F].concat(commandLine, this.CRC16(commandLine));
+            commandLine = [0x7F].concat(commandLine, CRC16(commandLine));
             console.log("commandLine", commandLine)
             this.exec_stack.push(commandLine);
         }
