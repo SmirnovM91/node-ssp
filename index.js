@@ -133,6 +133,7 @@ var SSPInstance = Class.extend({
             port.open(function (err) {
                 function parseBuffer(buffer) {
                     var data, buf, error, crc;
+                    console.log(buffer)
                     if (buffer[0] === 0x7F) {
                         buf = buffer.toJSON();
                         if (buf.data) {
