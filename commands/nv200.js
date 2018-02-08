@@ -37,6 +37,14 @@ module.exports = {
         this.sequence = 0x80;
         return 0x33;
     },
+    "get_denomination_route": function(){
+        this.sequence = 0x80;
+        return 0x3C;
+    },
+    "set_denomination_route": function(){
+        this.sequence = 0x80;
+        return 0x3B;
+    },
     "get_denomination_level": function () {
         this.sequence = 0x80;
         return 0x35;
