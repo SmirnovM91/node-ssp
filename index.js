@@ -87,7 +87,6 @@ var SSPInstance = Class.extend({
         cb = cb || function () {
             };
 
-        console.log(this.port.isOpen())
         if (this.port && this.port.isOpen()) {
             this.port.close(function () {
                 initializeDevice();
@@ -123,6 +122,8 @@ var SSPInstance = Class.extend({
                 parity: options.parity,
                 parser: serialport.parsers.raw
             }, false);
+            console.log(this.port.isOpen())
+
             self.port = port;
             commands = self.commands = new Commands(port, options.type, options.sspID, options.sequence);
             port.on('close', function () {
