@@ -146,7 +146,7 @@ var SSPInstance = Class.extend({
 
                         if (buf[buf.length - 2] !== crc[0] && buf[buf.length - 1] !== crc[1]) {
                             console.log('Wrong CRC from validator')
-                            self.emit('error', new Error('Wrong CRC from validator'), buffer, crc);
+                            // self.emit('error', new Error('Wrong CRC from validator'), buffer, crc);
                             // return;
                         }
                         error = new Error("New error");
@@ -182,6 +182,7 @@ var SSPInstance = Class.extend({
                             self.emit("error", error, buffer);
                         } else if (data.length > 1) {
                             var event;
+                            console.log(data)
                             switch (data[1]) {
                                 case 0xF1: //all
                                     event = ["slave_reset"];
