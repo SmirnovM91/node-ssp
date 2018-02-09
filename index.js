@@ -182,8 +182,10 @@ var SSPInstance = Class.extend({
                             self.emit("error", error, buffer);
                         } else if (data.length > 1) {
                             var event;
+                            console.log(data.length)
                             if (data.length > 3) {
                                 event = ["slave_intermediate_key"].concat[data]
+                                console.log(event)
                             } else {
                                 switch (data[1]) {
                                     case 0xF1: //all
