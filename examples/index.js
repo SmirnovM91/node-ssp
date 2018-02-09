@@ -1,5 +1,5 @@
 "use strict";
-
+var convertHex = require("convert-hex")
 var ssp = require('../');
 var notes = {
     1: "1USD",
@@ -75,8 +75,8 @@ ssp.init(function () {
     ssp.on("error", function (err) {
         console.log(err.code, err.message);
     });
-    ssp.on("data", function(data){
-        console.log(data)
+    ssp.on("slave_intermediate_key", function(data){
+        console.log(data, convertHex(data.reverse()))
     })
 });
 

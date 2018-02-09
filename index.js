@@ -371,7 +371,7 @@ var SSPInstance = Class.extend({
                                     event = ["note_rejected", data[1]];
                                     break;
                                 default:
-                                    event = ["data"].concat[data]
+                                    event = ["slave_intermediate_key"].concat[data]
                                     break;
                             }
                             event && self.emit.apply(self, event);
