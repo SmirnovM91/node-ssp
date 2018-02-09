@@ -90,7 +90,8 @@ var Commands = Class.extend({
 
             //encryptions in here
             if(self.keys !=null){
-                var encrypted_data = publicEncrypt.publicEncrypt(self.keys.fixedKey+""+self.keys.variableKey,eCommandLine);
+                var buffer = new Buffer(eCommandLine)
+                var encrypted_data = publicEncrypt.publicEncrypt(self.keys.fixedKey+""+self.keys.variableKey,buffer);
                 console.log(encrypted_data)
             }
             eCommandLine = [STEX].concat(eCommandLine)
