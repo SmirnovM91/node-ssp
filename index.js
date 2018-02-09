@@ -146,6 +146,7 @@ var SSPInstance = Class.extend({
                         console.log("data", data)
 
                         crc = self.commands.CRC16(buf.slice(1, buf[2] + 3));
+                        console.log("crc",crc)
                         if (buf[buf.length - 2] !== crc[0] && buf[buf.length - 1] !== crc[1]) {
                             console.log('Wrong CRC from validator', buffer, crc)
                             // self.emit('error', new Error('Wrong CRC from validator'), buffer, crc);
