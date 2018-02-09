@@ -9,6 +9,7 @@ var Commands = Class.extend({
     setKeys:function(keys){
         var self = this;
         self.keys = keys
+        console.log(keys)
     },
     initialize: function (socket, type, ID, sequence) {
         var self = this;
@@ -88,8 +89,10 @@ var Commands = Class.extend({
 
 
             //encryptions in here
-            var encrypted_data = publicEncrypt.publicEncrypt(self.keys.fixedKey+""+self.keys.variableKey,eCommandLine);
-            console.log(encrypted_data)
+            if(self.keys !=null){
+                var encrypted_data = publicEncrypt.publicEncrypt(self.keys.fixedKey+""+self.keys.variableKey,eCommandLine);
+                console.log(encrypted_data)
+            }
             eCommandLine = [STEX].concat(eCommandLine)
             console.log("eCommandLine",eCommandLine)
 
