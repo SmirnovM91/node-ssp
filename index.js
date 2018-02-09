@@ -184,7 +184,6 @@ var SSPInstance = Class.extend({
                             var event;
                             if (data.length > 3) {
                                 event = ["slave_intermediate_key"].concat(data)
-                                console.log(event)
                             } else {
                                 switch (data[1]) {
                                     case 0xF1: //all
@@ -375,7 +374,6 @@ var SSPInstance = Class.extend({
                                         break;
                                 }
                             }
-                            console.log(event)
                             event && self.emit.apply(self, event);
                         }
                     } else {
