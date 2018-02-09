@@ -426,6 +426,7 @@ var SSPInstance = Class.extend({
                             var len = buffer[2] + 5;
                             var buf = new Buffer(len);
                             buffer.copy(buf, 0, ix, ix + len);
+                            console.log("buf", buf)
                             parseBuffer(buf);
                             ix += len;
                         } while (ix < buffer.length);
