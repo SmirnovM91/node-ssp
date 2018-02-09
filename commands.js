@@ -68,8 +68,9 @@ var Commands = Class.extend({
             }
             var LENGTH = args.length + 1
             var SEQ_SLAVE_ID = this.getSequence()
-            var STEX = 0x7E
             var DATA = [command].concat(args)
+
+            var STEX = 0x7E
             var eLENGTH = DATA.length;
             var eCOUNT = 0x01
             var eDATA = DATA
@@ -81,12 +82,12 @@ var Commands = Class.extend({
             console.log("eCommandLine",eCommandLine)
 
             commandLine = [SEQ_SLAVE_ID, LENGTH].concat(DATA);
-
             var crc = this.CRC16(commandLine);
             var STX = 0x7F
 
             commandLine = [STX].concat(commandLine, crc);
 
+            console.log(args)
             this.exec_stack.push(commandLine);
         }
         return this;
@@ -105,7 +106,6 @@ var Commands = Class.extend({
             cb && cb();
         } else {
             var buf = new Buffer(this.exec_stack.shift()), self = this;
-            console.log("command buffer", buf)
             this.client.write(buf, function () {
                 self.client.drain(function () {
                     setTimeout(function () {
