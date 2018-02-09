@@ -5,8 +5,8 @@ var Class = require('./class');
 var Commands = Class.extend({
     command_list: null,
     exec_stack: [],
-    keys:null,
-    setKeys:function(keys){
+    keys: null,
+    setKeys: function (keys) {
         var self = this;
         self.keys = keys
         console.log(keys)
@@ -84,18 +84,15 @@ var Commands = Class.extend({
             var ePACKING = 0x00
             var eCommandLine = [eLENGTH, eCOUNT].concat(eDATA, ePACKING)
             var eCRC = this.CRC16(eCommandLine);
-            console.log("eCommandLine",eCommandLine)
+            console.log("eCommandLine", eCommandLine)
             eCommandLine = eCommandLine.concat(eCRC)
 
-
-            //encryptions in here
-            if(self.keys !=null){
-                var buffer = new Buffer(eCommandLine)
-                var encrypted_data = CryptoJS.AES.encrypt(buffer, self.keys.fixedKey+""+self.keys.variableKey);
+            if (self.keys != null) {
+                var encrypted_data = CryptoJS.AES.encrypt(this.byteToHexString(eCommandLine), self.keys.fixedKey + "" + self.keys.variableKey);
                 console.log(encrypted_data)
             }
             eCommandLine = [STEX].concat(eCommandLine)
-            console.log("eCommandLine",eCommandLine)
+            console.log("eCommandLine", eCommandLine)
 
             commandLine = [SEQ_SLAVE_ID, LENGTH].concat(DATA);
             var crc = this.CRC16(commandLine);
@@ -130,6 +127,17 @@ var Commands = Class.extend({
                 });
             });
         }
+    },
+    byteToHexString: function (uint8arr) {
+
+        var hexStr = '';
+        for (var i = 0; i < uint8arr.length; i++) {
+            var hex = (uint8arr[i] & 0xff).toString(16);
+            hex = (hex.length === 1) ? '0' + hex : hex;
+            hexStr += hex;
+        }
+
+        return hexStr.toUpperCase();
     },
     parseHexString: function (str, count) {
         console.log(str)
