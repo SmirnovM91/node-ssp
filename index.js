@@ -180,11 +180,11 @@ var SSPInstance = Class.extend({
                         }
                         if (error.code !== 0xF0) {
                             self.emit("error", error, buffer);
+                        }else if (data.length > 3) {
+                            var event = ["slave_intermediate_key"].concat(data)
+                            event && self.emit.apply(self, event);
                         } else if (data.length > 1) {
                             var event;
-                            if (data.length > 3) {
-                                event = ["slave_intermediate_key"].concat(data)
-                            } else {
                                 switch (data[1]) {
                                     case 0xF1: //all
                                         event = ["slave_reset"];
@@ -373,7 +373,6 @@ var SSPInstance = Class.extend({
                                         event = ["note_rejected", data[1]];
                                         break;
                                 }
-                            }
                             event && self.emit.apply(self, event);
                         }
                     } else {
