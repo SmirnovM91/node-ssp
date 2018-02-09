@@ -80,7 +80,7 @@ var SSPInstance = Class.extend({
         } else {
             slaveIntKeyString = slaveIntKey.value
         }
-        self.keys.slaveIntKey = slaveIntKey.toString()
+        self.keys.slaveIntKey = slaveIntKey
         self.keys.keyHost = self.keys.slaveIntKey ^ self.keys.hostRandom % self.keys.modulusKey
         self.keys.variableKey = self.keys.keyHost
         commands.setKeys(self.keys)
