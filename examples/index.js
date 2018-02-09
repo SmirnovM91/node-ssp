@@ -76,8 +76,8 @@ ssp.init(function () {
         console.log(err.code, err.message);
     });
     ssp.on("slave_intermediate_key", function(data){
-        console.log(data)
-        console.log(data, convertHex.bytesToHex(data.reverse()))
+        var hexString = convertHex.bytesToHex(data.reverse());
+        console.log(hexString.toString(10))
     })
 });
 
