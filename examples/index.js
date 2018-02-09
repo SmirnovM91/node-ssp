@@ -75,7 +75,12 @@ ssp.init(function () {
     ssp.on("error", function (err) {
         console.log(err.code, err.message);
     });
-    ssp.on("slave_intermediate_key", function(data){
+    ssp.on("slave_intermediate_key", function (data) {
+        console.log(data)
+        var data = data.filter(function (item) {
+            return item == 0
+        })
+        console.log(data)
         var hexString = convertHex.bytesToHex(data.reverse());
         console.log(hexString)
         console.log(parseInt(hexString, 16))
