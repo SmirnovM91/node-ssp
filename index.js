@@ -62,7 +62,7 @@ var SSPInstance = Class.extend({
         commands.request_key_exchange.apply(this, hostIntArray)
     },
     createHostEncryptionKeys: function (data) {
-        var self = this;
+        var commands = this.commands, self = this;
         data.shift()
         var hexString = convertHex.bytesToHex(data.reverse());
         var slaveIntKey = bigInt(hexString, 16);
