@@ -48,13 +48,15 @@ var SSPInstance = Class.extend({
         }
 
         var keyPair = forge.pki.rsa.generateKeyPair(64);
-        self.keys.generatorKey = keyPair.privateKey.p.toString();
-        self.keys.modulusKey = keyPair.privateKey.q.toString();
-        console.log(self.keys.generatorKey)
-        console.log(self.keys.modulusKey)
+        self.keys.generatorKey = keyPair.privateKey.p;
+        self.keys.modulusKey = keyPair.privateKey.q;
+        console.log(self.keys.generatorKey, keyPair.privateKey.p.toString())
+        console.log(self.keys.modulusKey, keyPair.privateKey.q.toString())
         self.keys.hostRandom = getRandomInt(5);
         self.keys.hostIntKey = self.keys.generatorKey ^ self.keys.hostRandom % self.keys.modulusKey
+        var test = keyPair.privateKey.p.toString() ^ self.keys.hostRandom % keyPair.privateKey.q.toString()
 
+        console.log(test)
         var generatorArray = commands.parseHexString(self.keys.generatorKey.toString(16), 8)
         var modulusArray = commands.parseHexString(self.keys.modulusKey.toString(16), 8)
         var hostIntArray = commands.parseHexString(self.keys.hostIntKey.toString(16), 8)
