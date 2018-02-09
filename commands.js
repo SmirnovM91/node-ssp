@@ -119,6 +119,7 @@ var Commands = Class.extend({
         console.log(str)
         var a = [];
         for (var i = str.length; i > 0; i -= 2) {
+
             a.push(parseInt(str.substr(i - 2, 2), 16));
         }
         for (var i = a.length; i < count; i++) {
