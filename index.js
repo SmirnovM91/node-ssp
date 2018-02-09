@@ -65,10 +65,19 @@ var SSPInstance = Class.extend({
         var self = this;
         data.shift()
         var hexString = convertHex.bytesToHex(data.reverse());
-        console.log(bigInt(hexString, 16))
+        var slaveIntKey = bigInt(hexString, 16);
+        var slaveIntKeyString = ""
+        if (!slaveIntKey.isSmall) {
+            var values = slaveIntKey.value.reverse();
+            for (var i = 0; i < values.length; i++) {
+                slaveIntKeyString += "" + values[i]
+            }
+        } else {
+            slaveIntKeyString = slaveIntKey.value
+        }
         console.log(parseInt(hexString, 16))
-
-        self.keys.slaveIntKey = parseInt(hexString, 16)
+        console.log(slaveIntKeyString)
+        self.keys.slaveIntKey = slaveIntKeyString
         self.keys.keyHost = self.keys.slaveIntKey ^ self.keys.hostRandom % self.keys.modulusKey
         self.keys.variableKey = self.keys.keyHost
     },
