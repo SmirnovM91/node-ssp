@@ -182,6 +182,7 @@ var SSPInstance = Class.extend({
                             self.emit("error", error, buffer);
                         }else if (data.length > 3) {
                             var event = ["slave_intermediate_key", data.splice(0,1)];
+                            console.log(event)
                             event && self.emit.apply(self, event);
                         } else if (data.length > 1) {
                             var event;
