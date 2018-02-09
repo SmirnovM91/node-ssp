@@ -70,16 +70,16 @@ var Commands = Class.extend({
             var SEQ_SLAVE_ID = this.getSequence()
             var DATA = [command].concat(args)
 
-            var STEX = 0x7E
-            var eLENGTH = DATA.length;
-            var eCOUNT = 0x01
-            var eDATA = DATA
-            var ePACKING = 0x00
-            var eCommandLine = [eLENGTH, eCOUNT].concat(eDATA).push(ePACKING)
-            var eCRC = this.CRC16(eCommandLine);
-            console.log("eCommandLine",eCommandLine)
-            eCommandLine = [STEX].concat(eCommandLine, eCRC)
-            console.log("eCommandLine",eCommandLine)
+            // var STEX = 0x7E
+            // var eLENGTH = DATA.length;
+            // var eCOUNT = 0x01
+            // var eDATA = DATA
+            // var ePACKING = 0x00
+            // var eCommandLine = [eLENGTH, eCOUNT].concat(eDATA).push(ePACKING)
+            // var eCRC = this.CRC16(eCommandLine);
+            // console.log("eCommandLine",eCommandLine)
+            // eCommandLine = [STEX].concat(eCommandLine, eCRC)
+            // console.log("eCommandLine",eCommandLine)
 
             commandLine = [SEQ_SLAVE_ID, LENGTH].concat(DATA);
             var crc = this.CRC16(commandLine);
