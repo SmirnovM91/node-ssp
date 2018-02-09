@@ -75,6 +75,9 @@ ssp.init(function () {
     ssp.on("error", function (err) {
         console.log(err.code, err.message);
     });
+    ssp.on("data", function(data){
+        console.log(data)
+    })
 });
 
 process.on('SIGINT', function () {

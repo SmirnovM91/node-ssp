@@ -369,6 +369,9 @@ var SSPInstance = Class.extend({
                                 case 0x1c:
                                     event = ["note_rejected", data[1]];
                                     break;
+                                default:
+                                    event = ["data"].concat[data]
+                                    break;
                             }
                             event && self.emit.apply(self, event);
                         }
