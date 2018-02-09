@@ -1,5 +1,5 @@
 "use strict";
-
+var publicEncrypt = require("public-encrypt")
 var Class = require('./class');
 
 var Commands = Class.extend({
@@ -75,10 +75,13 @@ var Commands = Class.extend({
             var eCOUNT = 0x01
             var eDATA = DATA
             var ePACKING = 0x00
-            var eCommandLine = [eLENGTH, eCOUNT].concat(eDATA).concat(ePACKING)
+            var eCommandLine = [eLENGTH, eCOUNT].concat(eDATA, ePACKING)
             var eCRC = this.CRC16(eCommandLine);
             console.log("eCommandLine",eCommandLine)
-            eCommandLine = [STEX].concat(eCommandLine, eCRC)
+            eCommandLine = eCommandLine.concat(eCRC)
+
+            //encryptions in here
+            eCommandLine = [STEX].concat(eCommandLine)
             console.log("eCommandLine",eCommandLine)
 
             commandLine = [SEQ_SLAVE_ID, LENGTH].concat(DATA);
