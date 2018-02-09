@@ -78,7 +78,6 @@ var SSPInstance = Class.extend({
         } else {
             slaveIntKeyString = slaveIntKey.value
         }
-        console.log(slaveIntKeyString,  slaveIntKey.toString())
         self.keys.slaveIntKey = slaveIntKey.toString()
         self.keys.keyHost = self.keys.slaveIntKey ^ self.keys.hostRandom % self.keys.modulusKey
         self.keys.variableKey = self.keys.keyHost
@@ -86,7 +85,7 @@ var SSPInstance = Class.extend({
 
         var fixedKeyArray = commands.parseHexString(self.keys.fixedKey, 8)
 
-        commands.set_encryption_key.apply(this, fixedKeyArray)
+        // commands.set_encryption_key.apply(this, fixedKeyArray)
     },
     enable: function (cb) {
         var commands = this.commands, self = this;
