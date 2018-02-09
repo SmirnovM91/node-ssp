@@ -65,7 +65,9 @@ var SSPInstance = Class.extend({
     },
     createHostEncryptionKeys: function (data) {
         var commands = this.commands, self = this;
+        console.log(data)
         data.shift()
+        console.log(data)
         var hexString = convertHex.bytesToHex(data.reverse());
         var slaveIntKey = bigInt(hexString, 16);
         var slaveIntKeyString = ""
@@ -216,7 +218,6 @@ var SSPInstance = Class.extend({
                         if (error.code !== 0xF0) {
                             self.emit("error", error, buffer);
                         } else if (data.length > 3) {
-                            console.log(data)
                             self.createHostEncryptionKeys(data)
                         } else if (data.length > 1) {
                             var event;
