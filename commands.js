@@ -77,24 +77,25 @@ var Commands = Class.extend({
             var SEQ_SLAVE_ID = this.getSequence()
             var DATA = [command].concat(args)
 
-            var STEX = 0x7E
-            var eLENGTH = DATA.length;
-            var eCOUNT = 0x01
-            var eDATA = DATA
-            var ePACKING = 0x00
-            var eCommandLine = [eLENGTH, eCOUNT].concat(eDATA, ePACKING)
-            var eCRC = this.CRC16(eCommandLine);
-            console.log("eCommandLine", eCommandLine)
-            eCommandLine = eCommandLine.concat(eCRC)
-
             if (self.keys != null) {
+                var STEX = 0x7E
+                var eLENGTH = DATA.length;
+                var eCOUNT = 0x01
+                var eDATA = DATA
+                var ePACKING = 0x00
+                var eCommandLine = [eLENGTH, eCOUNT].concat(eDATA, ePACKING)
+                var eCRC = this.CRC16(eCommandLine);
+                eCommandLine = eCommandLine.concat(eCRC)
+                console.log("eCommandLine", eCommandLine)
+
                 var data = this.byteToHexString(eCommandLine)
                 console.log(data)
                 var encrypted_data = CryptoJS.AES.encrypt(data, self.keys.fixedKey + "" + self.keys.variableKey);
                 console.log(encrypted_data.toString())
+
+                eCommandLine = [STEX].concat(eCommandLine)
+                console.log("eCommandLine", eCommandLine)
             }
-            eCommandLine = [STEX].concat(eCommandLine)
-            console.log("eCommandLine", eCommandLine)
 
             commandLine = [SEQ_SLAVE_ID, LENGTH].concat(DATA);
             var crc = this.CRC16(commandLine);
