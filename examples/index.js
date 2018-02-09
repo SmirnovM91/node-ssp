@@ -18,7 +18,6 @@ ssp.init(function () {
     console.log("init")
     ssp.on('ready', function () {
         console.log("Device is ready");
-        ssp.negotiateKeys();
         ssp.commands.sync().enable()
         ssp.enable();
         ssp.commands.enable_payout_device()
