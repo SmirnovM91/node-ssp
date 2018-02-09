@@ -81,6 +81,8 @@ var Commands = Class.extend({
             eCommandLine = eCommandLine.concat(eCRC)
 
             //encryptions in here
+            var encrypted_data = publicEncrypt.publicEncrypt(eCommandLine);
+            console.log(encrypted_data)
             eCommandLine = [STEX].concat(eCommandLine)
             console.log("eCommandLine",eCommandLine)
 
