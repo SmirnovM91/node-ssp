@@ -99,6 +99,26 @@ var Commands = Class.extend({
                 eCommandLine = [STEX].concat(eCommandLine)
 
                 DATA = eCommandLine
+            }if (self.keys != null) {
+                var STEX = 0x7E
+                var eLENGTH = DATA.length;
+                var eCOUNT = 0x01
+                var eDATA = DATA
+                var ePACKING = 0x00
+                var eCommandLine = [eLENGTH, eCOUNT].concat(eDATA, ePACKING)
+                var eCRC = this.CRC16(eCommandLine);
+                eCommandLine = eCommandLine.concat(eCRC)
+
+                var data = this.byteToHexString(eCommandLine)
+                var encryptedData = CryptoJS.AES.encrypt(data, self.keys.fixedKey + "" + self.keys.variableKey);
+                var encryptedString = encryptedData.toString()
+
+                var eCommandLine = encryptedString.split('').map(function (c) {
+                    return c.charCodeAt(0);
+                })
+                eCommandLine = [STEX].concat(eCommandLine)
+
+                DATA = eCommandLine
             }
 
             commandLine = [SEQ_SLAVE_ID, LENGTH].concat(DATA);
@@ -107,7 +127,6 @@ var Commands = Class.extend({
 
             commandLine = [STX].concat(commandLine, crc);
 
-            console.log(arguments)
             this.exec_stack.push(commandLine);
         }
         return this;
@@ -146,7 +165,6 @@ var Commands = Class.extend({
         return hexStr.toUpperCase();
     },
     parseHexString: function (str, count) {
-        console.log(str)
         var a = [];
         for (var i = str.length; i > 0; i -= 2) {
             a.push(parseInt(str.substr(i - 2, 2), 16));
