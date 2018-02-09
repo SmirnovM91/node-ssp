@@ -1,5 +1,4 @@
 "use strict";
-var convertHex = require("convert-hex")
 var ssp = require('../');
 var notes = {
     1: "1USD",
@@ -75,11 +74,6 @@ ssp.init(function () {
     ssp.on("error", function (err) {
         console.log(err.code, err.message);
     });
-    ssp.on("slave_intermediate_key", function (data) {
-        var hexString = convertHex.bytesToHex(data.reverse());
-        console.log(hexString)
-        console.log(parseInt(hexString, 16))
-    })
 });
 
 process.on('SIGINT', function () {

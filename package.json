@@ -31,9 +31,11 @@
   },
   "homepage": "https://github.com/soulman-is-good/node-ssp",
   "dependencies": {
+    "big-integer": "^1.6.26",
     "convert-hex": "^0.1.0",
     "crc": "^3.5.0",
     "node-forge": "^0.7.1",
+    "public-encrypt": "^4.0.0",
     "serialport": "^3.0.0"
   }
 }

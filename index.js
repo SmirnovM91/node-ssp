@@ -4,12 +4,24 @@ var serialport = require('serialport'),
     EventEmitter = require('events').EventEmitter,
     Commands = require('./commands'),
     Class = require('./class'),
-    forge = require('node-forge');
+    forge = require('node-forge'),
+    convertHex = require("convert-hex"),
+    bigInt = require("big-integer")
 
 var SSPInstance = Class.extend({
     options: {},
     port: null,
     commands: null,
+    keys: {
+        generatorKey: null,
+        modulusKey: null,
+        hostRandom: null,
+        hostIntKey: null,
+        slaveIntKey: null,
+        fixedKey: 0x0123456701234567,
+        keyHost: null,
+        variableKey: null
+    },
     initialize: function (opts) {
         var self = this;
         var options = this.options = {
@@ -36,17 +48,29 @@ var SSPInstance = Class.extend({
         }
 
         var keyPair = forge.pki.rsa.generateKeyPair(64);
-        var generatorKey = keyPair.privateKey.p;
-        var modulusKey = keyPair.privateKey.q;
-        var hostIntKey = getRandomInt(5) ^ generatorKey % modulusKey
+        self.keys.generatorKey = keyPair.privateKey.p;
+        self.keys.modulusKey = keyPair.privateKey.q;
+        self.keys.hostRandom = getRandomInt(5);
+        self.keys.hostIntKey = self.keys.generatorKey ^ self.keys.hostRandom % self.keys.modulusKey
 
-        var generatorArray = commands.parseHexString(generatorKey.toString(16), 8)
-        var modulusArray = commands.parseHexString(modulusKey.toString(16), 8)
-        var hostIntArray = commands.parseHexString(hostIntKey.toString(16), 8)
+        var generatorArray = commands.parseHexString(self.keys.generatorKey.toString(16), 8)
+        var modulusArray = commands.parseHexString(self.keys.modulusKey.toString(16), 8)
+        var hostIntArray = commands.parseHexString(self.keys.hostIntKey.toString(16), 8)
 
         commands.set_generator.apply(this, generatorArray)
         commands.set_modulus.apply(this, modulusArray)
         commands.request_key_exchange.apply(this, hostIntArray)
+    },
+    createHostEncryptionKeys: function (data) {
+        var self = this;
+        data.shift()
+        var hexString = convertHex.bytesToHex(data.reverse());
+        console.log(bigInt(hexString, 16))
+        console.log(parseInt(hexString, 16))
+
+        self.keys.slaveIntKey = parseInt(hexString, 16)
+        self.keys.keyHost = self.keys.slaveIntKey ^ self.keys.hostRandom % self.keys.modulusKey
+        self.keys.variableKey = self.keys.keyHost
     },
     enable: function (cb) {
         var commands = this.commands, self = this;
@@ -122,7 +146,6 @@ var SSPInstance = Class.extend({
                 parity: options.parity,
                 parser: serialport.parsers.raw
             }, false);
-            console.log(port.isOpen())
 
             self.port = port;
             commands = self.commands = new Commands(port, options.type, options.sspID, options.sequence);
@@ -181,9 +204,7 @@ var SSPInstance = Class.extend({
                         if (error.code !== 0xF0) {
                             self.emit("error", error, buffer);
                         } else if (data.length > 3) {
-                            data.shift()
-                            var event = ["slave_intermediate_key", data];
-                            event && self.emit.apply(self, event);
+                            self.createHostEncryptionKeys(data)
                         } else if (data.length > 1) {
                             var event;
                             switch (data[1]) {
