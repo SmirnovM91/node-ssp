@@ -183,7 +183,7 @@ var SSPInstance = Class.extend({
                         } else if (data.length > 1) {
                             var event;
                             if (data.length > 3) {
-                                console.log(data);
+                                console.log(data, ["slave_intermediate_key"].concat[data]);
                                 event = ["slave_intermediate_key"].concat[data]
                                 console.log(event)
                             } else {
