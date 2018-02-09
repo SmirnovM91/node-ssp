@@ -87,7 +87,7 @@ var Commands = Class.extend({
 
             commandLine = [STX].concat(commandLine, crc);
 
-            console.log(args)
+            console.log(arguments)
             this.exec_stack.push(commandLine);
         }
         return this;
