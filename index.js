@@ -79,7 +79,8 @@ var SSPInstance = Class.extend({
         self.keys.keyHost = self.keys.slaveIntKey ^ self.keys.hostRandom % self.keys.modulusKey
         self.keys.variableKey = self.keys.keyHost
         console.log(self.keys.variableKey)
-        console.log(self.keys.variableKey+self.keys.fixedKey)
+        console.log(self.keys.variableKey.toString(16))
+        console.log(self.keys.variableKey.toString(16) +""+ + self.keys.fixedKey)
     },
     enable: function (cb) {
         var commands = this.commands, self = this;
