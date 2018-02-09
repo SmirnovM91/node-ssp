@@ -50,6 +50,8 @@ var SSPInstance = Class.extend({
         var keyPair = forge.pki.rsa.generateKeyPair(64);
         self.keys.generatorKey = keyPair.privateKey.p.data;
         self.keys.modulusKey = keyPair.privateKey.q.data;
+        console.log(self.keys.generatorKey)
+        console.log(self.keys.modulusKey)
         self.keys.hostRandom = getRandomInt(5);
         self.keys.hostIntKey = self.keys.generatorKey ^ self.keys.hostRandom % self.keys.modulusKey
 
@@ -129,8 +131,6 @@ var SSPInstance = Class.extend({
             });
         } else if (!options.device) {
             serialport.list(function (err, ports) {
-                console.log(ports)
-
                 if (err || ports.length === 0) {
                     cb(err || new Error("No devices found"));
                 } else {
