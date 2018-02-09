@@ -1,5 +1,5 @@
 "use strict";
-var publicEncrypt = require("public-encrypt")
+var CryptoJS = require("crypto-js")
 var Class = require('./class');
 
 var Commands = Class.extend({
@@ -91,7 +91,7 @@ var Commands = Class.extend({
             //encryptions in here
             if(self.keys !=null){
                 var buffer = new Buffer(eCommandLine)
-                var encrypted_data = publicEncrypt.publicEncrypt(self.keys.fixedKey+""+self.keys.variableKey,buffer, true);
+                var encrypted_data = CryptoJS.AES.encrypt(buffer, self.keys.fixedKey+""+self.keys.variableKey);
                 console.log(encrypted_data)
             }
             eCommandLine = [STEX].concat(eCommandLine)
