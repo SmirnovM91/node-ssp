@@ -90,9 +90,11 @@ var Commands = Class.extend({
 
                 var data = this.byteToHexString(eCommandLine)
                 console.log(data)
-                var encrypted_data = CryptoJS.AES.encrypt(data, self.keys.fixedKey + "" + self.keys.variableKey);
-                console.log(encrypted_data.toString())
+                var encryptedData = CryptoJS.AES.encrypt(data, self.keys.fixedKey + "" + self.keys.variableKey);
+                var encryptedString = encryptedData.toString()
+                console.log(encryptedString)
 
+                var eCommandLine = encryptedString.split ('').map (function (c) { return c.charCodeAt (0); })
                 eCommandLine = [STEX].concat(eCommandLine)
                 console.log("eCommandLine", eCommandLine)
             }
