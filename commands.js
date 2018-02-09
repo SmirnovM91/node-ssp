@@ -66,9 +66,27 @@ var Commands = Class.extend({
             } else {
                 command = this.command_list[commandName];
             }
-            commandLine = [this.getSequence(), args.length + 1, command].concat(args);
+            var LENGTH = args.length + 1
+            var SEQ_SLAVE_ID = this.getSequence()
+            var STEX = 0x7E
+            var DATA = [command].concat(args)
+            var eLENGTH = DATA.length;
+            var eCOUNT = 0x01
+            var eDATA = DATA
+            var ePACKING = 0x00
+            var eCommandLine = [eLENGTH, eCOUNT].concat(eDATA).push(ePACKING)
+            var eCRC = this.CRC16(eCommandLine);
+            console.log("eCommandLine",eCommandLine)
+            eCommandLine = [STEX].concat(eCommandLine, eCRC)
+            console.log("eCommandLine",eCommandLine)
+
+            commandLine = [SEQ_SLAVE_ID, LENGTH].concat(DATA);
+
             var crc = this.CRC16(commandLine);
-            commandLine = [0x7F].concat(commandLine, crc);
+            var STX = 0x7F
+
+            commandLine = [STX].concat(commandLine, crc);
+
             this.exec_stack.push(commandLine);
         }
         return this;
@@ -103,7 +121,7 @@ var Commands = Class.extend({
         for (var i = 0, len = str.length; i < len; i += 2) {
             a.unshift(parseInt(str.substr(i, 2), 16));
         }
-        for(var i = a.length; i < count; i++){
+        for (var i = a.length; i < count; i++) {
             a.push(0)
         }
         return a;
