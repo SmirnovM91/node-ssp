@@ -36,7 +36,7 @@ var SSPInstance = Class.extend({
         }
 
         var keyPair = forge.pki.rsa.generateKeyPair(64);
-        var generatorKey = keyPair.privateKey.p;
+        var generatorKey = 1000000; //keyPair.privateKey.p;
         var modulusKey = keyPair.privateKey.q;
         var hostIntKey = getRandomInt(5) ^ generatorKey % modulusKey
 
