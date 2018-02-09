@@ -94,9 +94,13 @@ var Commands = Class.extend({
                 var encryptedString = encryptedData.toString()
                 console.log(encryptedString)
 
-                var eCommandLine = encryptedString.split ('').map (function (c) { return c.charCodeAt (0); })
+                var eCommandLine = encryptedString.split('').map(function (c) {
+                    return c.charCodeAt(0);
+                })
                 eCommandLine = [STEX].concat(eCommandLine)
                 console.log("eCommandLine", eCommandLine)
+
+                DATA = eCommandLine
             }
 
             commandLine = [SEQ_SLAVE_ID, LENGTH].concat(DATA);
