@@ -78,7 +78,7 @@ var SSPInstance = Class.extend({
         self.keys.slaveIntKey = slaveIntKeyString
         self.keys.keyHost = self.keys.slaveIntKey ^ self.keys.hostRandom % self.keys.modulusKey
         self.keys.variableKey = self.keys.keyHost
-        var fixedKeyArray = commands.parseHexString(self.keys.fixedKey.toString(16), 8)
+        var fixedKeyArray = commands.parseHexString(self.keys.fixedKey, 8)
 
         commands.set_encryption_key.apply(this, fixedKeyArray)
 
