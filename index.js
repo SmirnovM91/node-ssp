@@ -374,6 +374,7 @@ var SSPInstance = Class.extend({
                                         break;
                                 }
                             }
+                            console.log(event)
                             event && self.emit.apply(self, event);
                         }
                     } else {
