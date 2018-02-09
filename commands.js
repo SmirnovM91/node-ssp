@@ -88,8 +88,10 @@ var Commands = Class.extend({
             eCommandLine = eCommandLine.concat(eCRC)
 
             if (self.keys != null) {
-                var encrypted_data = CryptoJS.AES.encrypt(this.byteToHexString(eCommandLine), self.keys.fixedKey + "" + self.keys.variableKey);
-                console.log(encrypted_data)
+                var data = this.byteToHexString(eCommandLine)
+                console.log(data)
+                var encrypted_data = CryptoJS.AES.encrypt(data, self.keys.fixedKey + "" + self.keys.variableKey);
+                console.log(encrypted_data.toString())
             }
             eCommandLine = [STEX].concat(eCommandLine)
             console.log("eCommandLine", eCommandLine)
@@ -136,14 +138,12 @@ var Commands = Class.extend({
             hex = (hex.length === 1) ? '0' + hex : hex;
             hexStr += hex;
         }
-
         return hexStr.toUpperCase();
     },
     parseHexString: function (str, count) {
         console.log(str)
         var a = [];
         for (var i = str.length; i > 0; i -= 2) {
-
             a.push(parseInt(str.substr(i - 2, 2), 16));
         }
         for (var i = a.length; i < count; i++) {
