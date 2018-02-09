@@ -86,7 +86,6 @@ var Commands = Class.extend({
                 var eCommandLine = [eLENGTH, eCOUNT].concat(eDATA, ePACKING)
                 var eCRC = this.CRC16(eCommandLine);
                 eCommandLine = eCommandLine.concat(eCRC)
-                console.log("eCommandLine", eCommandLine)
 
                 var data = this.byteToHexString(eCommandLine)
                 console.log(data)
@@ -98,7 +97,6 @@ var Commands = Class.extend({
                     return c.charCodeAt(0);
                 })
                 eCommandLine = [STEX].concat(eCommandLine)
-                console.log("eCommandLine", eCommandLine)
 
                 DATA = eCommandLine
             }
