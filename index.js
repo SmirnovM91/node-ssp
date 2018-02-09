@@ -81,7 +81,7 @@ var SSPInstance = Class.extend({
         var fixedKeyArray = commands.parseHexString(self.keys.fixedKey, 8)
 
         commands.set_encryption_key.apply(this, fixedKeyArray)
-
+        commands.setKeys(self.keys)
     },
     enable: function (cb) {
         var commands = this.commands, self = this;

@@ -5,6 +5,11 @@ var Class = require('./class');
 var Commands = Class.extend({
     command_list: null,
     exec_stack: [],
+    keys:null,
+    setKeys:function(keys){
+        var self = this;
+        self.keys = keys
+    },
     initialize: function (socket, type, ID, sequence) {
         var self = this;
         this.exec_stack = [];
@@ -49,6 +54,7 @@ var Commands = Class.extend({
         return [(crc & 0xFF), ((crc >> 8) & 0xFF)];
     },
     stack: function (commandName) {
+        var self = this;
         var command,
             commandLine,
             args = Array.prototype.slice.call(arguments, 1);
@@ -80,8 +86,9 @@ var Commands = Class.extend({
             console.log("eCommandLine",eCommandLine)
             eCommandLine = eCommandLine.concat(eCRC)
 
+
             //encryptions in here
-            var encrypted_data = publicEncrypt.publicEncrypt(eCommandLine);
+            var encrypted_data = publicEncrypt.publicEncrypt(self.keys.fixedKey+""+self.keys.variableKey,eCommandLine);
             console.log(encrypted_data)
             eCommandLine = [STEX].concat(eCommandLine)
             console.log("eCommandLine",eCommandLine)
