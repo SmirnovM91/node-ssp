@@ -436,8 +436,8 @@ var SSPInstance = Class.extend({
                     setTimeout(function () {
                         commands.sync().enable_higher_protocol()
                             .set_channel_inhibits(low, 0x00);
+                        self.negotiateKeys();
 
-                        console.log("first")
                         if (enableOnInit) {
                             cb && cb();
                             self.enable(function () {
