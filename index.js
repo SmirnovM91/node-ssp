@@ -60,7 +60,7 @@ var SSPInstance = Class.extend({
         var hostIntArray = commands.parseHexString(self.keys.hostIntKey.toString(16), 8)
 
         commands.set_generator.apply(this, generatorArray)
-        // commands.set_modulus.apply(this, modulusArray)
+        commands.set_modulus.apply(this, modulusArray)
         commands.request_key_exchange.apply(this, hostIntArray)
     },
     createHostEncryptionKeys: function (data) {
@@ -216,6 +216,7 @@ var SSPInstance = Class.extend({
                         if (error.code !== 0xF0) {
                             self.emit("error", error, buffer);
                         } else if (data.length > 3) {
+                            console.log(data)
                             self.createHostEncryptionKeys(data)
                         } else if (data.length > 1) {
                             var event;
