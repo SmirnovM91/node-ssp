@@ -140,8 +140,10 @@ var SSPInstance = Class.extend({
                         if (buf.data) {
                             buf = buf.data;
                         }
+                        console.log("buffer ",buffer)
+                        console.log("buf ",buf)
                         data = buf.slice(3, 3 + buffer[2]);
-                        console.log("buffer data", data)
+                        console.log("data", data)
 
                         crc = self.commands.CRC16(buf.slice(1, buf[2] + 3));
                         if (buf[buf.length - 2] !== crc[0] && buf[buf.length - 1] !== crc[1]) {
@@ -182,7 +184,6 @@ var SSPInstance = Class.extend({
                             self.emit("error", error, buffer);
                         } else if (data.length > 1) {
                             var event;
-                            console.log("data = ", data)
                             switch (data[1]) {
                                 case 0xF1: //all
                                     event = ["slave_reset"];
