@@ -90,7 +90,7 @@ var Commands = Class.extend({
                 var data = this.byteToHexString(eCommandLine)
                 console.log(data)
                 console.log(self.keys.variableKey, self.keys.fixedKey)
-                var keys = (self.keys.variableKey & 0xff) | (self.keys.fixedKey & 0xff));
+                var keys = (self.keys.variableKey & 0xff) | (self.keys.fixedKey & 0xff);
                 console.log(keys);
                 var encryptedData = CryptoJS.AES.encrypt(data, keys);
                 var encryptedString = encryptedData.toString()
