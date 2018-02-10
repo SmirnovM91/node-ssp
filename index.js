@@ -18,7 +18,7 @@ var SSPInstance = Class.extend({
         hostRandom: null,
         hostIntKey: null,
         slaveIntKey: null,
-        fixedKey: "0123456701234567",
+        fixedKey: 0x0123456701234567,
         keyHost: null,
         variableKey: null
     },
