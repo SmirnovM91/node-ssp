@@ -87,26 +87,20 @@ var Commands = Class.extend({
                 var eCRC = this.CRC16(eCommandLine);
                 eCommandLine = eCommandLine.concat(eCRC)
 
-                var data = this.byteToHexString(eCommandLine)
-                console.log(data)
-                console.log(self.keys.variableKey.toString(16), self.keys.fixedKey.toString(16))
-                console.log(this.parseHexString(self.keys.variableKey.toString(16),8))
                 var key = this.parseHexString(self.keys.variableKey.toString(16),8).concat(this.parseHexString(self.keys.fixedKey.toString(16),8))
-                console.log(key);
 
                 var aesCtr = new aesjs.ModeOfOperation.ctr(key);
                 var eCommandLine = aesCtr.encrypt(eCommandLine);
-                console.log(eCommandLine);
+                console.log("eCommandLine",eCommandLine);
 
-                // var eCommandLine = encryptedString.split('').map(function (c) {
-                //     return c.charCodeAt(0);
-                // })
                 eCommandLine = [STEX].concat(eCommandLine)
 
                 DATA = eCommandLine
+                console.log("DATA",DATA)
             }
 
             commandLine = [SEQ_SLAVE_ID, LENGTH].concat(DATA);
+            consle.log("commandLine", commandLine)
             var crc = this.CRC16(commandLine);
             var STX = 0x7F
 
