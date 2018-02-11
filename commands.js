@@ -97,6 +97,7 @@ var Commands = Class.extend({
                 var text = "ABlockIs16Bytes!";
                 var textAsBytes = aesjs.utils.utf8.toBytes(text)
                 console.log(textAsBytes);
+                console.log(eCommandLine)
 
                 var eCommandLine = aes.encrypt(textAsBytes);
                 console.log(eCommandLine);
