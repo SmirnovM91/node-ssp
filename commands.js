@@ -93,13 +93,9 @@ var Commands = Class.extend({
                 console.log(this.parseHexString(self.keys.variableKey.toString(16),8))
                 var key = this.parseHexString(self.keys.variableKey.toString(16),8).concat(this.parseHexString(self.keys.fixedKey.toString(16),8))
                 console.log(key);
-                var aes = new aesjs.AES(key)
-                var text = "ABlockIs16Bytes!";
-                var textAsBytes = aesjs.utils.utf8.toBytes(text)
-                console.log(textAsBytes);
-                console.log(eCommandLine)
 
-                var eCommandLine = aes.encrypt(eCommandLine);
+                var aesCtr = new aesjs.ModeOfOperation.ctr(key);
+                var eCommandLine = aesCtr.encrypt(eCommandLine);
                 console.log(eCommandLine);
 
                 // var eCommandLine = encryptedString.split('').map(function (c) {
