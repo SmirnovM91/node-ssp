@@ -91,22 +91,16 @@ var Commands = Class.extend({
 
                 var aesCtr = new aesjs.ModeOfOperation.ctr(key);
                 var uint8Array = aesCtr.encrypt(eCommandLine);
-                console.log("eCommandLine", uint8Array);
-                console.log("eCommandLine", [].slice.call(uint8Array));
-
                 eCommandLine = [STEX].concat([].slice.call(uint8Array))
-
                 DATA = eCommandLine
-                console.log("DATA",DATA)
             }
 
             commandLine = [SEQ_SLAVE_ID, LENGTH].concat(DATA);
-            console.log("commandLine", commandLine)
             var crc = this.CRC16(commandLine);
             var STX = 0x7F
 
             commandLine = [STX].concat(commandLine, crc);
-
+            console.log("commandLine", commandLine)
             console.log(arguments)
             this.exec_stack.push(commandLine);
         }
