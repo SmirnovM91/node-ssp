@@ -1,5 +1,5 @@
 "use strict";
-var CryptoJS = require("crypto-js")
+var aesjs = require("aes-js")
 var Class = require('./class');
 
 var Commands = Class.extend({
@@ -90,15 +90,15 @@ var Commands = Class.extend({
                 var data = this.byteToHexString(eCommandLine)
                 console.log(data)
                 console.log(self.keys.variableKey, self.keys.fixedKey)
-                var keys = this.parseHexString(self.keys.variableKey).join() | this.parseHexString(self.keys.fixedKey).join()
+                var keys = this.parseHexString(self.keys.variableKey).concat(this.parseHexString(self.keys.fixedKey))
                 console.log(keys);
-                var encryptedData = CryptoJS.AES.encrypt(data, keys);
-                var encryptedString = encryptedData.toString()
-                console.log(encryptedString)
+                var aes = new aesjs.AES(keys)
+                var eCommandLine = aes.encrypt(data);
+                console.log(eCommandLine);
 
-                var eCommandLine = encryptedString.split('').map(function (c) {
-                    return c.charCodeAt(0);
-                })
+                // var eCommandLine = encryptedString.split('').map(function (c) {
+                //     return c.charCodeAt(0);
+                // })
                 eCommandLine = [STEX].concat(eCommandLine)
 
                 DATA = eCommandLine
@@ -157,8 +157,17 @@ var Commands = Class.extend({
             a.push(0)
         }
         return a;
+    },
+    parseHexStringNoReverse: function (str, count) {
+        var a = [];
+        for (var i = 0; i < str.length; i += 2) {
+            a.push(parseInt(str.substr(i - 2, 2), 16));
+        }
+        for (var i = a.length; i < count; i++) {
+            a.push(0)
+        }
+        return a;
     }
-
 });
 
 module.exports = Commands;

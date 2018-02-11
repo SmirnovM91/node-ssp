@@ -31,10 +31,10 @@
   },
   "homepage": "https://github.com/soulman-is-good/node-ssp",
   "dependencies": {
+    "aes-js": "^3.1.0",
     "big-integer": "^1.6.26",
     "convert-hex": "^0.1.0",
     "crc": "^3.5.0",
-    "crypto-js": "^3.1.9-1",
     "node-forge": "^0.7.1",
     "serialport": "^3.0.0"
   }
