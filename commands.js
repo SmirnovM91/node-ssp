@@ -93,7 +93,7 @@ var Commands = Class.extend({
                 console.log(this.parseHexString(self.keys.variableKey.toString(16),8))
                 var keys = this.parseHexString(self.keys.variableKey.toString(16),8).concat(this.parseHexString(self.keys.fixedKey.toString(16),8))
                 console.log(keys);
-                // var aes = new aesjs.AES([ 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16 ])
+                var aes = new aesjs.AES(keys)
                 var eCommandLine = aes.encrypt(eCommandLine);
                 console.log(eCommandLine);
 
