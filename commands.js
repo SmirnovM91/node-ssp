@@ -99,7 +99,7 @@ var Commands = Class.extend({
                 console.log(textAsBytes);
                 console.log(eCommandLine)
 
-                var eCommandLine = aes.encrypt(textAsBytes);
+                var eCommandLine = aes.encrypt(eCommandLine);
                 console.log(eCommandLine);
 
                 // var eCommandLine = encryptedString.split('').map(function (c) {
