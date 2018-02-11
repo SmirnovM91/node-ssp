@@ -100,7 +100,7 @@ var Commands = Class.extend({
             }
 
             commandLine = [SEQ_SLAVE_ID, LENGTH].concat(DATA);
-            consle.log("commandLine", commandLine)
+            console.log("commandLine", commandLine)
             var crc = this.CRC16(commandLine);
             var STX = 0x7F
 
