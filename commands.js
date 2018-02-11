@@ -90,10 +90,10 @@ var Commands = Class.extend({
                 var key = this.parseHexString(self.keys.variableKey.toString(16),8).concat(this.parseHexString(self.keys.fixedKey.toString(16),8))
 
                 var aesCtr = new aesjs.ModeOfOperation.ctr(key);
-                var eCommandLine = aesCtr.encrypt(eCommandLine);
+                var uint8Array = aesCtr.encrypt(eCommandLine);
                 console.log("eCommandLine",eCommandLine);
 
-                eCommandLine = [STEX].concat(eCommandLine)
+                eCommandLine = [STEX].concat([].slice.call(uint8Array))
 
                 DATA = eCommandLine
                 console.log("DATA",DATA)
