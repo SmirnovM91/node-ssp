@@ -91,7 +91,7 @@ var Commands = Class.extend({
                 console.log(data)
                 console.log(self.keys.variableKey.toString(16), self.keys.fixedKey.toString(16))
                 console.log(this.parseHexString(self.keys.variableKey.toString(16),8))
-                var key = [3, 1, 4, 1, 5, 9, 2, 6, 5, 3, 5, 8, 9, 7, 9, 3]; //this.parseHexString(self.keys.variableKey.toString(16),8).concat(this.parseHexString(self.keys.fixedKey.toString(16),8))
+                var key = this.parseHexString(self.keys.variableKey.toString(16),8).concat(this.parseHexString(self.keys.fixedKey.toString(16),8))
                 console.log(key);
                 var aes = new aesjs.AES(key)
                 var text = "ABlockIs16Bytes!";
