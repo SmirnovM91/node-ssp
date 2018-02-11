@@ -61,6 +61,7 @@ var SSPInstance = Class.extend({
         var modulusArray = commands.parseHexString(self.keys.modulusKey.toString(16), 8)
         var hostIntArray = commands.parseHexString(self.keys.hostIntKey.toString(16), 8)
 
+        commands.ssp_encryption_reset_to_default()
         commands.set_generator.apply(this, generatorArray)
         commands.set_modulus.apply(this, modulusArray)
         commands.request_key_exchange.apply(this, hostIntArray)

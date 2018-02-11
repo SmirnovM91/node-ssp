@@ -56,5 +56,6 @@ module.exports = {
     "cashbox_payout_operation_data": function () {
         return 0x53
     },
-    "set_encryption_key": 0x60
+    "set_encryption_key": 0x60,
+    "ssp_encryption_reset_to_default":0x61
 };
