@@ -89,7 +89,7 @@ var Commands = Class.extend({
 
                 var data = this.byteToHexString(eCommandLine)
                 console.log(data)
-                console.log(self.keys.variableKey, self.keys.fixedKey)
+                console.log(self.keys.variableKey.toString(16), self.keys.fixedKey.toString(16))
                 var keys = this.parseHexString(self.keys.variableKey).concat(this.parseHexString(self.keys.fixedKey))
                 console.log(keys);
                 var aes = new aesjs.AES(keys)
@@ -151,16 +151,6 @@ var Commands = Class.extend({
     parseHexString: function (str, count) {
         var a = [];
         for (var i = str.length; i > 0; i -= 2) {
-            a.push(parseInt(str.substr(i - 2, 2), 16));
-        }
-        for (var i = a.length; i < count; i++) {
-            a.push(0)
-        }
-        return a;
-    },
-    parseHexStringNoReverse: function (str, count) {
-        var a = [];
-        for (var i = 0; i < str.length; i += 2) {
             a.push(parseInt(str.substr(i - 2, 2), 16));
         }
         for (var i = a.length; i < count; i++) {
