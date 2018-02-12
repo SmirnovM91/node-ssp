@@ -100,7 +100,7 @@ var Commands = Class.extend({
                 var uint8Array = aesCtr.encrypt(eCommandLine);
                 eCommandLine = [STEX].concat([].slice.call(uint8Array))
                 DATA = eCommandLine
-                LENGTH = DATA.length
+                // LENGTH = DATA.length
             }
 
             commandLine = [SEQ_SLAVE_ID, LENGTH].concat(DATA);
