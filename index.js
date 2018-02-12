@@ -91,7 +91,7 @@ var SSPInstance = Class.extend({
         var wait = function () {
             self.pollID = setTimeout(function () {
                 commands.exec("poll", wait);
-            }, 400);
+            }, 4000);
         }
         commands.exec("enable", function () {
             cb && cb();
