@@ -1,7 +1,6 @@
 "use strict";
 var aesjs = require("aes-js")
 var Class = require('./class');
-var convertHex = require("convert-hex");
 
 var Commands = Class.extend({
     command_list: null,
@@ -88,7 +87,7 @@ var Commands = Class.extend({
                 var eCRC = this.CRC16(eCommandLine);
                 eCommandLine = eCommandLine.concat(eCRC)
 
-                var key = convertHex.hexToBytes(self.keys.fixedKey.toString(16)).concat(convertHex.hexToBytes(self.keys.key.toString(16)))
+                var key = this.parseHexString(self.keys.fixedKey.toString(16),8).concat(this.parseHexString(self.keys.key.toString(16),8))
 
                 var aesCtr = new aesjs.ModeOfOperation.ctr(key);
                 var uint8Array = aesCtr.encrypt(eCommandLine);
@@ -141,6 +140,16 @@ var Commands = Class.extend({
         return hexStr.toUpperCase();
     },
     parseHexString: function (str, count) {
+        var a = [];
+        for (var i = str.length; i > 0; i -= 2) {
+            a.push(parseInt(str.substr(i - 2, 2), 16));
+        }
+        for (var i = a.length; i < count; i++) {
+            a.push(0)
+        }
+        return a;
+    },
+    parseHexStringReverse: function (str, count) {
         var a = [];
         for (var i = str.length; i > 0; i -= 2) {
             a.push(parseInt(str.substr(i - 2, 2), 16));
