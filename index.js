@@ -61,10 +61,10 @@ var SSPInstance = Class.extend({
         self.keys.generatorKey = host.getGenerator()
         self.keys.hostRandom = host.getPrivateKey()
         self.keys.hostIntKey =host.getPublicKey()
-
-        var generatorArray = commands.parseHexString(self.keys.generatorKey.toString(16), 8)
-        var modulusArray = commands.parseHexString(self.keys.modulusKey.toString(16), 8)
-        var hostIntArray = commands.parseHexString(self.keys.hostIntKey.toString(16), 8)
+        //
+        // var generatorArray = commands.parseHexString(self.keys.generatorKey.toString(16), 8)
+        // var modulusArray = commands.parseHexString(self.keys.modulusKey.toString(16), 8)
+        // var hostIntArray = commands.parseHexString(self.keys.hostIntKey.toString(16), 8)
 
         commands.set_generator.apply(this, Array.prototype.slice.call(self.keys.generatorKey, 0))
         commands.set_modulus.apply(this, Array.prototype.slice.call(self.keys.modulusKey, 0))
