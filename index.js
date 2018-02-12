@@ -19,7 +19,6 @@ var SSPInstance = Class.extend({
         hostIntKey: null,
         slaveIntKey: null,
         fixedKey: 0x0123456701234567,
-        keyHost: null,
         variableKey: null
     },
     initialize: function (opts) {

@@ -1,6 +1,7 @@
 "use strict";
 var aesjs = require("aes-js")
 var Class = require('./class');
+var convertHex = require("convert-hex");
 
 var Commands = Class.extend({
     command_list: null,
@@ -87,7 +88,7 @@ var Commands = Class.extend({
                 var eCRC = this.CRC16(eCommandLine);
                 eCommandLine = eCommandLine.concat(eCRC)
 
-                var key = this.parseHexString(self.keys.fixedKey.toString(16),8).concat(this.parseHexString(self.keys.key.toString(16),8))
+                var key = convertHex.hexToBytes(self.keys.fixedKey.toString(16)).concat(convertHex.hexToBytes(self.keys.key.toString(16)))
 
                 var aesCtr = new aesjs.ModeOfOperation.ctr(key);
                 var uint8Array = aesCtr.encrypt(eCommandLine);
