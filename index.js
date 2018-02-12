@@ -81,10 +81,9 @@ var SSPInstance = Class.extend({
         }
         console.log(slaveIntKeyString)
         self.keys.slaveIntKey = slaveIntKey
-        console.log(self.keys.slaveIntKey)
-        self.keys.keyHost = (self.keys.slaveIntKey ^ self.keys.hostRandom ) % self.keys.modulusKey
-        console.log(self.keys.keyHost)
-        console.log((slaveIntKeyString ^ self.keys.hostRandom ) % self.keys.modulusKey)
+        console.log(self.keys.slaveIntKey, slaveIntKey)
+        self.keys.keyHost = (slaveIntKey ^ self.keys.hostRandom ) % self.keys.modulusKey
+        console.log(self.keys.keyHost, (slaveIntKeyString ^ self.keys.hostRandom ) % self.keys.modulusKey)
         self.keys.variableKey = self.keys.keyHost
         commands.setKeys(self.keys)
 
