@@ -51,6 +51,7 @@ var SSPInstance = Class.extend({
         self.keys.modulusKey = keyPair.privateKey.p;
         self.keys.generatorKey = keyPair.privateKey.q;
         const host = crypto.createDiffieHellman(64)
+        host.generateKeys();
         console.log("p", host.getPrime(), "q",host.getGenerator(), "random", host.getPrivateKey())
 
         self.keys.hostRandom = getRandomInt(10);
