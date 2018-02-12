@@ -49,7 +49,7 @@ var SSPInstance = Class.extend({
         var keyPair = forge.pki.rsa.generateKeyPair(64);
         self.keys.modulusKey = keyPair.privateKey.p;
         self.keys.generatorKey = keyPair.privateKey.q;
-        self.keys.hostRandom = getRandomInt(100);
+        self.keys.hostRandom = getRandomInt(10);
         self.keys.hostIntKey = Math.pow(self.keys.generatorKey, self.keys.hostRandom) % self.keys.modulusKey
 
         console.log(self.keys.generatorKey.toString(10), self.keys.modulusKey.toString(10))
@@ -64,12 +64,9 @@ var SSPInstance = Class.extend({
     createHostEncryptionKeys: function (data) {
         var commands = this.commands, self = this;
         data.shift()
-        console.log(data)
         data = data.filter(function(item){
             return item !=0
         })
-        console.log(data)
-        console.log(data.reverse())
 
         var hexString = convertHex.bytesToHex(data.reverse());
 
