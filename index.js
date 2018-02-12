@@ -56,12 +56,11 @@ var SSPInstance = Class.extend({
         self.keys.hostIntKey = self.keys.generatorKey ^ self.keys.hostRandom % self.keys.modulusKey
         var test = keyPair.privateKey.p.toString() ^ self.keys.hostRandom % keyPair.privateKey.q.toString()
 
-        console.log(test)
         var generatorArray = commands.parseHexString(self.keys.generatorKey.toString(16), 8)
         var modulusArray = commands.parseHexString(self.keys.modulusKey.toString(16), 8)
         var hostIntArray = commands.parseHexString(self.keys.hostIntKey.toString(16), 8)
 
-        // commands.ssp_encryption_reset_to_default()
+        commands.ssp_encryption_reset_to_default()
         commands.set_generator.apply(this, generatorArray)
         commands.set_modulus.apply(this, modulusArray)
         commands.request_key_exchange.apply(this, hostIntArray)
@@ -86,9 +85,9 @@ var SSPInstance = Class.extend({
         self.keys.variableKey = self.keys.keyHost
         commands.setKeys(self.keys)
 
-        // var fixedKeyArray = commands.parseHexString(self.keys.fixedKey, 8)
-
-        // commands.set_encryption_key.apply(this, fixedKeyArray)
+        var fixedKeyArray = commands.parseHexString(self.keys.fixedKey, 8)
+        //
+        commands.set_encryption_key.apply(this, fixedKeyArray)
     },
     enable: function (cb) {
         var commands = this.commands, self = this;
