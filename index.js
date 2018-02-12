@@ -6,7 +6,7 @@ var serialport = require('serialport'),
     Class = require('./class'),
     forge = require('node-forge'),
     convertHex = require("convert-hex"),
-    bigInt = require("big-integer")
+    bigInt = require("big-integer"),
     crypto = require("crypto")
 
 var SSPInstance = Class.extend({
