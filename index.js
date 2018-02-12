@@ -63,6 +63,11 @@ var SSPInstance = Class.extend({
     createHostEncryptionKeys: function (data) {
         var commands = this.commands, self = this;
         data.shift()
+        console.log(data)
+        data = data.filter(function(item){
+            return item !=0
+        })
+        console.log(data)
         console.log(data.reverse())
 
         var hexString = convertHex.bytesToHex(data);
