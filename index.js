@@ -66,23 +66,25 @@ var SSPInstance = Class.extend({
     createHostEncryptionKeys: function (data) {
         var commands = this.commands, self = this;
         data.shift()
-        console.log(data)
         var hexString = convertHex.bytesToHex(data.reverse());
 
-        console.log(hexString)
         var slaveIntKey = bigInt(hexString, 16);
-        // console.log(slaveIntKey)
-        // var slaveIntKeyString = ""
-        // if (!slaveIntKey.isSmall) {
-        //     var values = slaveIntKey.value.reverse();
-        //     for (var i = 0; i < values.length; i++) {
-        //         slaveIntKeyString += "" + values[i]
-        //     }
-        // } else {
-        //     slaveIntKeyString = slaveIntKey.value
-        // }
+        console.log(slaveIntKey)
+        var slaveIntKeyString = ""
+        if (!slaveIntKey.isSmall) {
+            var values = slaveIntKey.value.reverse();
+            for (var i = 0; i < values.length; i++) {
+                slaveIntKeyString += "" + values[i]
+            }
+        } else {
+            slaveIntKeyString = slaveIntKey.value
+        }
+        console.log(slaveIntKeyString)
         self.keys.slaveIntKey = slaveIntKey
+        console.log(self.keys.slaveIntKey)
         self.keys.keyHost = (self.keys.slaveIntKey ^ self.keys.hostRandom ) % self.keys.modulusKey
+        console.log(self.keys.keyHost)
+        console.log((slaveIntKeyString ^ self.keys.hostRandom ) % self.keys.modulusKey)
         self.keys.variableKey = self.keys.keyHost
         commands.setKeys(self.keys)
 
