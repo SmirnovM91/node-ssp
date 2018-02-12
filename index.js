@@ -53,8 +53,7 @@ var SSPInstance = Class.extend({
         console.log(self.keys.generatorKey, keyPair.privateKey.p.toString())
         console.log(self.keys.modulusKey, keyPair.privateKey.q.toString())
         self.keys.hostRandom = getRandomInt(5);
-        self.keys.hostIntKey = self.keys.generatorKey ^ self.keys.hostRandom % self.keys.modulusKey
-        var test = keyPair.privateKey.p.toString() ^ self.keys.hostRandom % keyPair.privateKey.q.toString()
+        self.keys.hostIntKey = (self.keys.generatorKey ^ self.keys.hostRandom) % self.keys.modulusKey
 
         var generatorArray = commands.parseHexString(self.keys.generatorKey.toString(16), 8)
         var modulusArray = commands.parseHexString(self.keys.modulusKey.toString(16), 8)
@@ -80,7 +79,7 @@ var SSPInstance = Class.extend({
             slaveIntKeyString = slaveIntKey.value
         }
         self.keys.slaveIntKey = slaveIntKeyString
-        self.keys.keyHost = slaveIntKeyString ^ self.keys.hostRandom % self.keys.modulusKey
+        self.keys.keyHost = (slaveIntKeyString ^ self.keys.hostRandom ) % self.keys.modulusKey
         self.keys.variableKey = self.keys.keyHost
         commands.setKeys(self.keys)
 
