@@ -71,18 +71,18 @@ var SSPInstance = Class.extend({
 
         console.log(hexString)
         var slaveIntKey = bigInt(hexString, 16);
-        console.log(slaveIntKey)
-        var slaveIntKeyString = ""
-        if (!slaveIntKey.isSmall) {
-            var values = slaveIntKey.value.reverse();
-            for (var i = 0; i < values.length; i++) {
-                slaveIntKeyString += "" + values[i]
-            }
-        } else {
-            slaveIntKeyString = slaveIntKey.value
-        }
-        self.keys.slaveIntKey = slaveIntKeyString
-        self.keys.keyHost = (slaveIntKeyString ^ self.keys.hostRandom ) % self.keys.modulusKey
+        // console.log(slaveIntKey)
+        // var slaveIntKeyString = ""
+        // if (!slaveIntKey.isSmall) {
+        //     var values = slaveIntKey.value.reverse();
+        //     for (var i = 0; i < values.length; i++) {
+        //         slaveIntKeyString += "" + values[i]
+        //     }
+        // } else {
+        //     slaveIntKeyString = slaveIntKey.value
+        // }
+        self.keys.slaveIntKey = slaveIntKey
+        self.keys.keyHost = (self.keys.slaveIntKey ^ self.keys.hostRandom ) % self.keys.modulusKey
         self.keys.variableKey = self.keys.keyHost
         commands.setKeys(self.keys)
 
