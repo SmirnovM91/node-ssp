@@ -7,6 +7,7 @@ var serialport = require('serialport'),
     forge = require('node-forge'),
     convertHex = require("convert-hex"),
     bigInt = require("big-integer")
+    crypto = require("crypto")
 
 var SSPInstance = Class.extend({
     options: {},
@@ -49,6 +50,9 @@ var SSPInstance = Class.extend({
         var keyPair = forge.pki.rsa.generateKeyPair(64);
         self.keys.modulusKey = keyPair.privateKey.p;
         self.keys.generatorKey = keyPair.privateKey.q;
+        const host = crypto.createDiffieHellman(64)
+        console.log("p", host.getPrime(), "q",host.getGenerator(), "random", host.getPrivateKey())
+
         self.keys.hostRandom = getRandomInt(10);
         self.keys.hostIntKey = Math.pow(self.keys.generatorKey.toString(10), self.keys.hostRandom) % self.keys.modulusKey.toString(10)
 
