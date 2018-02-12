@@ -60,25 +60,31 @@ var SSPInstance = Class.extend({
         self.keys.modulusKey = host.getPrime()
         self.keys.generatorKey = host.getGenerator()
         self.keys.hostRandom = host.getPrivateKey()
-        self.keys.hostIntKey =host.getPublicKey()
-        //
-        // var generatorArray = commands.parseHexString(self.keys.generatorKey.toString(16), 8)
-        // var modulusArray = commands.parseHexString(self.keys.modulusKey.toString(16), 8)
-        // var hostIntArray = commands.parseHexString(self.keys.hostIntKey.toString(16), 8)
+        self.keys.hostIntKey = host.getPublicKey()
 
-        commands.set_generator.apply(this, Array.prototype.slice.call(self.keys.generatorKey, 0))
-        commands.set_modulus.apply(this, Array.prototype.slice.call(self.keys.modulusKey, 0))
-        commands.request_key_exchange.apply(this, Array.prototype.slice.call(self.keys.hostIntKey, 0))
+        var parse = function (a, count) {
+            for (var i = a.length; i < count; i++) {
+                a.push(0)
+            }
+        }
+        var generatorArray = parse(Array.prototype.slice.call(self.keys.generatorKey, 0), 8)
+        var modulusArray = parse(Array.prototype.slice.call(self.keys.modulusKey, 0), 8)
+        var hostIntArray = parse(Array.prototype.slice.call(self.keys.hostIntKey, 0), 8)
+
+        commands.set_generator.apply(this, generatorArray)
+        commands.set_modulus.apply(this, modulusArray)
+        commands.request_key_exchange.apply(this, hostIntArray)
     },
     createHostEncryptionKeys: function (data) {
         var commands = this.commands, self = this;
         data.shift()
-        data = data.filter(function(item){
-            return item !=0
+        data = data.filter(function (item) {
+            return item != 0
         })
 
         // var hexString = convertHex.bytesToHex(data.reverse());
         //
+
         // var slaveIntKey = bigInt(hexString, 16);
         // var slaveIntKeyString = ""
         // if (!slaveIntKey.isSmall) {
