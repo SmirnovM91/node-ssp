@@ -50,19 +50,16 @@ var SSPInstance = Class.extend({
         var keyPair = forge.pki.rsa.generateKeyPair(64);
         self.keys.modulusKey = keyPair.privateKey.p;
         self.keys.generatorKey = keyPair.privateKey.q;
-        self.keys.hostRandom = getRandomInt(10);
-        self.keys.hostIntKey = Math.pow(self.keys.generatorKey.toString(10), self.keys.hostRandom) % self.keys.modulusKey.toString(10)
+        // self.keys.hostRandom = getRandomInt(10);
+        // self.keys.hostIntKey = Math.pow(self.keys.generatorKey.toString(10), self.keys.hostRandom) % self.keys.modulusKey.toString(10)
 
 
-        const host = crypto.createDiffieHellman(64)
+        const host = crypto.createDiffieHellman(self.keys.modulusKey, self.keys.generatorKey)
         host.generateKeys();
         self.keys.host = host
-        self.keys.modulusKey = host.getPrime()
-        self.keys.generatorKey = host.getGenerator()
         self.keys.hostRandom = host.getPrivateKey()
         self.keys.hostIntKey = host.getPublicKey()
 
-        console.log(self.keys)
         var parse = function (a, count) {
             for (var i = a.length; i < count; i++) {
                 a.push(0)
