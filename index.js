@@ -48,14 +48,14 @@ var SSPInstance = Class.extend({
         }
 
         var keyPair = forge.pki.rsa.generateKeyPair(64);
-        self.keys.modulusKey = keyPair.privateKey.p;
-        self.keys.generatorKey = keyPair.privateKey.q;
+        self.keys.modulusKey = keyPair.privateKey.p.toString(16);
+        self.keys.generatorKey = keyPair.privateKey.qtoString(16);
         // self.keys.hostRandom = getRandomInt(10);
         // self.keys.hostIntKey = Math.pow(self.keys.generatorKey.toString(10), self.keys.hostRandom) % self.keys.modulusKey.toString(10)
 
         // const alice = crypto.createDiffieHellman()
         // alice.generateKeys()
-        const host = crypto.createDiffieHellman(self.keys.modulusKey.toString(16),"hex",self.keys.generatorKey.toString(16),"hex")
+        const host = crypto.createDiffieHellman(self.keys.modulusKey,"hex",self.keys.generatorKey,"hex")
         host.generateKeys();
         self.keys.host = host
         self.keys.modulusKey = host.getPrime();
