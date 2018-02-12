@@ -52,6 +52,7 @@ var SSPInstance = Class.extend({
         self.keys.hostRandom = getRandomInt(100);
         self.keys.hostIntKey = Math.pow(self.keys.generatorKey, self.keys.hostRandom) % self.keys.modulusKey
 
+        console.log(self.keys.generatorKey.toString(10), self.keys.modulusKey.toString(10))
         var generatorArray = commands.parseHexString(self.keys.generatorKey.toString(16), 8)
         var modulusArray = commands.parseHexString(self.keys.modulusKey.toString(16), 8)
         var hostIntArray = commands.parseHexString(self.keys.hostIntKey.toString(16), 8)
