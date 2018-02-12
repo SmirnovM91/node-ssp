@@ -53,10 +53,12 @@ var SSPInstance = Class.extend({
         // self.keys.hostRandom = getRandomInt(10);
         // self.keys.hostIntKey = Math.pow(self.keys.generatorKey.toString(10), self.keys.hostRandom) % self.keys.modulusKey.toString(10)
 
-
-        const host = crypto.createDiffieHellman(self.keys.modulusKey, self.keys.generatorKey)
+        const alice = crypto.createDiffieHellman(64,self.keys.generatorKey)
+        alice.generateKeys()
+        const host = crypto.createDiffieHellman(alice.getPrime(), alice.getGenerator())
         host.generateKeys();
         self.keys.host = host
+        self.keys.modulusKey = alice.getPrime();
         self.keys.hostRandom = host.getPrivateKey()
         self.keys.hostIntKey = host.getPublicKey()
 
