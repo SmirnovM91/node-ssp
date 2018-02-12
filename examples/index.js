@@ -18,9 +18,12 @@ ssp.init(function () {
     console.log("init")
     ssp.on('ready', function () {
         console.log("Device is ready");
-        ssp.commands.sync().enable()
-        ssp.enable();
-        ssp.commands.get_denomination_level(0x64, 0x00, 0x00, 0x00, 0x55, 0x53, 0x44)
+        setTimeout(function () {
+            ssp.commands.sync().enable()
+            ssp.enable();
+            ssp.commands.get_denomination_level(0x64, 0x00, 0x00, 0x00, 0x55, 0x53, 0x44)
+        }, 4000);
+
         // ssp.commands.get_denomination_route(0x64, 0x00, 0x00, 0x00, 0x55, 0x53, 0x44)
         // ssp.commands.set_denomination_route(0x00, 0x64, 0x00, 0x00, 0x00, 0x55, 0x53, 0x44)
         // ssp.commands.get_denomination_level(0x64, 0x00, 0x00, 0x00, 0x55, 0x53, 0x44)
