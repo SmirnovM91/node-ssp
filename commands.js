@@ -87,7 +87,7 @@ var Commands = Class.extend({
                 var eCRC = this.CRC16(eCommandLine);
                 eCommandLine = eCommandLine.concat(eCRC)
 
-                var key = this.parseHexString(self.keys.fixedKey.toString(16),8).concat(this.parseHexString(self.keys.key,8))
+                var key = this.parseHexString(self.keys.fixedKey.toString(16),8).concat(parse(Array.prototype.slice.call(self.keys.key, 0), 8))
 
                 var aesCtr = new aesjs.ModeOfOperation.ctr(key);
                 var uint8Array = aesCtr.encrypt(eCommandLine);
