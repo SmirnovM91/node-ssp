@@ -99,7 +99,7 @@ var SSPInstance = Class.extend({
         // self.keys.slaveIntKey = slaveIntKeyString
         // self.keys.key = Math.pow(slaveIntKeyString, self.keys.hostRandom ) % self.keys.modulusKey.toString(10)
 
-        self.keys.key = self.keys.host.computeSecret(hexString, "hex", hex)
+        self.keys.key = self.keys.host.computeSecret(hexString, "hex")
         self.keys.variableKey = self.keys.key
         commands.setKeys(self.keys)
 
