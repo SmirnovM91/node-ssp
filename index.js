@@ -50,21 +50,25 @@ var SSPInstance = Class.extend({
         var keyPair = forge.pki.rsa.generateKeyPair(64);
         self.keys.modulusKey = keyPair.privateKey.p;
         self.keys.generatorKey = keyPair.privateKey.q;
-        const host = crypto.createDiffieHellman(64)
-        host.generateKeys();
-        console.log("p", host.getPrime(), "q",host.getGenerator(), "random", host.getPrivateKey())
-
         self.keys.hostRandom = getRandomInt(10);
         self.keys.hostIntKey = Math.pow(self.keys.generatorKey.toString(10), self.keys.hostRandom) % self.keys.modulusKey.toString(10)
 
-        console.log(self.keys.generatorKey.toString(10), self.keys.modulusKey.toString(10))
+
+        const host = crypto.createDiffieHellman(64)
+        host.generateKeys();
+        self.keys.host = host
+        self.keys.modulusKey = host.getPrime()
+        self.keys.generatorKey = host.getGenerator()
+        self.keys.hostRandom = host.getPrivateKey()
+        self.keys.hostIntKey =host.getPublicKey()
+
         var generatorArray = commands.parseHexString(self.keys.generatorKey.toString(16), 8)
         var modulusArray = commands.parseHexString(self.keys.modulusKey.toString(16), 8)
         var hostIntArray = commands.parseHexString(self.keys.hostIntKey.toString(16), 8)
 
-        commands.set_generator.apply(this, generatorArray)
-        commands.set_modulus.apply(this, modulusArray)
-        commands.request_key_exchange.apply(this, hostIntArray)
+        commands.set_generator.apply(this, Array.prototype.slice.call(self.keys.generatorKey, 0))
+        commands.set_modulus.apply(this, Array.prototype.slice.call(self.keys.modulusKey, 0))
+        commands.request_key_exchange.apply(this, Array.prototype.slice.call(self.keys.hostIntKey, 0))
     },
     createHostEncryptionKeys: function (data) {
         var commands = this.commands, self = this;
@@ -73,20 +77,21 @@ var SSPInstance = Class.extend({
             return item !=0
         })
 
-        var hexString = convertHex.bytesToHex(data.reverse());
-
-        var slaveIntKey = bigInt(hexString, 16);
-        var slaveIntKeyString = ""
-        if (!slaveIntKey.isSmall) {
-            var values = slaveIntKey.value.reverse();
-            for (var i = 0; i < values.length; i++) {
-                slaveIntKeyString += "" + values[i]
-            }
-        } else {
-            slaveIntKeyString = slaveIntKey.value
-        }
-        self.keys.slaveIntKey = slaveIntKeyString
-        self.keys.key = Math.pow(slaveIntKeyString, self.keys.hostRandom ) % self.keys.modulusKey.toString(10)
+        // var hexString = convertHex.bytesToHex(data.reverse());
+        //
+        // var slaveIntKey = bigInt(hexString, 16);
+        // var slaveIntKeyString = ""
+        // if (!slaveIntKey.isSmall) {
+        //     var values = slaveIntKey.value.reverse();
+        //     for (var i = 0; i < values.length; i++) {
+        //         slaveIntKeyString += "" + values[i]
+        //     }
+        // } else {
+        //     slaveIntKeyString = slaveIntKey.value
+        // }
+        // self.keys.slaveIntKey = slaveIntKeyString
+        // self.keys.key = Math.pow(slaveIntKeyString, self.keys.hostRandom ) % self.keys.modulusKey.toString(10)
+        self.keys.key = self.keys.host.computeSecret(data.reverse())
         self.keys.variableKey = self.keys.key
         commands.setKeys(self.keys)
 
