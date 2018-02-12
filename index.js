@@ -49,8 +49,8 @@ var SSPInstance = Class.extend({
         var keyPair = forge.pki.rsa.generateKeyPair(64);
         self.keys.modulusKey = keyPair.privateKey.p;
         self.keys.generatorKey = keyPair.privateKey.q;
-        self.keys.hostRandom = getRandomInt(5);
-        self.keys.hostIntKey = (self.keys.generatorKey ** self.keys.hostRandom) % self.keys.modulusKey
+        self.keys.hostRandom = getRandomInt(100);
+        self.keys.hostIntKey = Math.pow(self.keys.generatorKey, self.keys.hostRandom) % self.keys.modulusKey
 
         var generatorArray = commands.parseHexString(self.keys.generatorKey.toString(16), 8)
         var modulusArray = commands.parseHexString(self.keys.modulusKey.toString(16), 8)
@@ -83,7 +83,7 @@ var SSPInstance = Class.extend({
             slaveIntKeyString = slaveIntKey.value
         }
         self.keys.slaveIntKey = slaveIntKeyString
-        self.keys.key = (slaveIntKeyString ** self.keys.hostRandom ) % self.keys.modulusKey
+        self.keys.key = Math.pow(slaveIntKeyString, self.keys.hostRandom ) % self.keys.modulusKey
         self.keys.variableKey = self.keys.key
         commands.setKeys(self.keys)
 
