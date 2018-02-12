@@ -62,7 +62,7 @@ var SSPInstance = Class.extend({
         self.keys.hostRandom = host.getPrivateKey()
         self.keys.hostIntKey = host.getPublicKey()
 
-        console.log(keys)
+        console.log(self.keys)
         var parse = function (a, count) {
             for (var i = a.length; i < count; i++) {
                 a.push(0)
