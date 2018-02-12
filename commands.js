@@ -94,15 +94,16 @@ var Commands = Class.extend({
                     }
                     return a;
                 }
-                var key = parse(Array.prototype.slice.call(self.keys.key, 0).reverse(), 8)
+                var key = this.parseHexString(self.keys.fixedKey.toString(16),8).concat(parse(Array.prototype.slice.call(self.keys.key, 0).reverse(), 8))
 
                 var aesCtr = new aesjs.ModeOfOperation.ctr(key);
                 var uint8Array = aesCtr.encrypt(eCommandLine);
                 eCommandLine = [STEX].concat([].slice.call(uint8Array))
                 DATA = eCommandLine
+                LENGTH = DATA.length
             }
 
-            commandLine = [SEQ_SLAVE_ID, DATA.length].concat(DATA);
+            commandLine = [SEQ_SLAVE_ID, LENGTH].concat(DATA);
             var crc = this.CRC16(commandLine);
             var STX = 0x7F
 
