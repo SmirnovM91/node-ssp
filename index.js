@@ -19,7 +19,7 @@ var SSPInstance = Class.extend({
         hostRandom: null,
         hostIntKey: null,
         slaveIntKey: null,
-        fixedKey: 0x0123456701234567,
+        fixedKey: Buffer.from('0123456701234567',"hex"),
         variableKey: null
     },
     initialize: function (opts) {
