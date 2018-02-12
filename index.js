@@ -55,7 +55,7 @@ var SSPInstance = Class.extend({
 
         // const alice = crypto.createDiffieHellman()
         // alice.generateKeys()
-        const host = crypto.createDiffieHellman(self.keys.modulusKey,"hex",self.keys.generatorKey,"hex")
+        const host = crypto.createDiffieHellman(self.keys.modulusKey, "hex", self.keys.generatorKey, "hex")
         host.generateKeys();
         self.keys.host = host
         self.keys.modulusKey = host.getPrime();
@@ -99,7 +99,8 @@ var SSPInstance = Class.extend({
         // }
         // self.keys.slaveIntKey = slaveIntKeyString
         // self.keys.key = Math.pow(slaveIntKeyString, self.keys.hostRandom ) % self.keys.modulusKey.toString(10)
-        self.keys.key = self.keys.host.computeSecret(hexString,"hex", hex)
+
+        self.keys.key = self.keys.host.computeSecret(hexString, "hex", hex)
         self.keys.variableKey = self.keys.key
         commands.setKeys(self.keys)
 
