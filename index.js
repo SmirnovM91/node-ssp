@@ -55,6 +55,8 @@ var SSPInstance = Class.extend({
 
         // const alice = crypto.createDiffieHellman()
         // alice.generateKeys()
+        console.log(self.keys.modulusKey)
+        console.log(self.keys.generatorKey)
         const host = crypto.createDiffieHellman(self.keys.modulusKey, "hex", self.keys.generatorKey, "hex")
         host.generateKeys();
         self.keys.host = host
