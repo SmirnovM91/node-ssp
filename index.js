@@ -83,6 +83,7 @@ var SSPInstance = Class.extend({
             return item != 0
         })
 
+        console.log(data)
         // var hexString = convertHex.bytesToHex(data.reverse());
         //
 
