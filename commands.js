@@ -94,7 +94,7 @@ var Commands = Class.extend({
                     }
                     return a;
                 }
-                var key = this.parseHexString(self.keys.fixedKey.toString(16),8).concat(parse(Array.prototype.slice.call(self.keys.key, 0).reverse(), 8))
+                var key = parse(Array.prototype.slice.call(self.keys.key, 0).reverse(), 8)
 
                 var aesCtr = new aesjs.ModeOfOperation.ctr(key);
                 var uint8Array = aesCtr.encrypt(eCommandLine);
