@@ -67,7 +67,7 @@ var SSPInstance = Class.extend({
         var commands = this.commands, self = this;
         data.shift()
         console.log(data)
-        var hexString = convertHex.bytesToHex(data);
+        var hexString = convertHex.bytesToHex(data.reverse());
 
         console.log(hexString)
         var slaveIntKey = bigInt(hexString, 16);
