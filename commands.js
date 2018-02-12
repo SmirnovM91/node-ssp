@@ -95,7 +95,7 @@ var Commands = Class.extend({
                 DATA = eCommandLine
             }
 
-            commandLine = [SEQ_SLAVE_ID, LENGTH].concat(DATA);
+            commandLine = [SEQ_SLAVE_ID, DATA.length].concat(DATA);
             var crc = this.CRC16(commandLine);
             var STX = 0x7F
 
