@@ -71,6 +71,7 @@ var SSPInstance = Class.extend({
         var modulusArray = parse(Array.prototype.slice.call(self.keys.modulusKey, 0).reverse(), 8)
         var hostIntArray = parse(Array.prototype.slice.call(self.keys.hostIntKey, 0).reverse(), 8)
 
+        commands.ssp_encryption_reset_to_default()
         commands.set_generator.apply(this, generatorArray)
         commands.set_modulus.apply(this, modulusArray)
         commands.request_key_exchange.apply(this, hostIntArray)
@@ -103,7 +104,6 @@ var SSPInstance = Class.extend({
         self.keys.key = self.keys.host.computeSecret(hexString, "hex")
         self.keys.variableKey = self.keys.key
         commands.setKeys(self.keys)
-        commands.ssp_encryption_reset_to_default()
         //
         // var parse = function (a, count) {
         //     for (var i = a.length; i < count; i++) {
