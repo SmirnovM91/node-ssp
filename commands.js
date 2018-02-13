@@ -99,7 +99,7 @@ var Commands = Class.extend({
                 console.log("key",key)
                 var aesCtr = new aesjs.ModeOfOperation.ctr(key);
                 var uint8Array = aesCtr.encrypt(eCommandLine);
-                eCommandLine = [STEX].concat([].slice.call(uint8Array))
+                eCommandLine = [STEX].concat([].slice.call(uint8Array).reverse())
                 DATA = eCommandLine
                 LENGTH = DATA.length
             }
