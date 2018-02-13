@@ -71,7 +71,6 @@ var SSPInstance = Class.extend({
         var modulusArray = parse(Array.prototype.slice.call(self.keys.modulusKey, 0).reverse(), 8)
         var hostIntArray = parse(Array.prototype.slice.call(self.keys.hostIntKey, 0).reverse(), 8)
 
-        commands.ssp_encryption_reset_to_default()
         commands.set_generator.apply(this, generatorArray)
         commands.set_modulus.apply(this, modulusArray)
         commands.request_key_exchange.apply(this, hostIntArray)
