@@ -29,6 +29,7 @@ module.exports = {
         return 0x4a;
     },
     "set_modulus": function () {
+        this.sequence = 0x00;
         return 0x4b;
     },
     "request_key_exchange": function () {
