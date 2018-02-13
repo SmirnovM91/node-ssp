@@ -94,12 +94,12 @@ var Commands = Class.extend({
                     }
                     return a;
                 }
-                var key = parse(Array.prototype.slice.call(self.keys.fixedKey, 0).reverse(), 8).concat(parse(Array.prototype.slice.call(self.keys.key, 0).reverse(), 8))
+                var key = parse(Array.prototype.slice.call(self.keys.fixedKey, 0), 8).concat(parse(Array.prototype.slice.call(self.keys.key, 0).reverse(), 8))
 
                 console.log("key",key)
                 var aesCtr = new aesjs.ModeOfOperation.ctr(key);
                 var uint8Array = aesCtr.encrypt(eCommandLine);
-                eCommandLine = [STEX].concat([].slice.call(uint8Array).reverse())
+                eCommandLine = [STEX].concat([].slice.call(uint8Array))
                 DATA = eCommandLine
                 LENGTH = DATA.length
             }
