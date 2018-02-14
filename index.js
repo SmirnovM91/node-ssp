@@ -474,7 +474,7 @@ var SSPInstance = Class.extend({
 
                     setTimeout(function () {
                         commands.sync()
-                        self.negotiateKeys();
+                        // self.negotiateKeys();
                         if (enableOnInit) {
                             cb && cb();
                             self.enable(function () {
