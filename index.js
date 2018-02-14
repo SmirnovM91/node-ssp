@@ -193,9 +193,14 @@ var SSPInstance = Class.extend({
             commands = self.commands = new Commands(port, options.type, options.sspID, options.sequence);
             port.on('close', function () {
                 self.emit('close');
+                console.log('close:');
             });
             port.on('error', function (err) {
                 self.emit('error', err);
+                console.log('error:', err);
+            });
+            port.on('readable', function () {
+                console.log('Data:', port.read());
             });
             port.open(function (err) {
                 function parseBuffer(buffer) {
