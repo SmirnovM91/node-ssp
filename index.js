@@ -20,7 +20,8 @@ var SSPInstance = Class.extend({
         hostIntKey: null,
         slaveIntKey: null,
         fixedKey: Buffer.from('0123456701234567', "hex"),
-        variableKey: null
+        variableKey: null,
+        key: null
     },
     initialize: function (opts) {
         var self = this;
@@ -75,7 +76,7 @@ var SSPInstance = Class.extend({
     createHostEncryptionKeys: function (data) {
         var commands = this.commands, self = this;
 
-        if (!self.keys.key) {
+        if (self.keys.key == null) {
             data.shift()
             data = data.filter(function (item) {
                 return item != 0
@@ -85,9 +86,7 @@ var SSPInstance = Class.extend({
             self.keys.key = self.keys.host.computeSecret(hexString, "hex")
             self.keys.variableKey = self.keys.key
             commands.setKeys(self.keys)
-
         }
-
     },
     enable: function (cb) {
         var commands = this.commands, self = this;
