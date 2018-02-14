@@ -73,7 +73,7 @@ var SSPInstance = Class.extend({
 
         commands.set_generator.apply(this, generatorArray)
         commands.host_set_modulus.apply(this, modulusArray)
-        commands.request_key_exchange.apply(this, hostIntArray)
+        commands.host_request_key_exchange.apply(this, hostIntArray)
 
         // commands.host_set_generator.apply(this, generatorArray)
         // commands.host_set_modulus.apply(this, modulusArray)
