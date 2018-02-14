@@ -62,9 +62,9 @@ var SSPInstance = Class.extend({
             }
             return a;
         }
-        var generatorArray = parse(Array.prototype.slice.call(self.keys.generatorKey, 0).reverse(), 8)
-        var modulusArray = parse(Array.prototype.slice.call(self.keys.modulusKey, 0).reverse(), 8)
-        var hostIntArray = parse(Array.prototype.slice.call(self.keys.hostIntKey, 0).reverse(), 8)
+        var generatorArray = parse(Array.prototype.slice.call(self.keys.generatorKey, 0), 8)
+        var modulusArray = parse(Array.prototype.slice.call(self.keys.modulusKey, 0), 8)
+        var hostIntArray = parse(Array.prototype.slice.call(self.keys.hostIntKey, 0), 8)
 
         commands.set_generator.apply(this, generatorArray)
         commands.set_modulus.apply(this, modulusArray)
