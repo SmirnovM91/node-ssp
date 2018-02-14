@@ -22,6 +22,7 @@ var SSPInstance = Class.extend({
         fixedKey: Buffer.from('0123456701234567', "hex"),
         variableKey: null,
         key: null,
+        negotiateKeys: false
         set_generator: false,
         set_modulus: false,
         request_key_exchange: false
@@ -58,6 +59,8 @@ var SSPInstance = Class.extend({
         self.keys.generatorKey = host.getGenerator();
         self.keys.hostRandom = host.getPrivateKey()
         self.keys.hostIntKey = host.getPublicKey()
+        self.keys.negotiateKeys = true
+
     },
     parse: function (a, count) {
         for (var i = a.length; i < count; i++) {
@@ -236,18 +239,20 @@ var SSPInstance = Class.extend({
                         }
                         if (error.code !== 0xF0) {
                             self.emit("error", error, buffer);
-                        } else if (!self.keys.set_generator) {
-                            console.log("data ", data)
-                            self.sendGenerator()
-                        } else if (!self.keys.set_modulus) {
-                            console.log("data ", data)
-                            self.sendModulus()
-                        }else if (!self.keys.request_key_exchange) {
-                            console.log("data ", data)
-                            self.sendRequestKeyExchange()
-                        } else if (data.length > 3) {
-                            console.log("data ", data)
-                            self.createHostEncryptionKeys(data)
+                        } else if (self.keys.negotiateKeys ) {
+                            if (!self.keys.set_generator) {
+                                console.log("data ", data)
+                                self.sendGenerator()
+                            } else if (!self.keys.set_modulus) {
+                                console.log("data ", data)
+                                self.sendModulus()
+                            } else if (!self.keys.request_key_exchange) {
+                                console.log("data ", data)
+                                self.sendRequestKeyExchange()
+                            } else if (data.length > 3) {
+                                console.log("data ", data)
+                                self.createHostEncryptionKeys(data)
+                            }
                         } else if (data.length > 1) {
                             var event;
                             switch (data[1]) {
