@@ -45,8 +45,8 @@ var SSPInstance = Class.extend({
         var commands = this.commands, self = this;
 
         var keyPair = forge.pki.rsa.generateKeyPair(64);
-        var modulusKey = keyPair.privateKey.n.toString(16);
-        var generatorKey = keyPair.privateKey.e.toString(16);
+        var modulusKey = keyPair.privateKey.p.toString(16);
+        var generatorKey = keyPair.privateKey.q.toString(16);
         console.log(keyPair)
 
         const host = crypto.createDiffieHellman(modulusKey, "hex", generatorKey, "hex")
