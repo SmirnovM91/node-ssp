@@ -22,10 +22,11 @@ var SSPInstance = Class.extend({
         fixedKey: Buffer.from('0123456701234567', "hex"),
         variableKey: null,
         key: null,
-        negotiateKeys: false
+        negotiateKeys: false,
         set_generator: false,
         set_modulus: false,
-        request_key_exchange: false
+        request_key_exchange: false,
+        finishEncryption: false
     },
     initialize: function (opts) {
         var self = this;
@@ -103,6 +104,7 @@ var SSPInstance = Class.extend({
             self.keys.key = self.keys.host.computeSecret(hexString, "hex")
             self.keys.variableKey = self.keys.key
             commands.setKeys(self.keys)
+            self.keys.finishEncryption = true
         }
     },
     enable: function (cb) {
@@ -249,7 +251,7 @@ var SSPInstance = Class.extend({
                             } else if (!self.keys.request_key_exchange) {
                                 console.log("data ", data)
                                 self.sendRequestKeyExchange()
-                            } else if (data.length > 3) {
+                            } else if (!self.keys.finishEncryption) {
                                 console.log("data ", data)
                                 self.createHostEncryptionKeys(data)
                             }
