@@ -89,7 +89,6 @@ var SSPInstance = Class.extend({
         var hostIntArray = self.parse(Array.prototype.slice.call(self.keys.hostIntKey, 0).reverse(), 8)
         self.keys.request_key_exchange = true;
         commands.request_key_exchange.apply(this, hostIntArray)
-
     },
     createHostEncryptionKeys: function (data) {
         var commands = this.commands, self = this;
@@ -197,6 +196,7 @@ var SSPInstance = Class.extend({
             port.open(function (err) {
                 function parseBuffer(buffer) {
                     var data, buf, error, crc;
+                    console.log(data)
                     if (buffer[0] === 0x7F) {
                         buf = buffer.toJSON();
                         if (buf.data) {
