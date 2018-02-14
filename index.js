@@ -73,22 +73,28 @@ var SSPInstance = Class.extend({
         var commands = this.commands, self = this;
         console.log(commands.byteToHexString(self.keys.generatorKey))
         var generatorArray = self.parse(Array.prototype.slice.call(self.keys.generatorKey, 0).reverse(), 8)
-        self.keys.set_generator = true;
-        commands.set_generator.apply(this, generatorArray)
+        setTimeout(function () {
+            self.keys.set_generator = true;
+            commands.set_generator.apply(this, generatorArray)
+        }, 2000);
     },
     sendModulus: function(){
         var commands = this.commands, self = this;
         console.log(commands.byteToHexString(self.keys.modulusKey))
         var modulusArray = self.parse(Array.prototype.slice.call(self.keys.modulusKey, 0).reverse(), 8)
-        self.keys.set_modulus = true;
-        commands.set_modulus.apply(this, modulusArray)
+        setTimeout(function () {
+            self.keys.set_modulus = true;
+            commands.set_modulus.apply(this, modulusArray)
+        }, 2000);
     },
     sendRequestKeyExchange: function(){
         var commands = this.commands, self = this;
         console.log(commands.byteToHexString(self.keys.hostIntKey))
         var hostIntArray = self.parse(Array.prototype.slice.call(self.keys.hostIntKey, 0).reverse(), 8)
-        self.keys.request_key_exchange = true;
-        commands.request_key_exchange.apply(this, hostIntArray)
+        setTimeout(function () {
+            self.keys.request_key_exchange = true;
+            commands.request_key_exchange.apply(this, hostIntArray)
+        }, 2000);
 
     },
     createHostEncryptionKeys: function (data) {
