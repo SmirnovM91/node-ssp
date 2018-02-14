@@ -49,6 +49,7 @@ var SSPInstance = Class.extend({
         var generatorKey = keyPair.privateKey.q.toString(16);
         console.log(keyPair)
 
+
         const host = crypto.createDiffieHellman(modulusKey, "hex", generatorKey, "hex")
         host.generateKeys();
         self.keys.host = host
