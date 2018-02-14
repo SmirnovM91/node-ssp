@@ -67,6 +67,7 @@ var SSPInstance = Class.extend({
     },
     sendGenerator: function(){
         var commands = this.commands, self = this;
+        console.log(commands.byteToHexString(self.keys.generatorKey))
         var generatorArray = self.parse(Array.prototype.slice.call(self.keys.generatorKey, 0).reverse(), 8)
         self.keys.set_generator = true;
         commands.set_generator.apply(this, generatorArray)
