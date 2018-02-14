@@ -49,7 +49,7 @@ var SSPInstance = Class.extend({
     },
     negotiateKeys: function () {
         var self = this;
-        var keyPair = forge.pki.rsa.generateKeyPair(128);
+        var keyPair = forge.pki.rsa.generateKeyPair(64);
         var modulusKey = keyPair.privateKey.p.toString(16);
         var generatorKey = keyPair.privateKey.q.toString(16);
 
