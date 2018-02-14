@@ -43,13 +43,11 @@ var SSPInstance = Class.extend({
     },
     negotiateKeys: function () {
         var commands = this.commands, self = this;
-        var getRandomInt = function (max) {
-            return Math.floor(Math.random() * Math.floor(max));
-        }
 
         var keyPair = forge.pki.rsa.generateKeyPair(64);
         var modulusKey = keyPair.privateKey.p.toString(16);
         var generatorKey = keyPair.privateKey.q.toString(16);
+        console.log(keyPair)
 
         const host = crypto.createDiffieHellman(modulusKey, "hex", generatorKey, "hex")
         host.generateKeys();
@@ -72,10 +70,6 @@ var SSPInstance = Class.extend({
         commands.set_generator.apply(this, generatorArray)
         commands.set_modulus.apply(this, modulusArray)
         commands.request_key_exchange.apply(this, hostIntArray)
-
-        commands.host_set_generator.apply(this, generatorArray)
-        commands.host_set_modulus.apply(this, modulusArray)
-        commands.host_request_key_exchange.apply(this, hostIntArray)
     },
     createHostEncryptionKeys: function (data) {
         var commands = this.commands, self = this;
@@ -84,7 +78,6 @@ var SSPInstance = Class.extend({
             return item != 0
         })
 
-        console.log(data)
         var hexString = convertHex.bytesToHex(data.reverse());
         //
 
@@ -249,6 +242,7 @@ var SSPInstance = Class.extend({
                         if (error.code !== 0xF0) {
                             self.emit("error", error, buffer);
                         } else if (data.length > 3) {
+                            console.log("data ", data)
                             self.createHostEncryptionKeys(data)
                         } else if (data.length > 1) {
                             var event;
