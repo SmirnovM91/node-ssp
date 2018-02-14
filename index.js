@@ -69,32 +69,26 @@ var SSPInstance = Class.extend({
         }
         return a;
     },
-    sendGenerator: function(){
+    sendGenerator: function () {
         var commands = this.commands, self = this;
         console.log(commands.byteToHexString(self.keys.generatorKey))
         var generatorArray = self.parse(Array.prototype.slice.call(self.keys.generatorKey, 0).reverse(), 8)
-        setTimeout(function (commands, self, generatorArray) {
-            self.keys.set_generator = true;
-            commands.set_generator.apply(this, generatorArray)
-        }, 1000, commands, self, generatorArray);
+        self.keys.set_generator = true;
+        commands.set_generator.apply(this, generatorArray)
     },
-    sendModulus: function(){
+    sendModulus: function () {
         var commands = this.commands, self = this;
         console.log(commands.byteToHexString(self.keys.modulusKey))
         var modulusArray = self.parse(Array.prototype.slice.call(self.keys.modulusKey, 0).reverse(), 8)
-        setTimeout(function (commands, self, modulusArray) {
-            self.keys.set_modulus = true;
-            commands.set_modulus.apply(this, modulusArray)
-        }, 1000, commands, self, modulusArray);
+        self.keys.set_modulus = true;
+        commands.set_modulus.apply(this, modulusArray)
     },
-    sendRequestKeyExchange: function(){
+    sendRequestKeyExchange: function () {
         var commands = this.commands, self = this;
         console.log(commands.byteToHexString(self.keys.hostIntKey))
         var hostIntArray = self.parse(Array.prototype.slice.call(self.keys.hostIntKey, 0).reverse(), 8)
-        setTimeout(function (commands, self, hostIntArray) {
-            self.keys.request_key_exchange = true;
-            commands.request_key_exchange.apply(this, hostIntArray)
-        }, 1000, commands, self, hostIntArray);
+        self.keys.request_key_exchange = true;
+        commands.request_key_exchange.apply(this, hostIntArray)
 
     },
     createHostEncryptionKeys: function (data) {
@@ -248,7 +242,7 @@ var SSPInstance = Class.extend({
                         }
                         if (error.code !== 0xF0) {
                             self.emit("error", error, buffer);
-                        } else if (self.keys.negotiateKeys ) {
+                        } else if (self.keys.negotiateKeys) {
                             if (!self.keys.set_generator) {
                                 console.log("data ", data)
                                 self.sendGenerator()
