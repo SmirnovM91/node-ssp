@@ -43,8 +43,6 @@ var SSPInstance = Class.extend({
         }
     },
     negotiateKeys: function () {
-        var commands = this.commands, self = this;
-
         var keyPair = forge.pki.rsa.generateKeyPair(64);
         var modulusKey = keyPair.privateKey.p.toString(16);
         var generatorKey = keyPair.privateKey.q.toString(16);
@@ -56,22 +54,28 @@ var SSPInstance = Class.extend({
         self.keys.generatorKey = host.getGenerator();
         self.keys.hostRandom = host.getPrivateKey()
         self.keys.hostIntKey = host.getPublicKey()
-
-        var parse = function (a, count) {
-            for (var i = a.length; i < count; i++) {
-                a.push(0)
-            }
-            return a;
+    },
+    parse: function (a, count) {
+        for (var i = a.length; i < count; i++) {
+            a.push(0)
         }
-        var generatorArray = parse(Array.prototype.slice.call(self.keys.generatorKey, 0).reverse(), 8)
-        var modulusArray = parse(Array.prototype.slice.call(self.keys.modulusKey, 0).reverse(), 8)
-        var hostIntArray = parse(Array.prototype.slice.call(self.keys.hostIntKey, 0).reverse(), 8)
-
+        return a;
+    },
+    sendGenerator: function(){
+        var commands = this.commands, self = this;
+        var generatorArray = self.parse(Array.prototype.slice.call(self.keys.generatorKey, 0).reverse(), 8)
         commands.set_generator.apply(this, generatorArray)
+    },
+    sendModulus: function(){
+        var commands = this.commands, self = this;
+        var modulusArray = self.parse(Array.prototype.slice.call(self.keys.modulusKey, 0).reverse(), 8)
         commands.set_modulus.apply(this, modulusArray)
+    },
+    sendRequestKeyExchange: function(){
+        var commands = this.commands, self = this;
+        var hostIntArray = self.parse(Array.prototype.slice.call(self.keys.hostIntKey, 0).reverse(), 8)
         commands.request_key_exchange.apply(this, hostIntArray)
-        // commands.get_serial_number()
-        // commands.setup_request()
+
     },
     createHostEncryptionKeys: function (data) {
         var commands = this.commands, self = this;
@@ -222,7 +226,16 @@ var SSPInstance = Class.extend({
                         }
                         if (error.code !== 0xF0) {
                             self.emit("error", error, buffer);
-                        } else if (data.length > 3) {
+                        } else if (!self.keys.set_generator) {
+                            console.log("data ", data)
+                            self.sendGenerator(data)
+                        } else if (!self.keys.set_modulus) {
+                            console.log("data ", data)
+                            self.sendModulus(data)
+                        }else if (!self.keys.request_key_exchange) {
+                            console.log("data ", data)
+                            self.sendRequestKeyExchange(data)
+                        } else if (data.length == 9) {
                             console.log("data ", data)
                             self.createHostEncryptionKeys(data)
                         } else if (data.length > 1) {
