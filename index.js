@@ -57,7 +57,7 @@ var SSPInstance = Class.extend({
         host.generateKeys();
         self.keys.host = host
         self.keys.modulusKey = host.getPrime();
-        self.keys.generatorKey = host.getGenerator();
+        self.keys.generatorKey = 4 //host.getGenerator();
         self.keys.hostRandom = host.getPrivateKey()
         self.keys.hostIntKey = host.getPublicKey()
 
