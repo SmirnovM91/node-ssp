@@ -74,12 +74,14 @@ var SSPInstance = Class.extend({
     },
     sendModulus: function(){
         var commands = this.commands, self = this;
+        console.log(commands.byteToHexString(self.keys.modulusKey))
         var modulusArray = self.parse(Array.prototype.slice.call(self.keys.modulusKey, 0).reverse(), 8)
         self.keys.set_modulus = true;
         commands.set_modulus.apply(this, modulusArray)
     },
     sendRequestKeyExchange: function(){
         var commands = this.commands, self = this;
+        console.log(commands.byteToHexString(self.keys.hostIntKey))
         var hostIntArray = self.parse(Array.prototype.slice.call(self.keys.hostIntKey, 0).reverse(), 8)
         self.keys.request_key_exchange = true;
         commands.request_key_exchange.apply(this, hostIntArray)
