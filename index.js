@@ -67,7 +67,7 @@ var SSPInstance = Class.extend({
         var hostIntArray = parse(Array.prototype.slice.call(self.keys.hostIntKey, 0).reverse(), 8)
 
         commands.set_generator.apply(this, generatorArray)
-        // commands.set_modulus.apply(this, modulusArray)
+        commands.set_modulus.apply(this, modulusArray)
         // commands.request_key_exchange.apply(this, hostIntArray)
         commands.get_serial_number()
         commands.setup_request()
