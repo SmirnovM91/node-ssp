@@ -76,27 +76,6 @@ var SSPInstance = Class.extend({
         }
         return a;
     },
-    sendGenerator: function () {
-        var commands = this.commands, self = this;
-        console.log(commands.byteToHexString(self.keys.generatorKey))
-        var generatorArray = self.parse(Array.prototype.slice.call(self.keys.generatorKey, 0).reverse(), 8)
-        self.keys.set_generator = true;
-        commands.set_generator.apply(this, generatorArray)
-    },
-    sendModulus: function () {
-        var commands = this.commands, self = this;
-        console.log(commands.byteToHexString(self.keys.modulusKey))
-        var modulusArray = self.parse(Array.prototype.slice.call(self.keys.modulusKey, 0).reverse(), 8)
-        self.keys.set_modulus = true;
-        commands.set_modulus.apply(this, modulusArray)
-    },
-    sendRequestKeyExchange: function () {
-        var commands = this.commands, self = this;
-        console.log(commands.byteToHexString(self.keys.hostIntKey))
-        var hostIntArray = self.parse(Array.prototype.slice.call(self.keys.hostIntKey, 0).reverse(), 8)
-        self.keys.request_key_exchange = true;
-        commands.request_key_exchange.apply(this, hostIntArray)
-    },
     createHostEncryptionKeys: function (data) {
         var commands = this.commands, self = this;
 
@@ -213,8 +192,8 @@ var SSPInstance = Class.extend({
 
                         if (buf[buf.length - 2] !== crc[0] && buf[buf.length - 1] !== crc[1]) {
                             console.log('Wrong CRC from validator')
-                            // self.emit('error', new Error('Wrong CRC from validator'), buffer, crc);
-                            // return;
+                            self.emit('error', new Error('Wrong CRC from validator'), buffer, crc);
+                            return;
                         }
                         error = new Error("New error");
                         error.code = data[0];
@@ -248,17 +227,7 @@ var SSPInstance = Class.extend({
                         if (error.code !== 0xF0) {
                             self.emit("error", error, buffer);
                         } else if (self.keys.negotiateKeys) {
-                            // if (!self.keys.set_generator) {
-                            //     console.log("data ", data)
-                            //     self.sendGenerator()
-                            // } else if (!self.keys.set_modulus) {
-                            //     console.log("data ", data)
-                            //     self.sendModulus()
-                            // } else if (!self.keys.request_key_exchange) {
-                            //     console.log("data ", data)
-                            //     self.sendRequestKeyExchange()
-                            // } else
-                            if (data.length > 3) {
+                            if (data.length > 3 && !self.keys.finishEncryption) {
                                 console.log("data ", data)
                                 self.createHostEncryptionKeys(data)
                             }
