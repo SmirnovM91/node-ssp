@@ -69,8 +69,8 @@ var SSPInstance = Class.extend({
         commands.set_generator.apply(this, generatorArray)
         commands.set_modulus.apply(this, modulusArray)
         commands.request_key_exchange.apply(this, hostIntArray)
-        commands.get_serial_number()
-        commands.setup_request()
+        // commands.get_serial_number()
+        // commands.setup_request()
     },
     createHostEncryptionKeys: function (data) {
         var commands = this.commands, self = this;
