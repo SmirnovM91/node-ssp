@@ -33,6 +33,7 @@ module.exports = {
         return 0x4a;
     },
     "set_modulus": function () {
+        this.sequence = 0x80;
         return 0x4b;
     },
     "host_set_modulus": function () {
