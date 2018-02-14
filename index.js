@@ -72,11 +72,13 @@ var SSPInstance = Class.extend({
         var hostIntArray = parse(Array.prototype.slice.call(self.keys.hostIntKey, 0).reverse(), 8)
 
         commands.set_generator.apply(this, generatorArray)
-        commands.host_set_generator.apply(this, generatorArray)
         commands.set_modulus.apply(this, modulusArray)
+
+        commands.host_set_generator.apply(this, generatorArray)
         commands.host_set_modulus.apply(this, modulusArray)
+
         commands.request_key_exchange.apply(this, hostIntArray)
-        // commands.host_request_key_exchange.apply(this, hostIntArray)
+        commands.host_request_key_exchange.apply(this, hostIntArray)
     },
     createHostEncryptionKeys: function (data) {
         var commands = this.commands, self = this;
