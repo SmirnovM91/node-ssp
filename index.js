@@ -23,9 +23,6 @@ var SSPInstance = Class.extend({
         variableKey: null,
         key: null,
         negotiateKeys: false,
-        set_generator: false,
-        set_modulus: false,
-        request_key_exchange: false,
         finishEncryption: false
     },
     initialize: function (opts) {
@@ -88,8 +85,8 @@ var SSPInstance = Class.extend({
             self.keys.slaveIntKey = Buffer.from(hexString, "hex")
             self.keys.key = self.keys.host.computeSecret(hexString, "hex")
             self.keys.variableKey = self.keys.key
-            commands.setKeys(self.keys)
             self.keys.finishEncryption = true
+            commands.setKeys(self.keys)
         }
     },
     enable: function (cb) {
