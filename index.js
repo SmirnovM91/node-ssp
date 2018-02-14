@@ -48,7 +48,7 @@ var SSPInstance = Class.extend({
         }
     },
     negotiateKeys: function () {
-        var self = this;
+        var self = this, commands = this.commands;
         var keyPair = forge.pki.rsa.generateKeyPair(64);
         var modulusKey = keyPair.privateKey.p.toString(16);
         var generatorKey = keyPair.privateKey.q.toString(16);
@@ -62,6 +62,13 @@ var SSPInstance = Class.extend({
         self.keys.hostIntKey = host.getPublicKey()
         self.keys.negotiateKeys = true
 
+        var generatorArray = self.parse(Array.prototype.slice.call(self.keys.generatorKey, 0).reverse(), 8)
+        var modulusArray = self.parse(Array.prototype.slice.call(self.keys.modulusKey, 0).reverse(), 8)
+        var hostIntArray = self.parse(Array.prototype.slice.call(self.keys.hostIntKey, 0).reverse(), 8)
+
+        commands.set_generator.apply(this, generatorArray)
+        commands.set_modulus.apply(this, modulusArray)
+        commands.request_key_exchange.apply(this, hostIntArray)
     },
     parse: function (a, count) {
         for (var i = a.length; i < count; i++) {
@@ -242,19 +249,19 @@ var SSPInstance = Class.extend({
                         if (error.code !== 0xF0) {
                             self.emit("error", error, buffer);
                         } else if (self.keys.negotiateKeys) {
-                            if (!self.keys.set_generator) {
-                                console.log("data ", data)
-                                self.sendGenerator()
-                            } else if (!self.keys.set_modulus) {
-                                console.log("data ", data)
-                                self.sendModulus()
-                            } else if (!self.keys.request_key_exchange) {
-                                console.log("data ", data)
-                                self.sendRequestKeyExchange()
-                            } else if (!self.keys.finishEncryption) {
+                            // if (!self.keys.set_generator) {
+                            //     console.log("data ", data)
+                            //     self.sendGenerator()
+                            // } else if (!self.keys.set_modulus) {
+                            //     console.log("data ", data)
+                            //     self.sendModulus()
+                            // } else if (!self.keys.request_key_exchange) {
+                            //     console.log("data ", data)
+                            //     self.sendRequestKeyExchange()
+                            // } else if (!self.keys.finishEncryption) {
                                 console.log("data ", data)
                                 self.createHostEncryptionKeys(data)
-                            }
+                            // }
                         } else if (data.length > 1) {
                             var event;
                             switch (data[1]) {
