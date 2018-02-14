@@ -81,7 +81,7 @@ var SSPInstance = Class.extend({
             data = data.filter(function (item) {
                 return item != 0
             })
-            var hexString = convertHex.bytesToHex(data);
+            var hexString = convertHex.bytesToHex(data.reverse());
             self.keys.slaveIntKey = Buffer.from(hexString, "hex")
             self.keys.key = self.keys.host.computeSecret(hexString, "hex")
             self.keys.variableKey = self.keys.key
