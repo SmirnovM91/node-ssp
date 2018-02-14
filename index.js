@@ -481,7 +481,7 @@ var SSPInstance = Class.extend({
                     self.negotiateKeys();
 
                     setTimeout(function () {
-                        commands.sync()
+                        commands.sync().enable_higher_protocol()
                         if (enableOnInit) {
                             cb && cb();
                             self.enable(function () {
