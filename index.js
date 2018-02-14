@@ -21,7 +21,10 @@ var SSPInstance = Class.extend({
         slaveIntKey: null,
         fixedKey: Buffer.from('0123456701234567', "hex"),
         variableKey: null,
-        key: null
+        key: null,
+        set_generator: false,
+        set_modulus: false,
+        request_key_exchange: false
     },
     initialize: function (opts) {
         var self = this;
@@ -65,16 +68,19 @@ var SSPInstance = Class.extend({
     sendGenerator: function(){
         var commands = this.commands, self = this;
         var generatorArray = self.parse(Array.prototype.slice.call(self.keys.generatorKey, 0).reverse(), 8)
+        self.keys.set_generator = true;
         commands.set_generator.apply(this, generatorArray)
     },
     sendModulus: function(){
         var commands = this.commands, self = this;
         var modulusArray = self.parse(Array.prototype.slice.call(self.keys.modulusKey, 0).reverse(), 8)
+        self.keys.set_modulus = true;
         commands.set_modulus.apply(this, modulusArray)
     },
     sendRequestKeyExchange: function(){
         var commands = this.commands, self = this;
         var hostIntArray = self.parse(Array.prototype.slice.call(self.keys.hostIntKey, 0).reverse(), 8)
+        self.keys.request_key_exchange = true;
         commands.request_key_exchange.apply(this, hostIntArray)
 
     },
