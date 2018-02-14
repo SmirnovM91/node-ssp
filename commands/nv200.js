@@ -17,7 +17,7 @@ module.exports = {
     "channel_security_data": 0x0f,
     "channel_reteach_data": 0x10,
     "sync": function () {
-        this.sequence = 0x00;
+        this.sequence = 0x80;
         return 0x11;
     },
     "enable_higher_protocol": 0x13,
@@ -40,19 +40,15 @@ module.exports = {
         return 0x5c;
     },
     "payout_amount": function () {
-        this.sequence = 0x80;
         return 0x33;
     },
     "get_denomination_route": function () {
-        this.sequence = 0x80;
         return 0x3C;
     },
     "set_denomination_route": function () {
-        this.sequence = 0x80;
         return 0x3B;
     },
     "get_denomination_level": function () {
-        this.sequence = 0x80;
         return 0x35;
     },
     "smart_empty": function () {
