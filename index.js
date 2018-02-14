@@ -478,10 +478,11 @@ var SSPInstance = Class.extend({
                     });
 
                     //wait a bit for port buffer to empty
-                    self.negotiateKeys();
 
                     setTimeout(function () {
                         commands.sync().enable_higher_protocol()
+                        self.negotiateKeys();
+
                         if (enableOnInit) {
                             cb && cb();
                             self.enable(function () {
