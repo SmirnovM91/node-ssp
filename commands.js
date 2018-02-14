@@ -96,9 +96,8 @@ var Commands = Class.extend({
                 }
                 var key = parse(Array.prototype.slice.call(self.keys.fixedKey, 0), 8).concat(parse(Array.prototype.slice.call(self.keys.key, 0).reverse(), 8))
 
-                var iv = [ 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34,35, 36 ];
                 console.log(key)
-                var aesCtr = new aesjs.ModeOfOperation.ofb(key, iv); //new aesjs.ModeOfOperation.ctr(key);
+                var aesCtr = new aesjs.ModeOfOperation.ctr(key);
                 var uint8Array = aesCtr.encrypt(eCommandLine);
                 eCommandLine = [STEX].concat([].slice.call(uint8Array))
                 DATA = eCommandLine
