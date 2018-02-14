@@ -235,14 +235,14 @@ var SSPInstance = Class.extend({
                             self.emit("error", error, buffer);
                         } else if (!self.keys.set_generator) {
                             console.log("data ", data)
-                            self.sendGenerator(data)
+                            self.sendGenerator()
                         } else if (!self.keys.set_modulus) {
                             console.log("data ", data)
-                            self.sendModulus(data)
+                            self.sendModulus()
                         }else if (!self.keys.request_key_exchange) {
                             console.log("data ", data)
-                            self.sendRequestKeyExchange(data)
-                        } else if (data.length == 9) {
+                            self.sendRequestKeyExchange()
+                        } else if (data.length > 3) {
                             console.log("data ", data)
                             self.createHostEncryptionKeys(data)
                         } else if (data.length > 1) {
