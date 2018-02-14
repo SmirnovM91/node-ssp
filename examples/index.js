@@ -20,7 +20,7 @@ ssp.init(function () {
         console.log("Device is ready");
         setTimeout(function () {
             ssp.commands.set_denomination_route(0x00, 0x64, 0x00, 0x00, 0x00, 0x55, 0x53, 0x44)
-            ssp.enable_payout_device()
+            ssp.commands.enable_payout_device()
             ssp.commands.set_channel_inhibits(0x07, 0x00);
             ssp.enable();
             ssp.commands.get_denomination_level(0x64, 0x00, 0x00, 0x00, 0x55, 0x53, 0x44)
