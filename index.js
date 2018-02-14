@@ -50,8 +50,6 @@ var SSPInstance = Class.extend({
         var keyPair = forge.pki.rsa.generateKeyPair(64);
         var modulusKey = keyPair.privateKey.p.toString(16);
         var generatorKey = keyPair.privateKey.q.toString(16);
-        // self.keys.hostRandom = getRandomInt(10);
-        // self.keys.hostIntKey = Math.pow(self.keys.generatorKey.toString(10), self.keys.hostRandom) % self.keys.modulusKey.toString(10)
 
         const host = crypto.createDiffieHellman(modulusKey, "hex", generatorKey, "hex")
         host.generateKeys();
@@ -75,9 +73,9 @@ var SSPInstance = Class.extend({
         commands.set_modulus.apply(this, modulusArray)
         commands.request_key_exchange.apply(this, hostIntArray)
 
-        // commands.host_set_generator.apply(this, generatorArray)
-        // commands.host_set_modulus.apply(this, modulusArray)
-        // commands.host_request_key_exchange.apply(this, hostIntArray)
+        commands.host_set_generator.apply(this, generatorArray)
+        commands.host_set_modulus.apply(this, modulusArray)
+        commands.host_request_key_exchange.apply(this, hostIntArray)
     },
     createHostEncryptionKeys: function (data) {
         var commands = this.commands, self = this;
