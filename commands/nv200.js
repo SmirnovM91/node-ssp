@@ -26,7 +26,6 @@ module.exports = {
     "get_firmware_version": 0x20,
     "get_dataset_version": 0x21,
     "set_generator": function () {
-        this.sequence = 0x80;
         return 0x4a;
     },
     "host_set_generator": function () {
@@ -34,7 +33,6 @@ module.exports = {
         return 0x4a;
     },
     "set_modulus": function () {
-        this.sequence = 0x80;
         return 0x4b;
     },
     "host_set_modulus": function () {
@@ -42,7 +40,6 @@ module.exports = {
         return 0x4b;
     },
     "request_key_exchange": function () {
-        this.sequence = 0x80;
         return 0x4c;
     },
     "host_request_key_exchange": function () {
