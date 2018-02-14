@@ -19,7 +19,7 @@ var SSPInstance = Class.extend({
         hostRandom: null,
         hostIntKey: null,
         slaveIntKey: null,
-        fixedKey: Buffer.from('0123456701234567',"hex"),
+        fixedKey: Buffer.from('0123456701234567', "hex"),
         variableKey: null
     },
     initialize: function (opts) {
@@ -74,39 +74,20 @@ var SSPInstance = Class.extend({
     },
     createHostEncryptionKeys: function (data) {
         var commands = this.commands, self = this;
-        data.shift()
-        data = data.filter(function (item) {
-            return item != 0
-        })
 
-        var hexString = convertHex.bytesToHex(data.reverse());
-        //
+        if (!self.keys.key) {
+            data.shift()
+            data = data.filter(function (item) {
+                return item != 0
+            })
+            var hexString = convertHex.bytesToHex(data.reverse());
+            self.keys.slaveIntKey = Buffer.from(hexString, "hex")
+            self.keys.key = self.keys.host.computeSecret(hexString, "hex")
+            self.keys.variableKey = self.keys.key
+            commands.setKeys(self.keys)
 
-        // var slaveIntKey = bigInt(hexString, 16);
-        // var slaveIntKeyString = ""
-        // if (!slaveIntKey.isSmall) {
-        //     var values = slaveIntKey.value.reverse();
-        //     for (var i = 0; i < values.length; i++) {
-        //         slaveIntKeyString += "" + values[i]
-        //     }
-        // } else {
-        //     slaveIntKeyString = slaveIntKey.value
-        // }
-        // self.keys.slaveIntKey = slaveIntKeyString
-        // self.keys.key = Math.pow(slaveIntKeyString, self.keys.hostRandom ) % self.keys.modulusKey.toString(10)
+        }
 
-        self.keys.slaveIntKey = Buffer.from(hexString,"hex")
-        self.keys.key = self.keys.host.computeSecret(hexString, "hex")
-        self.keys.variableKey = self.keys.key
-        commands.setKeys(self.keys)
-        //
-        // var parse = function (a, count) {
-        //     for (var i = a.length; i < count; i++) {
-        //         a.push(0)
-        //     }
-        //     return a;
-        // }
-        // commands.set_encryption_key.apply(this, parse(Array.prototype.slice.call(self.keys.fixedKey, 0).reverse(), 8))
     },
     enable: function (cb) {
         var commands = this.commands, self = this;
