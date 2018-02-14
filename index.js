@@ -258,10 +258,11 @@ var SSPInstance = Class.extend({
                             // } else if (!self.keys.request_key_exchange) {
                             //     console.log("data ", data)
                             //     self.sendRequestKeyExchange()
-                            // } else if (!self.keys.finishEncryption) {
+                            // } else
+                            if (data.length > 3) {
                                 console.log("data ", data)
                                 self.createHostEncryptionKeys(data)
-                            // }
+                            }
                         } else if (data.length > 1) {
                             var event;
                             switch (data[1]) {
