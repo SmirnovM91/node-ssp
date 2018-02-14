@@ -474,7 +474,7 @@ var SSPInstance = Class.extend({
                     self.negotiateKeys();
 
                     setTimeout(function () {
-                        commands.sync()
+                        commands.sync().enable_payout_device().set_channel_inhibits(0x07, 0x00);
                         if (enableOnInit) {
                             cb && cb();
                             self.enable(function () {
