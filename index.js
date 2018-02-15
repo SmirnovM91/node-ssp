@@ -247,8 +247,8 @@ var SSPInstance = Class.extend({
                                 error.message = "Unknown error";
                         }
                         if (error.code == 0xFA){
-                            self.keys.finishEncryption = false
-                            self.sendRequestKeyExchange()
+                            // self.keys.finishEncryption = false
+                            // self.sendRequestKeyExchange()
                         }
                         if (error.code !== 0xF0) {
                             self.emit("error", error, buffer);
