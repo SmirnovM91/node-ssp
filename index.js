@@ -48,18 +48,16 @@ var SSPInstance = Class.extend({
         }
     },
     initiateKeys: function () {
-        var self = this;
-        var keyPair = forge.pki.rsa.generateKeyPair(64);
-        var modulusKey = keyPair.privateKey.p.toString(16);
-        var generatorKey = keyPair.privateKey.q.toString(16);
+        var commands = this.commands, self = this;
+        var getRandomInt = function (max) {
+            return Math.floor(Math.random() * Math.floor(max));
+        }
 
-        const host = crypto.createDiffieHellman(modulusKey, "hex", generatorKey, "hex")
-        host.generateKeys();
-        self.keys.host = host
-        self.keys.modulusKey = host.getPrime();
-        self.keys.generatorKey = host.getGenerator();
-        self.keys.hostRandom = host.getPrivateKey()
-        self.keys.hostIntKey = host.getPublicKey()
+        var keyPair = forge.pki.rsa.generateKeyPair(64);
+        self.keys.generatorKey = keyPair.privateKey.p;
+        self.keys.modulusKey = keyPair.privateKey.q;
+        self.keys.hostRandom = getRandomInt(5);
+        self.keys.hostIntKey = self.keys.generatorKey ^ self.keys.hostRandom % self.keys.modulusKey
         self.keys.negotiateKeys = true
 
     },
@@ -93,16 +91,23 @@ var SSPInstance = Class.extend({
     },
     createHostEncryptionKeys: function (data) {
         var commands = this.commands, self = this;
-
         if (self.keys.key == null) {
             data.shift()
-            data = data.filter(function (item) {
-                return item != 0
-            })
             var hexString = convertHex.bytesToHex(data.reverse());
-            self.keys.slaveIntKey = Buffer.from(hexString, "hex")
-            self.keys.key = self.keys.host.computeSecret(hexString, "hex")
-            self.keys.variableKey = self.keys.key
+
+            var slaveIntKey = bigInt(hexString, 16);
+            var slaveIntKeyString = ""
+            if (!slaveIntKey.isSmall) {
+                var values = slaveIntKey.value.reverse();
+                for (var i = 0; i < values.length; i++) {
+                    slaveIntKeyString += "" + values[i]
+                }
+            } else {
+                slaveIntKeyString = slaveIntKey.value
+            }
+            self.keys.slaveIntKey = slaveIntKeyString
+            self.keys.keyHost = self.keys.slaveIntKey ^ self.keys.hostRandom % self.keys.modulusKey
+            self.keys.variableKey = self.keys.keyHost
             commands.setKeys(self.keys)
             self.keys.finishEncryption = true
             self.emit("ready");
