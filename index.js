@@ -105,6 +105,7 @@ var SSPInstance = Class.extend({
             } else {
                 slaveIntKeyString = slaveIntKey.value
             }
+            console.log(slaveIntKeyString)
             self.keys.slaveIntKey = slaveIntKeyString
             self.keys.key = self.keys.slaveIntKey ^ self.keys.hostRandom % self.keys.modulusKey
             self.keys.variableKey = self.keys.key
@@ -466,9 +467,6 @@ var SSPInstance = Class.extend({
                 if (err) {
                     cb(err);
                 } else {
-                    var low = self.options.currencies.reduce(function (p, c, i) {
-                        return c === 1 ? p += Math.pow(2, i) : p;
-                    }, 0);
                     port.on('data', function (buffer) {
                         console.log("buffer",buffer)
                         var ix = 0;
