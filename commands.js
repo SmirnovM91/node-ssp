@@ -6,7 +6,7 @@ var Commands = Class.extend({
     command_list: null,
     exec_stack: [],
     keys: null,
-    counts: 0,
+    count: 0,
     setKeys: function (keys) {
         var self = this;
         self.keys = keys
@@ -81,7 +81,7 @@ var Commands = Class.extend({
             if (self.keys != null) {
                 var STEX = 0x7E
                 var eLENGTH = DATA.length;
-                this.count++
+                self.count++
                 var eCOUNT = this.parseHexString(this.count.toString(16), 4)
                 var eDATA = DATA
                 var ePACKING = 0x00
