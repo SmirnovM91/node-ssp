@@ -485,12 +485,12 @@ var SSPInstance = Class.extend({
                         if (enableOnInit) {
                             cb && cb();
                             self.enable(function () {
-                                // self.emit("ready");
+                                self.emit("ready");
                             });
                         } else {
                             commands.exec(function () {
                                 cb && cb();
-                                // self.emit("ready");
+                                self.emit("ready");
                             });
                         }
                     }, 2000);
