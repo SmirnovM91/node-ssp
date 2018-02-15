@@ -83,6 +83,7 @@ var Commands = Class.extend({
                 var eLENGTH = DATA.length;
                 self.count++
                 var eCOUNT = this.parseHexString(this.count.toString(16), 4)
+                console.log(eCOUNT)
                 var eDATA = DATA
                 var ePACKING = 0x00
                 var eCommandLine = [eLENGTH, eCOUNT].concat(eDATA, ePACKING)
