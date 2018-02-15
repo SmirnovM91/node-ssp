@@ -83,14 +83,14 @@ var Commands = Class.extend({
                 var eLENGTH = DATA.length;
                 self.count++
                 var eCOUNT = this.parseHexString(this.count.toString(16), 4)
-                console.log(eCOUNT)
                 var eDATA = DATA
                 var ePACKING = 0x00
+                console.log(eLENGTH, eCOUNT, eDATA, ePACKING)
                 var eCommandLine = [eLENGTH, eCOUNT].concat(eDATA, ePACKING)
                 var eCRC = this.CRC16(eCommandLine);
                 eCommandLine = eCommandLine.concat(eCRC)
 
-
+                console.log(eCommandLine)
                 var parse = function (a, count) {
                     for (var i = a.length; i < count; i++) {
                         a.push(0)
@@ -102,6 +102,7 @@ var Commands = Class.extend({
                 console.log(key)
                 var aesCtr = new aesjs.ModeOfOperation.ctr(key);
                 var uint8Array = aesCtr.encrypt(eCommandLine);
+                console.log(uint8Array)
                 eCommandLine = [STEX].concat([].slice.call(uint8Array))
                 DATA = eCommandLine
                 LENGTH = DATA.length
