@@ -85,19 +85,17 @@ var Commands = Class.extend({
                 var eCOUNT = this.parseHexString(this.count.toString(16), 4)
                 var eDATA = DATA
                 var ePACKING = 0x00
-                console.log(eLENGTH, eCOUNT, eDATA, ePACKING)
                 var eCommandLine = [eLENGTH].concat(eCOUNT, eDATA, ePACKING)
                 var eCRC = this.CRC16(eCommandLine);
                 eCommandLine = eCommandLine.concat(eCRC)
 
-                console.log(eCommandLine)
                 var parse = function (a, count) {
                     for (var i = a.length; i < count; i++) {
                         a.push(0)
                     }
                     return a;
                 }
-                var key = parse(Array.prototype.slice.call(self.keys.fixedKey, 0), 8).concat(this.parseHexString(self.keys.key, 8))
+                var key = parse(Array.prototype.slice.call(self.keys.fixedKey, 0).reverse(), 8).concat(this.parseHexString(self.keys.key, 8))
 
                 console.log(key)
                 var aesCtr = new aesjs.ModeOfOperation.ctr(key);
