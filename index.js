@@ -106,7 +106,7 @@ var SSPInstance = Class.extend({
                 slaveIntKeyString = slaveIntKey.value
             }
             self.keys.slaveIntKey = slaveIntKeyString
-            self.keys.keyHost = self.keys.slaveIntKey ^ self.keys.hostRandom % self.keys.modulusKey
+            self.keys.key = self.keys.slaveIntKey ^ self.keys.hostRandom % self.keys.modulusKey
             self.keys.variableKey = self.keys.keyHost
             commands.setKeys(self.keys)
             self.keys.finishEncryption = true
