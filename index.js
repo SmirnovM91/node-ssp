@@ -107,9 +107,10 @@ var SSPInstance = Class.extend({
             }
             self.keys.slaveIntKey = slaveIntKeyString
             self.keys.key = self.keys.slaveIntKey ^ self.keys.hostRandom % self.keys.modulusKey
-            self.keys.variableKey = self.keys.keyHost
-            commands.setKeys(self.keys)
+            self.keys.variableKey = self.keys.key
             self.keys.finishEncryption = true
+            commands.setKeys(self.keys)
+
             self.emit("ready");
         }
     },
