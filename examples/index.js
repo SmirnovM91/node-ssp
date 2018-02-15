@@ -19,6 +19,7 @@ ssp.init(function () {
     ssp.on('ready', function () {
         console.log("Device is ready");
         setTimeout(function () {
+            ssp.commands.setup_request()
             ssp.commands.set_denomination_route(0x00, 0x64, 0x00, 0x00, 0x00, 0x55, 0x53, 0x44)
             ssp.commands.enable_payout_device()
             ssp.enable();
