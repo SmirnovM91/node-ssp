@@ -32,7 +32,6 @@ var Commands = Class.extend({
     },
     getSequence: function () {
         var seq =  this.ID | (this.sequence = (this.sequence === this.sequenceNumber ? 0x00 : this.sequenceNumber));
-        console.log(seq)
         return seq
     },
     CRC16: function (command) {
