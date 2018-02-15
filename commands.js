@@ -86,7 +86,7 @@ var Commands = Class.extend({
                 var eDATA = DATA
                 var ePACKING = 0x00
                 console.log(eLENGTH, eCOUNT, eDATA, ePACKING)
-                var eCommandLine = [eLENGTH, eCOUNT].concat(eDATA, ePACKING)
+                var eCommandLine = [eLENGTH].concat(eCOUNT, eDATA, ePACKING)
                 var eCRC = this.CRC16(eCommandLine);
                 eCommandLine = eCommandLine.concat(eCRC)
 
