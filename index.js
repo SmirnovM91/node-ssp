@@ -23,6 +23,9 @@ var SSPInstance = Class.extend({
         variableKey: null,
         key: null,
         negotiateKeys: false,
+        set_generator: false,
+        set_modulus: false,
+        request_key_exchange: false,
         finishEncryption: false
     },
     initialize: function (opts) {
@@ -44,8 +47,8 @@ var SSPInstance = Class.extend({
             throw new Error("Unknown device type '" + options.type + "'");
         }
     },
-    negotiateKeys: function () {
-        var self = this, commands = this.commands;
+    initiateKeys: function () {
+        var self = this;
         var keyPair = forge.pki.rsa.generateKeyPair(64);
         var modulusKey = keyPair.privateKey.p.toString(16);
         var generatorKey = keyPair.privateKey.q.toString(16);
@@ -59,19 +62,34 @@ var SSPInstance = Class.extend({
         self.keys.hostIntKey = host.getPublicKey()
         self.keys.negotiateKeys = true
 
-        var generatorArray = self.parse(Array.prototype.slice.call(self.keys.generatorKey, 0).reverse(), 8)
-        var modulusArray = self.parse(Array.prototype.slice.call(self.keys.modulusKey, 0).reverse(), 8)
-        var hostIntArray = self.parse(Array.prototype.slice.call(self.keys.hostIntKey, 0).reverse(), 8)
-
-        commands.set_generator.apply(this, generatorArray)
-        commands.set_modulus.apply(this, modulusArray)
-        commands.request_key_exchange.apply(this, hostIntArray)
     },
     parse: function (a, count) {
         for (var i = a.length; i < count; i++) {
             a.push(0)
         }
         return a;
+    },
+    sendGenerator: function () {
+        var commands = this.commands, self = this;
+        console.log(commands.byteToHexString(self.keys.generatorKey))
+        var generatorArray = self.parse(Array.prototype.slice.call(self.keys.generatorKey, 0).reverse(), 8)
+        self.keys.set_generator = true;
+        commands.set_generator.apply(this, generatorArray)
+    },
+    sendModulus: function () {
+        var commands = this.commands, self = this;
+        console.log(commands.byteToHexString(self.keys.modulusKey))
+        var modulusArray = self.parse(Array.prototype.slice.call(self.keys.modulusKey, 0).reverse(), 8)
+        self.keys.set_modulus = true;
+        commands.set_modulus.apply(this, modulusArray)
+    },
+    sendRequestKeyExchange: function () {
+        var commands = this.commands, self = this;
+        console.log(commands.byteToHexString(self.keys.hostIntKey))
+        var hostIntArray = self.parse(Array.prototype.slice.call(self.keys.hostIntKey, 0).reverse(), 8)
+        self.keys.request_key_exchange = true;
+        commands.request_key_exchange.apply(this, hostIntArray)
+
     },
     createHostEncryptionKeys: function (data) {
         var commands = this.commands, self = this;
@@ -85,8 +103,9 @@ var SSPInstance = Class.extend({
             self.keys.slaveIntKey = Buffer.from(hexString, "hex")
             self.keys.key = self.keys.host.computeSecret(hexString, "hex")
             self.keys.variableKey = self.keys.key
-            self.keys.finishEncryption = true
             commands.setKeys(self.keys)
+            self.keys.finishEncryption = true
+            self.emit("ready");
         }
     },
     enable: function (cb) {
@@ -189,8 +208,8 @@ var SSPInstance = Class.extend({
 
                         if (buf[buf.length - 2] !== crc[0] && buf[buf.length - 1] !== crc[1]) {
                             console.log('Wrong CRC from validator')
-                            self.emit('error', new Error('Wrong CRC from validator'), buffer, crc);
-                            return;
+                            // self.emit('error', new Error('Wrong CRC from validator'), buffer, crc);
+                            // return;
                         }
                         error = new Error("New error");
                         error.code = data[0];
@@ -224,7 +243,16 @@ var SSPInstance = Class.extend({
                         if (error.code !== 0xF0) {
                             self.emit("error", error, buffer);
                         } else if (self.keys.negotiateKeys) {
-                            if (data.length > 3 && !self.keys.finishEncryption) {
+                            if (!self.keys.set_generator) {
+                                console.log("data ", data)
+                                self.sendGenerator()
+                            } else if (!self.keys.set_modulus) {
+                                console.log("data ", data)
+                                self.sendModulus()
+                            } else if (!self.keys.request_key_exchange) {
+                                console.log("data ", data)
+                                self.sendRequestKeyExchange()
+                            } else if (!self.keys.finishEncryption) {
                                 console.log("data ", data)
                                 self.createHostEncryptionKeys(data)
                             }
@@ -447,17 +475,16 @@ var SSPInstance = Class.extend({
 
                     setTimeout(function () {
                         commands.sync().enable_higher_protocol()
-                        self.negotiateKeys();
-
+                        self.initiateKeys();
                         if (enableOnInit) {
                             cb && cb();
                             self.enable(function () {
-                                self.emit("ready");
+                                // self.emit("ready");
                             });
                         } else {
                             commands.exec(function () {
                                 cb && cb();
-                                self.emit("ready");
+                                // self.emit("ready");
                             });
                         }
                     }, 2000);
