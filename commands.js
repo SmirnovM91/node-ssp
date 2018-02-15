@@ -66,6 +66,7 @@ var Commands = Class.extend({
             throw new Error("Unknown command '" + commandName + "'");
         }
         if (commandName instanceof Array) {
+            console.log("commandName", commandName)
             for (var i in commandName) {
                 this.stack(commandName[i]);
             }
@@ -99,7 +100,6 @@ var Commands = Class.extend({
                 }
                 var key = parse(Array.prototype.slice.call(self.keys.fixedKey, 0).reverse(), 8).concat(this.parseHexString(self.keys.key, 8))
 
-                console.log(key)
                 var aesCtr = new aesjs.ModeOfOperation.ctr(key);
                 var uint8Array = aesCtr.encrypt(eCommandLine);
                 eCommandLine = [STEX].concat([].slice.call(uint8Array))
@@ -112,7 +112,6 @@ var Commands = Class.extend({
             var STX = 0x7F
 
             commandLine = [STX].concat(commandLine, crc);
-            console.log("commandLine", commandLine)
             console.log(arguments)
             this.exec_stack.push(commandLine);
         }
