@@ -110,8 +110,8 @@ var SSPInstance = Class.extend({
             self.keys.variableKey = self.keys.key
             self.keys.finishEncryption = true
             commands.setKeys(self.keys)
-
             self.emit("ready");
+            console.log("ready")
         }
     },
     enable: function (cb) {
