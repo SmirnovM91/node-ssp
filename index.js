@@ -49,14 +49,14 @@ var SSPInstance = Class.extend({
     },
     initiateKeys: function () {
         var commands = this.commands, self = this;
-        var getRandomInt = function (max) {
-            return Math.floor(Math.random() * Math.floor(max));
+        var getRandomInt = function (min, max) {
+            return Math.floor(Math.random() * (max - min)) + min;
         }
 
         var keyPair = forge.pki.rsa.generateKeyPair(64);
         self.keys.generatorKey = keyPair.privateKey.p;
         self.keys.modulusKey = keyPair.privateKey.q;
-        self.keys.hostRandom = getRandomInt(5);
+        self.keys.hostRandom = getRandomInt(1, 5);
         self.keys.hostIntKey = self.keys.generatorKey ^ self.keys.hostRandom % self.keys.modulusKey
         self.keys.negotiateKeys = true
 
