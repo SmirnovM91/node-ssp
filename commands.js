@@ -6,6 +6,7 @@ var Commands = Class.extend({
     command_list: null,
     exec_stack: [],
     keys: null,
+    counts: 0,
     setKeys: function (keys) {
         var self = this;
         self.keys = keys
@@ -77,32 +78,33 @@ var Commands = Class.extend({
             var SEQ_SLAVE_ID = this.getSequence()
             var DATA = [command].concat(args)
 
-            // if (self.keys != null) {
-            //     var STEX = 0x7E
-            //     var eLENGTH = DATA.length;
-            //     var eCOUNT = 0x01
-            //     var eDATA = DATA
-            //     var ePACKING = 0x00
-            //     var eCommandLine = [eLENGTH, eCOUNT].concat(eDATA, ePACKING)
-            //     var eCRC = this.CRC16(eCommandLine);
-            //     eCommandLine = eCommandLine.concat(eCRC)
-            //
-            //
-            //     var parse = function (a, count) {
-            //         for (var i = a.length; i < count; i++) {
-            //             a.push(0)
-            //         }
-            //         return a;
-            //     }
-            //     var key = parse(Array.prototype.slice.call(self.keys.fixedKey, 0), 8).concat(this.parseHexString(self.keys.key,8))
-            //
-            //     console.log(key)
-            //     var aesCtr = new aesjs.ModeOfOperation.ctr(key);
-            //     var uint8Array = aesCtr.encrypt(eCommandLine);
-            //     eCommandLine = [STEX].concat([].slice.call(uint8Array))
-            //     DATA = eCommandLine
-            //     LENGTH = DATA.length
-            // }
+            if (self.keys != null) {
+                var STEX = 0x7E
+                var eLENGTH = DATA.length;
+                this.count++
+                var eCOUNT = this.parseHexString(this.count.toString(16), 4)
+                var eDATA = DATA
+                var ePACKING = 0x00
+                var eCommandLine = [eLENGTH, eCOUNT].concat(eDATA, ePACKING)
+                var eCRC = this.CRC16(eCommandLine);
+                eCommandLine = eCommandLine.concat(eCRC)
+
+
+                var parse = function (a, count) {
+                    for (var i = a.length; i < count; i++) {
+                        a.push(0)
+                    }
+                    return a;
+                }
+                var key = parse(Array.prototype.slice.call(self.keys.fixedKey, 0), 8).concat(this.parseHexString(self.keys.key, 8))
+
+                console.log(key)
+                var aesCtr = new aesjs.ModeOfOperation.ctr(key);
+                var uint8Array = aesCtr.encrypt(eCommandLine);
+                eCommandLine = [STEX].concat([].slice.call(uint8Array))
+                DATA = eCommandLine
+                LENGTH = DATA.length
+            }
 
             commandLine = [SEQ_SLAVE_ID, LENGTH].concat(DATA);
             var crc = this.CRC16(commandLine);
