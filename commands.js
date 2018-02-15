@@ -31,7 +31,7 @@ var Commands = Class.extend({
         this.sequence = this.sequenceNumber = sequence || 0x80;
     },
     getSequence: function () {
-        return 0x00 //this.ID | (this.sequence = (this.sequence === this.sequenceNumber ? 0x00 : this.sequenceNumber));
+        return 0x80 //this.ID | (this.sequence = (this.sequence === this.sequenceNumber ? 0x00 : this.sequenceNumber));
     },
     CRC16: function (command) {
         var length = command.length,
