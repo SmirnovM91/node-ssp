@@ -70,21 +70,21 @@ var SSPInstance = Class.extend({
     sendGenerator: function () {
         var commands = this.commands, self = this;
         // var generatorArray = self.parse(Array.prototype.slice.call(self.keys.generatorKey, 0).reverse(), 8)
-        var generatorArray = commands.parseHexString(generatorKey.toString(16), 8)
+        var generatorArray = commands.parseHexString(self.keys.generatorKey.toString(16), 8)
         self.keys.set_generator = true;
         commands.set_generator.apply(this, generatorArray)
     },
     sendModulus: function () {
         var commands = this.commands, self = this;
         // var modulusArray = self.parse(Array.prototype.slice.call(self.keys.modulusKey, 0).reverse(), 8)
-        var modulusArray = commands.parseHexString(modulusKey.toString(16), 8)
+        var modulusArray = commands.parseHexString(self.keys.modulusKey.toString(16), 8)
         self.keys.set_modulus = true;
         commands.set_modulus.apply(this, modulusArray)
     },
     sendRequestKeyExchange: function () {
         var commands = this.commands, self = this;
         // var hostIntArray = self.parse(Array.prototype.slice.call(self.keys.hostIntKey, 0).reverse(), 8)
-        var hostIntArray = commands.parseHexString(hostIntKey.toString(16), 8)
+        var hostIntArray = commands.parseHexString(self.keys.hostIntKey.toString(16), 8)
         self.keys.request_key_exchange = true;
         commands.request_key_exchange.apply(this, hostIntArray)
 
