@@ -73,7 +73,7 @@ var SSPInstance = Class.extend({
             var generatorArray = commands.parseHexString(self.keys.generatorKey.toString(16), 8)
             self.keys.set_generator = true;
             commands.set_generator.apply(this, generatorArray)
-        }, 500)
+        }, 200)
 
     },
     sendModulus: function () {
@@ -82,7 +82,7 @@ var SSPInstance = Class.extend({
             var modulusArray = commands.parseHexString(self.keys.modulusKey.toString(16), 8)
             self.keys.set_modulus = true;
             commands.set_modulus.apply(this, modulusArray)
-        }, 500)
+        }, 200)
     },
     sendRequestKeyExchange: function () {
         var commands = this.commands, self = this;
@@ -90,7 +90,7 @@ var SSPInstance = Class.extend({
             var hostIntArray = commands.parseHexString(self.keys.hostIntKey.toString(16), 8)
             self.keys.request_key_exchange = true;
             commands.request_key_exchange.apply(this, hostIntArray)
-        }, 500)
+        }, 200)
 
     },
     createHostEncryptionKeys: function (data) {
