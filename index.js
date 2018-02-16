@@ -490,6 +490,7 @@ var SSPInstance = Class.extend({
                         } else {
                             commands.exec(function () {
                                 cb && cb();
+                                self.emit("ready");
                             });
                         }
                     }, 2000);

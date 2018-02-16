@@ -132,8 +132,8 @@ var Commands = Class.extend({
         var typeCmd = typeof command;
         if ("function" === typeCmd) {
             console.log("command function", command)
-            cb = command;
-            command = null;
+            // cb = command;
+            // command = null;
         } else if ("string" === typeCmd) {
             console.log("command String", command)
             this.stack(command);
