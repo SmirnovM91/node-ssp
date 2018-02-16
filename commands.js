@@ -88,6 +88,9 @@ var Commands = Class.extend({
             }
         }
         console.log("CRC16", crc)
+        console.log((crc & 0xFF))
+        console.log(crc >> 8)
+        console.log(((crc >> 8) & 0xFF))
         var response = [(crc & 0xFF), ((crc >> 8) & 0xFF)]
         console.log("response", response)
         return response;
