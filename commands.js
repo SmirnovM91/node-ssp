@@ -111,7 +111,7 @@ var Commands = Class.extend({
             var STX = 0x7F
 
             commandLine = [STX].concat(commandLine, crc);
-            console.log(arguments)
+            console.log(arguments[0], commandLine)
             this.exec_stack.push(commandLine);
         }
         return this;
