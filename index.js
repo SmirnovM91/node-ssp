@@ -107,8 +107,6 @@ var SSPInstance = Class.extend({
             self.keys.variableKey = self.keys.key
             self.keys.finishEncryption = true
             commands.setKeys(self.keys)
-            self.emit("ready");
-            console.log("ready")
         }
     },
     enable: function (cb) {
@@ -490,7 +488,7 @@ var SSPInstance = Class.extend({
                         } else {
                             commands.exec(function () {
                                 cb && cb();
-                                self.emit("ready");
+                                // self.emit("ready");
                             });
                         }
                     }, 2000);
