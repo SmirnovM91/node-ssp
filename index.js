@@ -69,21 +69,28 @@ var SSPInstance = Class.extend({
     },
     sendGenerator: function () {
         var commands = this.commands, self = this;
-        var generatorArray = commands.parseHexString(self.keys.generatorKey.toString(16), 8)
-        self.keys.set_generator = true;
-        commands.set_generator.apply(this, generatorArray)
+        setTimeout(function () {
+            var generatorArray = commands.parseHexString(self.keys.generatorKey.toString(16), 8)
+            self.keys.set_generator = true;
+            commands.set_generator.apply(this, generatorArray)
+        }, 500)
+
     },
     sendModulus: function () {
         var commands = this.commands, self = this;
-        var modulusArray = commands.parseHexString(self.keys.modulusKey.toString(16), 8)
-        self.keys.set_modulus = true;
-        commands.set_modulus.apply(this, modulusArray)
+        setTimeout(function () {
+            var modulusArray = commands.parseHexString(self.keys.modulusKey.toString(16), 8)
+            self.keys.set_modulus = true;
+            commands.set_modulus.apply(this, modulusArray)
+        }, 500)
     },
     sendRequestKeyExchange: function () {
         var commands = this.commands, self = this;
-        var hostIntArray = commands.parseHexString(self.keys.hostIntKey.toString(16), 8)
-        self.keys.request_key_exchange = true;
-        commands.request_key_exchange.apply(this, hostIntArray)
+        setTimeout(function () {
+            var hostIntArray = commands.parseHexString(self.keys.hostIntKey.toString(16), 8)
+            self.keys.request_key_exchange = true;
+            commands.request_key_exchange.apply(this, hostIntArray)
+        }, 500)
 
     },
     createHostEncryptionKeys: function (data) {
@@ -243,7 +250,7 @@ var SSPInstance = Class.extend({
                             default:
                                 error.message = "Unknown error";
                         }
-                        if (error.code == 0xFA){
+                        if (error.code == 0xFA) {
                             // self.keys.finishEncryption = false
                             // self.sendRequestKeyExchange()
                         }
@@ -464,7 +471,7 @@ var SSPInstance = Class.extend({
                     cb(err);
                 } else {
                     port.on('data', function (buffer) {
-                        console.log("COM1 <= ", Array.prototype.slice.call(buffer, 0).map(function(item){
+                        console.log("COM1 <= ", Array.prototype.slice.call(buffer, 0).map(function (item) {
                             return item.toString(16).toUpperCase()
                         }))
                         var ix = 0;
