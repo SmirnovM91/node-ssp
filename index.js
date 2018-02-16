@@ -86,8 +86,8 @@ var SSPInstance = Class.extend({
         // var hostIntArray = self.parse(Array.prototype.slice.call(self.keys.hostIntKey, 0).reverse(), 8)
         var hostIntArray = commands.parseHexString(self.keys.hostIntKey.toString(16), 8)
         self.keys.request_key_exchange = true;
-        commands.request_key_exchange.apply(this, hostIntArray)
         commands.host_request_key_exchange.apply(this, hostIntArray)
+        commands.request_key_exchange.apply(this, hostIntArray)
 
     },
     createHostEncryptionKeys: function (data) {
