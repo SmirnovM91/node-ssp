@@ -51,12 +51,9 @@ var Commands = Class.extend({
         0x8243, 0x0246, 0x024C, 0x8249, 0x0258, 0x825D, 0x8257, 0x0252, 0x0270, 0x8275, 0x827F, 0x027A, 0x826B, 0x026E, 0x0264, 0x8261,
         0x0220, 0x8225, 0x822F, 0x022A, 0x823B, 0x023E, 0x0234, 0x8231, 0x8213, 0x0216, 0x021C, 0x8219, 0x0208, 0x820D, 0x8207, 0x0202],
 
-    crc16_CCIT: function (command) {
-
+    CRC16_CCIT: function (command) {
         var crc = 0xFFFF;
         var j, i;
-
-
         for (var i = 0; i < command.length; i++) {
             var c = command[i];
             if (c > 255) {
@@ -65,6 +62,8 @@ var Commands = Class.extend({
             j = (c ^ (crc >> 8)) & 0xFF;
             crc = this.crcTable[j] ^ (crc << 8);
         }
+        console.log("CRC16_CCIT", crc)
+
         var response = [(crc & 0xFF), ((crc >> 8) & 0xFF)]
         return response
     },
@@ -88,7 +87,7 @@ var Commands = Class.extend({
 
             }
         }
-        console.log("CRC", crc)
+        console.log("CRC16", crc)
         var response = [(crc & 0xFF), ((crc >> 8) & 0xFF)]
         console.log("response", response)
         return response;
@@ -120,8 +119,9 @@ var Commands = Class.extend({
 
             commandLine = [SEQ_SLAVE_ID, LENGTH].concat(DATA);
             var crc = this.CRC16(commandLine);
+            var crc_ccit = this.CRC16_CCIT(commandLine)
 
-            console.log(crc, this.crc16_CCIT(commandLine))
+            console.log(crc, crc_ccit)
             commandLine = [STX].concat(commandLine, crc);
             var hex = commandLine.map(function (item) {
                 return item.toString(16).toUpperCase()
