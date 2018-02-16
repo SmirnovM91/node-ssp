@@ -132,8 +132,8 @@ var Commands = Class.extend({
         var typeCmd = typeof command;
         if ("function" === typeCmd) {
             console.log("command function", command)
-            // cb = command;
-            // command = null;
+            cb = command;
+            command = null;
         } else if ("string" === typeCmd) {
             console.log("command String", command)
             this.stack(command);
@@ -142,7 +142,7 @@ var Commands = Class.extend({
             this.exec_stack.push(command);
         }
         if (this.exec_stack.length === 0) {
-            cb && cb();
+            // cb && cb();
         } else {
             var buf = new Buffer(this.exec_stack.shift()), self = this;
             this.client.write(buf, function () {
