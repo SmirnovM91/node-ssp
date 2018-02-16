@@ -26,7 +26,7 @@ module.exports = {
     "get_firmware_version": 0x20,
     "get_dataset_version": 0x21,
     "set_generator": function () {
-        this.sequence = 0x80;
+        this.sequence = 0x00;
         return 0x4a;
     },
     "set_modulus": function () {
