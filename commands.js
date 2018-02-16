@@ -146,7 +146,7 @@ var Commands = Class.extend({
                 self.client.drain(function () {
                     setTimeout(function () {
                         self.exec(cb);
-                    }, 1000);
+                    }, 100);
                 });
             });
         }
