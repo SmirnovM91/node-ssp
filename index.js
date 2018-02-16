@@ -71,21 +71,18 @@ var SSPInstance = Class.extend({
         var commands = this.commands, self = this;
         var generatorArray = commands.parseHexString(self.keys.generatorKey.toString(16), 8)
         self.keys.set_generator = true;
-        commands.host_set_generator.apply(this, generatorArray)
         commands.set_generator.apply(this, generatorArray)
     },
     sendModulus: function () {
         var commands = this.commands, self = this;
         var modulusArray = commands.parseHexString(self.keys.modulusKey.toString(16), 8)
         self.keys.set_modulus = true;
-        commands.host_set_modulus.apply(this, modulusArray)
         commands.set_modulus.apply(this, modulusArray)
     },
     sendRequestKeyExchange: function () {
         var commands = this.commands, self = this;
         var hostIntArray = commands.parseHexString(self.keys.hostIntKey.toString(16), 8)
         self.keys.request_key_exchange = true;
-        // commands.host_request_key_exchange.apply(this, hostIntArray)
         commands.request_key_exchange.apply(this, hostIntArray)
 
     },
@@ -105,7 +102,6 @@ var SSPInstance = Class.extend({
             } else {
                 slaveIntKeyString = slaveIntKey.value
             }
-            console.log(slaveIntKeyString)
             self.keys.slaveIntKey = slaveIntKeyString
             self.keys.key = self.keys.slaveIntKey ^ self.keys.hostRandom % self.keys.modulusKey
             self.keys.variableKey = self.keys.key
