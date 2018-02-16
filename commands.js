@@ -47,14 +47,17 @@ var Commands = Class.extend({
             for (var j = 0; j < 8; j++) {
 
                 if (crc & 0x8000) {
-                    crc = ((crc << 1) & 0xffff) ^ poly;
+                    crc = (crc << 1) ^ poly;
                 } else {
                     crc <<= 1;
                 }
 
             }
         }
-        return [(crc & 0xFF), ((crc >> 8) & 0xFF)];
+        console.log("CRC", crc)
+        var response = [(crc & 0xFF), ((crc >> 8) & 0xFF)]
+        console.log("response", response)
+        return response;
     },
     stack: function (commandName) {
         var self = this;
