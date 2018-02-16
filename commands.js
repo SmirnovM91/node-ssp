@@ -76,9 +76,17 @@ var Commands = Class.extend({
             } else {
                 command = this.command_list[commandName];
             }
+            var STX = 0x7F
             var LENGTH = args.length + 1
             var SEQ_SLAVE_ID = this.getSequence()
             var DATA = [command].concat(args)
+
+            commandLine = [SEQ_SLAVE_ID, LENGTH].concat(DATA);
+            var crc = this.CRC16(commandLine);
+
+            commandLine = [STX].concat(commandLine, crc);
+            var hex = commandLine.map(function(item) { return item.toString(16)})
+            console.log("UNENCRYPTED", hex, "|", arguments[0] )
 
             if (self.keys != null) {
                 var STEX = 0x7E
@@ -107,11 +115,12 @@ var Commands = Class.extend({
             }
 
             commandLine = [SEQ_SLAVE_ID, LENGTH].concat(DATA);
-            var crc = this.CRC16(commandLine);
-            var STX = 0x7F
+            crc = this.CRC16(commandLine);
 
             commandLine = [STX].concat(commandLine, crc);
-            console.log(arguments[0], commandLine)
+            commandLine = [STX].concat(commandLine, crc);
+            var hex = commandLine.map(function(item) { return item.toString(16)})
+            console.log("ENCRYPTED", hex, "|", arguments[0] )
             this.exec_stack.push(commandLine);
         }
         return this;
