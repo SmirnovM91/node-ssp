@@ -251,16 +251,16 @@ var SSPInstance = Class.extend({
                             self.emit("error", error, buffer);
                         } else if (self.keys.negotiateKeys) {
                             if (!self.keys.set_generator) {
-                                console.log("data ", data)
+                                // console.log("data ", data)
                                 self.sendGenerator()
                             } else if (!self.keys.set_modulus) {
-                                console.log("data ", data)
+                                // console.log("data ", data)
                                 self.sendModulus()
                             } else if (!self.keys.request_key_exchange) {
-                                console.log("data ", data)
+                                // console.log("data ", data)
                                 self.sendRequestKeyExchange()
                             } else if (!self.keys.finishEncryption && data.length == 9) {
-                                console.log("data ", data)
+                                // console.log("data ", data)
                                 self.createHostEncryptionKeys(data)
                             }
                         } else if (data.length > 1) {
@@ -465,7 +465,7 @@ var SSPInstance = Class.extend({
                 } else {
                     port.on('data', function (buffer) {
                         console.log("COM1 <= ", Array.prototype.slice.call(buffer, 0).map(function(item){
-                            return item.toString(16)
+                            return item.toString(16).toUpperCase()
                         }))
                         var ix = 0;
                         do {
