@@ -28,7 +28,15 @@ module.exports = {
     "set_generator": function () {
         return 0x4a;
     },
+    "host_set_generator": function () {
+        this.sequence = 0x00;
+        return 0x4a;
+    },
     "set_modulus": function () {
+        return 0x4b;
+    },
+    "host_set_modulus": function () {
+        this.sequence = 0x00;
         return 0x4b;
     },
     "request_key_exchange": function () {
