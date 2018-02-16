@@ -464,7 +464,7 @@ var SSPInstance = Class.extend({
                     cb(err);
                 } else {
                     port.on('data', function (buffer) {
-                        console.log("buffer",buffer)
+                        console.log("COM1 <= ", [].slice.call(this, buffer))
                         var ix = 0;
                         do {
                             var len = buffer[2] + 5;

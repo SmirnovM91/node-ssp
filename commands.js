@@ -86,7 +86,7 @@ var Commands = Class.extend({
 
             commandLine = [STX].concat(commandLine, crc);
             var hex = commandLine.map(function(item) { return item.toString(16)})
-            console.log("COM1", hex,"| UNENCRYPTED |", arguments[0] )
+            console.log("COM1 => ", hex,"| UNENCRYPTED |", arguments[0] )
 
             if (self.keys != null) {
                 var STEX = 0x7E
@@ -120,7 +120,7 @@ var Commands = Class.extend({
 
             if (self.keys != null) {
                 var hex = commandLine.map(function(item) { return item.toString(16)})
-                console.log("COM1", hex,"| ENCRYPTED |", arguments[0] )
+                console.log("COM1 =>", hex,"| ENCRYPTED |", arguments[0] )
             }
             this.exec_stack.push(commandLine);
         }
