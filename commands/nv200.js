@@ -32,6 +32,9 @@ module.exports = {
         return 0x4b;
     },
     "request_key_exchange": function () {
+        return 0x4c;
+    },
+    "host_request_key_exchange": function () {
         this.sequence = 0x00;
         return 0x4c;
     },
