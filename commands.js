@@ -131,7 +131,7 @@ var Commands = Class.extend({
     exec: function (command, cb) {
         var typeCmd = typeof command;
         if ("function" === typeCmd) {
-            consoe.log("command function", command)
+            console.log("command function", command)
             cb = command;
             command = null;
         } else if ("string" === typeCmd) {
