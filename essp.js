@@ -125,7 +125,7 @@ export default class eSSP extends EventEmitter {
                     this.port.drain()
                 })
 
-                this.port.on('data', function (buffer) {
+                this.port.once('data', function (buffer) {
                     var ix = 0;
                     do {
                         var len = buffer[2] + 5;
@@ -154,7 +154,7 @@ export default class eSSP extends EventEmitter {
                     this.port.drain()
                 })
 
-                this.port.on('data', function (buffer) {
+                this.port.once('data', function (buffer) {
                     var ix = 0;
                     do {
                         var len = buffer[2] + 5;
@@ -181,7 +181,7 @@ export default class eSSP extends EventEmitter {
                 this.port.write(buff, ()=> {
                     this.port.drain()
                 })
-                this.port.on('data', function (buffer) {
+                this.port.once('data', function (buffer) {
                     var ix = 0;
                     do {
                         var len = buffer[2] + 5;
