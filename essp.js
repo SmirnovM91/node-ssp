@@ -132,16 +132,16 @@ export default class eSSP extends EventEmitter {
                     var len = buffer[2] + 5;
                     var buf = new Buffer(len);
                     buffer.copy(buf, 0, ix, ix + len);
-                    console.log(buffer)
+                    resolve(buffer)
                     ix += len;
                 } while (ix < buffer.length);
             });
-            this.port.once('data', (data) => {
-                resolve(data.toString());
-            });
-            this.port.once('error', (err) => {
-                reject(err);
-            });
+            // this.port.once('data', (data) => {
+            //     resolve(data.toString());
+            // });
+            // this.port.once('error', (err) => {
+            //     reject(err);
+            // });
         });
     }
 
