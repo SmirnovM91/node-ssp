@@ -58,8 +58,8 @@ export default class eSSP extends EventEmitter {
         }, false);
 
         this.port = port;
-        port.open(function () {
-            function parseBuffer(buffer) {
+        port.open(() =>{
+            let parseBuffer = (buffer) => {
                 var data, buf, error, crc;
                 if (buffer[0] === 0x7F) {
                     buf = buffer.toJSON();
