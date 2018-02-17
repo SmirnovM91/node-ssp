@@ -104,10 +104,13 @@ export default class eSSP extends EventEmitter {
         var buff = new Buffer(packet)
         return new Promise((resolve, reject) => {
             setTimeout(()=>[
-                this.port.write(buff)
+                this.port.write(buff,()=>{
+                    this.port.drain()
+                })
             ], 300)
+
             this.port.once('data', (data) => {
-                resolve(data.toString());
+                resolve(data);
             });
             this.port.once('error', (err) => {
                 reject(err);
@@ -121,8 +124,10 @@ export default class eSSP extends EventEmitter {
         var buff = new Buffer(packet)
         return new Promise((resolve, reject) => {
             setTimeout(()=>[
-                this.port.write(buff)
-            ], 1000)
+                this.port.write(buff,()=>{
+                    this.port.drain()
+                })
+            ], 500)
 
             this.port.once('data', (data) => {
                 console.log(0x11, "once",data)
@@ -140,8 +145,10 @@ export default class eSSP extends EventEmitter {
         var buff = new Buffer(packet)
         return new Promise((resolve, reject) => {
             setTimeout(()=>[
-                this.port.write(buff)
-            ], 1000)
+                this.port.write(buff,()=>{
+                    this.port.drain()
+                })
+            ], 500)
             this.port.once('data', function(data){
                 console.log(0x4A, "once",data)
                 resolve(data.toString());
@@ -158,8 +165,10 @@ export default class eSSP extends EventEmitter {
         var buff = new Buffer(packet)
         return new Promise((resolve, reject) => {
             setTimeout(()=>[
-                this.port.write(buff)
-            ], 1000)
+                this.port.write(buff,()=>{
+                    this.port.drain()
+                })
+            ], 500)
             this.port.once('data', function(data){
                 console.log(0x4B, "once",data)
                 resolve(data.toString());
