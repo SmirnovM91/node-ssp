@@ -57,6 +57,9 @@ export default class eSSP extends EventEmitter {
         }, false);
 
         this.port = port;
+        port.open(function(){
+
+        })
     }
 
     async initiateKeys() {
