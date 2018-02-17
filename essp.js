@@ -100,7 +100,7 @@ export default class eSSP extends EventEmitter {
         var buff = new Buffer(packet)
         return new Promise((resolve, reject) => {
             setTimeout(()=>[
-                this.port.write(buff,()=>{
+                this.port.write(buff, ()=> {
                     this.port.drain()
                 })
             ], 300)
@@ -119,11 +119,11 @@ export default class eSSP extends EventEmitter {
         console.log(packet)
         var buff = new Buffer(packet)
         return new Promise((resolve, reject) => {
-            setTimeout(()=>[
-                this.port.write(buff,()=>{
+            setTimeout(()=> {
+                this.port.write(buff, ()=> {
                     this.port.drain()
                 })
-            ], 500)
+            }, 500)
 
             this.port.on('data', function (buffer) {
                 var ix = 0;
@@ -131,7 +131,7 @@ export default class eSSP extends EventEmitter {
                     var len = buffer[2] + 5;
                     var buf = new Buffer(len);
                     buffer.copy(buf, 0, ix, ix + len);
-                    console.log(0x11, "once",buffer)
+                    console.log(0x11, "once", buffer)
                     resolve(buffer);
                     ix += len;
                 } while (ix < buffer.length);
@@ -147,18 +147,18 @@ export default class eSSP extends EventEmitter {
         var packet = this.toPackets(0x4A, generatorArray)
         var buff = new Buffer(packet)
         return new Promise((resolve, reject) => {
-            setTimeout(()=>[
-                this.port.write(buff,()=>{
+            setTimeout(()=> {
+                this.port.write(buff, ()=> {
                     this.port.drain()
                 })
-            ], 500)
+            }, 500)
             this.port.on('data', function (buffer) {
                 var ix = 0;
                 do {
                     var len = buffer[2] + 5;
                     var buf = new Buffer(len);
                     buffer.copy(buf, 0, ix, ix + len);
-                    console.log(0x4A, "once",buffer)
+                    console.log(0x4A, "once", buffer)
                     resolve(buffer);
                     ix += len;
                 } while (ix < buffer.length);
@@ -174,25 +174,25 @@ export default class eSSP extends EventEmitter {
         var packet = this.toPackets(0x4B, modulusArray)
         var buff = new Buffer(packet)
         return new Promise((resolve, reject) => {
-            setTimeout(()=>[
-                this.port.write(buff,()=>{
+            setTimeout(()=> {
+                this.port.write(buff, ()=> {
                     this.port.drain()
                 })
-            ], 500)
+            }, 500)
             this.port.on('data', function (buffer) {
                 var ix = 0;
                 do {
                     var len = buffer[2] + 5;
                     var buf = new Buffer(len);
                     buffer.copy(buf, 0, ix, ix + len);
-                    console.log(0x4B, "once",buffer)
+                    console.log(0x4B, "once", buffer)
                     resolve(buffer);
                     ix += len;
                 } while (ix < buffer.length);
-            });
+            })
             this.port.on('error', (err) => {
                 reject(err);
-            });
+            })
         });
     }
 
@@ -201,18 +201,18 @@ export default class eSSP extends EventEmitter {
         var packet = this.toPackets(0x4C, hostIntArray)
         var buff = new Buffer(packet)
         return new Promise((resolve, reject) => {
-            setTimeout(()=>[
-                this.port.write(buff,()=>{
+            setTimeout(()=> {
+                this.port.write(buff, ()=> {
                     this.port.drain()
                 })
-            ], 1000)
+            }, 1000)
             this.port.on('data', function (buffer) {
                 var ix = 0;
                 do {
                     var len = buffer[2] + 5;
                     var buf = new Buffer(len);
                     buffer.copy(buf, 0, ix, ix + len);
-                    console.log(0x4C, "once",buffer)
+                    console.log(0x4C, "once", buffer)
                     resolve(buffer);
                     ix += len;
                 } while (ix < buffer.length);
