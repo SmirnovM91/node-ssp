@@ -104,6 +104,7 @@ export default class eSSP extends EventEmitter {
 
     sendGenerator() {
         var generatorArray = this.parseHexString(this.keys.generatorKey.toString(16), 8)
+        console.log(generatorArray);
         this.keys.set_generator = true;
         var packet = this.toPackets(0x11,generatorArray)
         console.log(packet)
