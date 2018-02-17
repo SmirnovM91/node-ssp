@@ -74,7 +74,7 @@ export default class eSSP extends EventEmitter {
         });
     }
 
-    initiateKeys() {
+    async initiateKeys() {
         var getRandomInt = function (min, max) {
             return Math.floor(Math.random() * (max - min)) + min;
         }
@@ -86,11 +86,8 @@ export default class eSSP extends EventEmitter {
         this.keys.hostIntKey = this.keys.generatorKey ^ this.keys.hostRandom % this.keys.modulusKey
         this.keys.negotiateKeys = true;
 
-        let run = async() => {
-            let data = await this.sendGenerator()
-            console.log(data)
-        }
-        run();
+        let data = await this.sendGenerator()
+        console.log(data)
     }
 
     parseHexString(str, count) {
