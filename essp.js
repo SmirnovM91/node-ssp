@@ -228,9 +228,9 @@ export default class eSSP extends EventEmitter {
 
     getSequence() {
         if (this.sequence == 0x80) {
-            this.sequence == 0x00
+            this.sequence = 0x00
         } else {
-            this.sequence == 0x80
+            this.sequence = 0x80
         }
         return this.sequence
     }
