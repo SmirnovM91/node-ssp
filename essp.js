@@ -194,6 +194,7 @@ export default class eSSP extends EventEmitter {
         if (self.keys != null) {
             var STEX = 0x7E
             var eLENGTH = DATA.length;
+            console.log(self.count)
             self.count++
             var eCOUNT = this.parseHexString(self.count.toString(16), 4)
             var eDATA = DATA
