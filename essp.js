@@ -57,7 +57,7 @@ export default class eSSP extends EventEmitter {
         }, false);
 
         this.port = port;
-        port.open(function(){
+        port.open(function () {
 
         })
     }
@@ -75,7 +75,14 @@ export default class eSSP extends EventEmitter {
         this.keys.negotiateKeys = true;
 
         let data = await this.sendGenerator()
-        console.log("generated",data)
+        console.log(data)
+
+        data = await this.sendModulus()
+        console.log(data)
+
+        data = await this.sendRequestKeyExchange()
+        console.log(data)
+
     }
 
     parseHexString(str, count) {
@@ -122,22 +129,10 @@ export default class eSSP extends EventEmitter {
 
     sendGenerator() {
         var generatorArray = this.parseHexString(this.keys.generatorKey.toString(16), 8)
-        this.keys.set_generator = true;
         var packet = this.toPackets(0x4A, generatorArray)
         var buff = new Buffer(packet)
         return new Promise((resolve, reject) => {
             this.port.write(buff);
-            this.port.on('data', function (buffer) {
-                var ix = 0;
-                do {
-                    var len = buffer[2] + 5;
-                    var buf = new Buffer(len);
-                    buffer.copy(buf, 0, ix, ix + len);
-                    console.log(buffer)
-                    resolve(buffer)
-                    ix += len;
-                } while (ix < buffer.length);
-            });
             this.port.once('data', (data) => {
                 resolve(data.toString());
             });
@@ -149,15 +144,35 @@ export default class eSSP extends EventEmitter {
 
     sendModulus() {
         var modulusArray = this.parseHexString(this.keys.modulusKey.toString(16), 8)
-        this.keys.set_modulus = true;
+        var packet = this.toPackets(0x4A, modulusArray)
+        var buff = new Buffer(packet)
+        return new Promise((resolve, reject) => {
+            this.port.write(buff);
+            this.port.once('data', (data) => {
+                resolve(data.toString());
+            });
+            this.port.once('error', (err) => {
+                reject(err);
+            });
+        });
     }
 
     sendRequestKeyExchange() {
         var hostIntArray = this.parseHexString(this.keys.hostIntKey.toString(16), 8)
-        this.keys.request_key_exchange = true;
+        var packet = this.toPackets(0x4A, hostIntArray)
+        var buff = new Buffer(packet)
+        return new Promise((resolve, reject) => {
+            this.port.write(buff);
+            this.port.once('data', (data) => {
+                resolve(data.toString());
+            });
+            this.port.once('error', (err) => {
+                reject(err);
+            });
+        });
     }
 
-    createHostEncryptionKeys(data) {
+    createHostEncryptionKeys() {
         if (this.keys.key == null) {
             data.shift()
             var hexString = convertHex.bytesToHex(data.reverse());
