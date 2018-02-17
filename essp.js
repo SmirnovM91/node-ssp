@@ -99,18 +99,19 @@ export default class eSSP extends EventEmitter {
         var packet = this.toPackets(0x09)
         var buff = new Buffer(packet)
         return new Promise((resolve, reject) => {
-            setTimeout(()=>[
+            setTimeout(()=> {
                 this.port.write(buff, ()=> {
                     this.port.drain()
                 })
-            ], 300)
 
-            this.port.once('data', (data) => {
-                resolve(data);
-            });
-            this.port.once('error', (err) => {
-                reject(err);
-            });
+                this.port.once('data', (data) => {
+                    resolve(data);
+                });
+                this.port.once('error', (err) => {
+                    reject(err);
+                });
+            }, 300)
+
         });
     }
 
@@ -123,22 +124,23 @@ export default class eSSP extends EventEmitter {
                 this.port.write(buff, ()=> {
                     this.port.drain()
                 })
+
+                this.port.on('data', function (buffer) {
+                    var ix = 0;
+                    do {
+                        var len = buffer[2] + 5;
+                        var buf = new Buffer(len);
+                        buffer.copy(buf, 0, ix, ix + len);
+                        console.log(0x11, "once", buffer)
+                        resolve(buffer);
+                        ix += len;
+                    } while (ix < buffer.length);
+                });
+                this.port.on('error', (err) => {
+                    reject(err);
+                });
             }, 500)
 
-            this.port.on('data', function (buffer) {
-                var ix = 0;
-                do {
-                    var len = buffer[2] + 5;
-                    var buf = new Buffer(len);
-                    buffer.copy(buf, 0, ix, ix + len);
-                    console.log(0x11, "once", buffer)
-                    resolve(buffer);
-                    ix += len;
-                } while (ix < buffer.length);
-            });
-            this.port.on('error', (err) => {
-                reject(err);
-            });
         });
     }
 
@@ -151,21 +153,22 @@ export default class eSSP extends EventEmitter {
                 this.port.write(buff, ()=> {
                     this.port.drain()
                 })
+
+                this.port.on('data', function (buffer) {
+                    var ix = 0;
+                    do {
+                        var len = buffer[2] + 5;
+                        var buf = new Buffer(len);
+                        buffer.copy(buf, 0, ix, ix + len);
+                        console.log(0x4A, "once", buffer)
+                        resolve(buffer);
+                        ix += len;
+                    } while (ix < buffer.length);
+                });
+                this.port.on('error', (err) => {
+                    reject(err);
+                });
             }, 500)
-            this.port.on('data', function (buffer) {
-                var ix = 0;
-                do {
-                    var len = buffer[2] + 5;
-                    var buf = new Buffer(len);
-                    buffer.copy(buf, 0, ix, ix + len);
-                    console.log(0x4A, "once", buffer)
-                    resolve(buffer);
-                    ix += len;
-                } while (ix < buffer.length);
-            });
-            this.port.on('error', (err) => {
-                reject(err);
-            });
         });
     }
 
@@ -178,21 +181,22 @@ export default class eSSP extends EventEmitter {
                 this.port.write(buff, ()=> {
                     this.port.drain()
                 })
+                this.port.on('data', function (buffer) {
+                    var ix = 0;
+                    do {
+                        var len = buffer[2] + 5;
+                        var buf = new Buffer(len);
+                        buffer.copy(buf, 0, ix, ix + len);
+                        console.log(0x4B, "once", buffer)
+                        resolve(buffer);
+                        ix += len;
+                    } while (ix < buffer.length);
+                })
+                this.port.on('error', (err) => {
+                    reject(err);
+                })
             }, 500)
-            this.port.on('data', function (buffer) {
-                var ix = 0;
-                do {
-                    var len = buffer[2] + 5;
-                    var buf = new Buffer(len);
-                    buffer.copy(buf, 0, ix, ix + len);
-                    console.log(0x4B, "once", buffer)
-                    resolve(buffer);
-                    ix += len;
-                } while (ix < buffer.length);
-            })
-            this.port.on('error', (err) => {
-                reject(err);
-            })
+
         });
     }
 
@@ -205,21 +209,22 @@ export default class eSSP extends EventEmitter {
                 this.port.write(buff, ()=> {
                     this.port.drain()
                 })
+                this.port.on('data', function (buffer) {
+                    var ix = 0;
+                    do {
+                        var len = buffer[2] + 5;
+                        var buf = new Buffer(len);
+                        buffer.copy(buf, 0, ix, ix + len);
+                        console.log(0x4C, "once", buffer)
+                        resolve(buffer);
+                        ix += len;
+                    } while (ix < buffer.length);
+                });
+                this.port.on('error', (err) => {
+                    reject(err);
+                });
             }, 1000)
-            this.port.on('data', function (buffer) {
-                var ix = 0;
-                do {
-                    var len = buffer[2] + 5;
-                    var buf = new Buffer(len);
-                    buffer.copy(buf, 0, ix, ix + len);
-                    console.log(0x4C, "once", buffer)
-                    resolve(buffer);
-                    ix += len;
-                } while (ix < buffer.length);
-            });
-            this.port.on('error', (err) => {
-                reject(err);
-            });
+
         });
     }
 
