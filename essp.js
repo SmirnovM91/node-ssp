@@ -72,7 +72,7 @@ export default class eSSP extends EventEmitter {
         this.keys.negotiateKeys = true;
 
         let data = await this.sendGenerator()
-        console.log(data)
+        console.log("generated",data)
     }
 
     parseHexString(str, count) {
@@ -119,10 +119,8 @@ export default class eSSP extends EventEmitter {
 
     sendGenerator() {
         var generatorArray = this.parseHexString(this.keys.generatorKey.toString(16), 8)
-        console.log(generatorArray);
         this.keys.set_generator = true;
         var packet = this.toPackets(0x4A, generatorArray)
-        console.log(packet)
         var buff = new Buffer(packet)
         return new Promise((resolve, reject) => {
             this.port.write(buff);
