@@ -13,8 +13,7 @@ export default class eSSP extends EventEmitter {
         this.port = null;
         this.commands = null
         this.count = 0
-        this.sequence = this.sequenceNumber = sequence || 0x80;
-
+        this.sequence = 0x80;
         this.keys = {
             generatorKey: null,
             modulusKey: null,
