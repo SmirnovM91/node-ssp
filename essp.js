@@ -86,10 +86,11 @@ export default class eSSP extends EventEmitter {
         this.keys.hostIntKey = this.keys.generatorKey ^ this.keys.hostRandom % this.keys.modulusKey
         this.keys.negotiateKeys = true;
 
-        (async() => {
+        let run = async() => {
             let data = await this.sendGenerator()
             console.log(data)
-        })();
+        }
+        run();
     }
 
     parseHexString(str, count) {
