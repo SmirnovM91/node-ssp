@@ -93,6 +93,7 @@ export default class eSSP extends EventEmitter {
     }
 
     parseHexString(str, count) {
+        console.log(str)
         var a = [];
         for (var i = str.length; i > 0; i -= 2) {
             a.push(parseInt(str.substr(i - 2, 2), 16));
@@ -194,7 +195,6 @@ export default class eSSP extends EventEmitter {
         if (self.keys != null) {
             var STEX = 0x7E
             var eLENGTH = DATA.length;
-            console.log(self.count)
             self.count++
             var eCOUNT = this.parseHexString(self.count.toString(16), 4)
             var eDATA = DATA
