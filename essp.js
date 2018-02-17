@@ -61,16 +61,6 @@ export default class eSSP extends EventEmitter {
         port.open(function () {
 
         })
-        port.on('data', function (buffer) {
-            var ix = 0;
-            do {
-                var len = buffer[2] + 5;
-                var buf = new Buffer(len);
-                buffer.copy(buf, 0, ix, ix + len);
-                console.log(0x11, "once", buffer)
-                ix += len;
-            } while (ix < buffer.length);
-        });
         port.on('error', (err) => {
             console.log(err);
         });
@@ -119,6 +109,18 @@ export default class eSSP extends EventEmitter {
                     this.port.drain()
                 })
             }, 500)
+
+            this.port.once('data', function (buffer) {
+                var ix = 0;
+                do {
+                    var len = buffer[2] + 5;
+                    var buf = new Buffer(len);
+                    buffer.copy(buf, 0, ix, ix + len);
+                    console.log(0x09, "once", buffer)
+                    resolve(buffer)
+                    ix += len;
+                } while (ix < buffer.length);
+            });
         });
     }
 
@@ -134,6 +136,18 @@ export default class eSSP extends EventEmitter {
                 })
                 resolve(true)
             }, 500)
+
+            this.port.once('data', function (buffer) {
+                var ix = 0;
+                do {
+                    var len = buffer[2] + 5;
+                    var buf = new Buffer(len);
+                    buffer.copy(buf, 0, ix, ix + len);
+                    console.log(0x11, "once", buffer)
+                    resolve(buffer)
+                    ix += len;
+                } while (ix < buffer.length);
+            });
         });
     }
 
@@ -149,6 +163,18 @@ export default class eSSP extends EventEmitter {
                 })
                 resolve(true)
             }, 500)
+
+            this.port.once('data', function (buffer) {
+                var ix = 0;
+                do {
+                    var len = buffer[2] + 5;
+                    var buf = new Buffer(len);
+                    buffer.copy(buf, 0, ix, ix + len);
+                    console.log(0x4A, "once", buffer)
+                    resolve(buffer)
+                    ix += len;
+                } while (ix < buffer.length);
+            });
         });
     }
 
@@ -165,6 +191,18 @@ export default class eSSP extends EventEmitter {
                 resolve(true)
             }, 500)
 
+            this.port.on('data', function (buffer) {
+                var ix = 0;
+                do {
+                    var len = buffer[2] + 5;
+                    var buf = new Buffer(len);
+                    buffer.copy(buf, 0, ix, ix + len);
+                    console.log(0x4B, "once", buffer)
+                    resolve(buffer)
+                    ix += len;
+                } while (ix < buffer.length);
+            });
+
         });
     }
 
@@ -177,9 +215,19 @@ export default class eSSP extends EventEmitter {
                 this.port.write(buff, ()=> {
                     this.port.drain()
                 })
-                resolve(true)
             }, 1000)
 
+            this.port.on('data', function (buffer) {
+                var ix = 0;
+                do {
+                    var len = buffer[2] + 5;
+                    var buf = new Buffer(len);
+                    buffer.copy(buf, 0, ix, ix + len);
+                    console.log(0x4c, "once", buffer)
+                    resolve(buffer)
+                    ix += len;
+                } while (ix < buffer.length);
+            });
         });
     }
 
