@@ -59,11 +59,12 @@ export default class eSSP extends EventEmitter {
             parser: serialport.parsers.raw
         }, false);
 
-        this.port = port;
         port.open(function (err) {
             console.log(err)
         })
-        return port;
+        console.log(port.isOpen())
+
+        this.port = port;
     }
 
     initiateKeys() {
@@ -94,7 +95,7 @@ export default class eSSP extends EventEmitter {
         return a;
     }
 
-    sync(){
+    sync() {
         var packet = this.toPackets(0x11)
         console.log(packet)
         var buff = new Buffer(packet)
@@ -108,11 +109,12 @@ export default class eSSP extends EventEmitter {
             });
         });
     }
+
     sendGenerator() {
         var generatorArray = this.parseHexString(this.keys.generatorKey.toString(16), 8)
         console.log(generatorArray);
         this.keys.set_generator = true;
-        var packet = this.toPackets(0x4A,generatorArray)
+        var packet = this.toPackets(0x4A, generatorArray)
         console.log(packet)
         var buff = new Buffer(packet)
         return new Promise((resolve, reject) => {
