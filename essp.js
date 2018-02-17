@@ -59,13 +59,17 @@ export default class eSSP extends EventEmitter {
         this.port = port;
 
         return new Promise((resolve, reject) => {
+            var interval = setInterval(()=> {
+                console.log(port.isOpen())
+                if (port.isOpen()){
+                    clearInterval(interval)
+                    resolve(true)
+                }
+            }, 100)
             port.open(function (err) {
-                if(err){
+                if (err) {
                     reject(err)
                 }
-            })
-            port.on('open', function(){
-                resolve(true);
             })
         });
     }
