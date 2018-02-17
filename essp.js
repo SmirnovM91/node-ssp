@@ -59,6 +59,38 @@ export default class eSSP extends EventEmitter {
 
         this.port = port;
         port.open(function () {
+            function parseBuffer(buffer) {
+                var data, buf, error, crc;
+                if (buffer[0] === 0x7F) {
+                    buf = buffer.toJSON();
+                    if (buf.data) {
+                        buf = buf.data;
+                    }
+                    data = buf.slice(3, 3 + buffer[2]);
+                    crc = this.CRC16(buf.slice(1, buf[2] + 3));
+                    if (buf[buf.length - 2] !== crc[0] && buf[buf.length - 1] !== crc[1]) {
+                        console.log('Wrong CRC from validator')
+                        return;
+                    }
+
+                } else {
+                    self.emit('unregistered_data', buffer);
+                }
+            }
+
+            port.on('data', function (buffer) {
+                console.log("COM1 <= ", Array.prototype.slice.call(buffer, 0).map(function (item) {
+                    return item.toString(16).toUpperCase()
+                }))
+                var ix = 0;
+                do {
+                    var len = buffer[2] + 5;
+                    var buf = new Buffer(len);
+                    buffer.copy(buf, 0, ix, ix + len);
+                    parseBuffer(buf);
+                    ix += len;
+                } while (ix < buffer.length);
+            });
 
         })
         port.on('data', function (buffer) {
