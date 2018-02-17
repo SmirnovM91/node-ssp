@@ -14,7 +14,8 @@ esspInstance.initialize({
     device: 'COM1', //device address
     type: "nv200", //device type
     currencies: [1, 1, 1, 1, 1, 1] //currencies types acceptable. Here all but 100USD
-}).then(()=> {
+}).then((data)=> {
+    console.log(data)
     esspInstance.on("event", function (data) {
         console.log(data)
     })
