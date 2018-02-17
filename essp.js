@@ -192,42 +192,10 @@ export default class eSSP extends EventEmitter {
         })
         console.log("COM1 => ", hex, "| UNENCRYPTED |", arguments[0])
 
-        if (self.keys != null) {
-            var STEX = 0x7E
-            var eLENGTH = DATA.length;
-            self.count++
-            var eCOUNT = this.parseHexString(self.count.toString(16), 4)
-            var eDATA = DATA
-            var ePACKING = 0x00
-            var eCommandLine = [eLENGTH].concat(eCOUNT, eDATA, ePACKING)
-            var eCRC = this.CRC16(eCommandLine);
-            eCommandLine = eCommandLine.concat(eCRC)
-
-            var parse = function (a, count) {
-                for (var i = a.length; i < count; i++) {
-                    a.push(0)
-                }
-                return a;
-            }
-            var key = parse(Array.prototype.slice.call(self.keys.fixedKey, 0).reverse(), 8).concat(this.parseHexString(self.keys.key, 8))
-
-            var aesCtr = new aesjs.ModeOfOperation.ctr(key);
-            var uint8Array = aesCtr.encrypt(eCommandLine);
-            eCommandLine = [STEX].concat([].slice.call(uint8Array))
-            DATA = eCommandLine
-            LENGTH = DATA.length
-        }
-
         commandLine = [SEQ_SLAVE_ID, LENGTH].concat(DATA);
         crc = this.CRC16(commandLine);
         commandLine = [STX].concat(commandLine, crc);
 
-        if (self.keys != null) {
-            var hex = commandLine.map(function (item) {
-                return item.toString(16).toUpperCase()
-            })
-            console.log("COM1 =>", hex, "| ENCRYPTED |", args[0])
-        }
         console.log(commandLine)
         return commandLine
     }
