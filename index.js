@@ -69,28 +69,22 @@ var SSPInstance = Class.extend({
     },
     sendGenerator: function () {
         var commands = this.commands, self = this;
-        setTimeout(function () {
-            var generatorArray = commands.parseHexString(self.keys.generatorKey.toString(16), 8)
-            self.keys.set_generator = true;
-            commands.set_generator.apply(this, generatorArray)
-        }, 200)
+        var generatorArray = commands.parseHexString(self.keys.generatorKey.toString(16), 8)
+        self.keys.set_generator = true;
+        commands.set_generator.apply(this, generatorArray)
 
     },
     sendModulus: function () {
         var commands = this.commands, self = this;
-        setTimeout(function () {
-            var modulusArray = commands.parseHexString(self.keys.modulusKey.toString(16), 8)
-            self.keys.set_modulus = true;
-            commands.set_modulus.apply(this, modulusArray)
-        }, 200)
+        var modulusArray = commands.parseHexString(self.keys.modulusKey.toString(16), 8)
+        self.keys.set_modulus = true;
+        commands.set_modulus.apply(this, modulusArray)
     },
     sendRequestKeyExchange: function () {
         var commands = this.commands, self = this;
-        setTimeout(function () {
-            var hostIntArray = commands.parseHexString(self.keys.hostIntKey.toString(16), 8)
-            self.keys.request_key_exchange = true;
-            commands.request_key_exchange.apply(this, hostIntArray)
-        }, 200)
+        var hostIntArray = commands.parseHexString(self.keys.hostIntKey.toString(16), 8)
+        self.keys.request_key_exchange = true;
+        commands.request_key_exchange.apply(this, hostIntArray)
 
     },
     createHostEncryptionKeys: function (data) {
@@ -114,7 +108,6 @@ var SSPInstance = Class.extend({
             self.keys.variableKey = self.keys.key
             self.keys.finishEncryption = true
             commands.setKeys(self.keys)
-            self.emit("ready");
 
         }
     },
