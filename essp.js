@@ -57,21 +57,6 @@ export default class eSSP extends EventEmitter {
         }, false);
 
         this.port = port;
-
-        return new Promise((resolve, reject) => {
-            var interval = setInterval(()=> {
-                console.log(port.isOpen())
-                if (port.isOpen()) {
-                    clearInterval(interval)
-                    resolve(true)
-                }
-            }, 100)
-            port.open(function (err) {
-                if (err) {
-                    reject(err)
-                }
-            })
-        });
     }
 
     async initiateKeys() {
@@ -141,6 +126,16 @@ export default class eSSP extends EventEmitter {
         var buff = new Buffer(packet)
         return new Promise((resolve, reject) => {
             this.port.write(buff);
+            this.port.on('data', function (buffer) {
+                var ix = 0;
+                do {
+                    var len = buffer[2] + 5;
+                    var buf = new Buffer(len);
+                    buffer.copy(buf, 0, ix, ix + len);
+                    console.log(buffer)
+                    ix += len;
+                } while (ix < buffer.length);
+            });
             this.port.once('data', (data) => {
                 resolve(data.toString());
             });
