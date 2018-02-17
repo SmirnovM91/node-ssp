@@ -108,4 +108,5 @@ process.on('uncaughtException', function (err) {
 
 process.on('exit', function () {
     ssp.port && ssp.port.isOpened && ssp.disable();
+    esspInstance.port && esspInstance.port.isOpened && esspInstance.disable();
 });
