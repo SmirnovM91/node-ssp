@@ -47,10 +47,7 @@ export default class eSSP extends EventEmitter {
             }).indexOf(options.type) === -1) {
             throw new Error("Unknown device type '" + options.type + "'");
         }
-        this.initializeDevice(options);
-    }
 
-    initializeDevice(options) {
         var port = new serialport.SerialPort(options.device, {
             baudrate: options.baudrate,
             databits: options.databits,
@@ -63,13 +60,14 @@ export default class eSSP extends EventEmitter {
 
         return new Promise((resolve, reject) => {
             port.open(function (err) {
-                console.log(err)
+                if(err){
+                    reject(err)
+                }
             })
             port.on('open', function(){
                 resolve(true);
             })
         });
-
     }
 
     initiateKeys() {
