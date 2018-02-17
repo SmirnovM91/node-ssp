@@ -212,6 +212,7 @@ export default class eSSP extends EventEmitter {
         var buff = new Buffer(packet)
         return new Promise((resolve, reject) => {
             setTimeout(()=> {
+                console.log(buff)
                 this.port.write(buff, ()=> {
                     this.port.drain()
                 })
