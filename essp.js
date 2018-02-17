@@ -60,6 +60,7 @@ export default class eSSP extends EventEmitter {
         }, false);
 
         this.port = port;
+        console.log(this.port)
         port.on('close', function () {
             self.emit('close');
             console.log('close:');
@@ -196,7 +197,6 @@ export default class eSSP extends EventEmitter {
         crc = this.CRC16(commandLine);
         commandLine = [STX].concat(commandLine, crc);
 
-        console.log(commandLine)
         return commandLine
     }
 
