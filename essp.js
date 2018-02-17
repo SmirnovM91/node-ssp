@@ -108,7 +108,7 @@ export default class eSSP extends EventEmitter {
                 this.port.write(buff, ()=> {
                     this.port.drain()
                 })
-            }, 500)
+            }, 2000)
 
             this.port.once('data', function (buffer) {
                 var ix = 0;
@@ -135,7 +135,7 @@ export default class eSSP extends EventEmitter {
                     this.port.drain()
                 })
                 resolve(true)
-            }, 500)
+            }, 2000)
 
             this.port.once('data', function (buffer) {
                 var ix = 0;
@@ -162,7 +162,7 @@ export default class eSSP extends EventEmitter {
                     this.port.drain()
                 })
                 resolve(true)
-            }, 500)
+            }, 2000)
 
             this.port.once('data', function (buffer) {
                 var ix = 0;
@@ -189,7 +189,7 @@ export default class eSSP extends EventEmitter {
                     this.port.drain()
                 })
                 resolve(true)
-            }, 500)
+            }, 2000)
 
             this.port.once('data', function (buffer) {
                 var ix = 0;
@@ -216,7 +216,7 @@ export default class eSSP extends EventEmitter {
                 this.port.write(buff, ()=> {
                     this.port.drain()
                 })
-            }, 1000)
+            }, 2000)
 
             this.port.once('data', function (buffer) {
                 var ix = 0;
