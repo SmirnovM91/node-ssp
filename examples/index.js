@@ -21,7 +21,9 @@ esspInstance.initialize({
 // esspInstance.on("error", function (data) {
 //     console.log(data)
 // })
-esspInstance.initiateKeys()
+setTimeout(()=> {
+    esspInstance.initiateKeys()
+}, 1000)
 
 
 //
