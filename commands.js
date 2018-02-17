@@ -76,7 +76,7 @@ var Commands = Class.extend({
             }
             var STX = 0x7F
             var LENGTH = args.length + 1
-            var SEQ_SLAVE_ID = 0x00 //this.getSequence()
+            var SEQ_SLAVE_ID = this.getSequence()
             var DATA = [command].concat(args)
 
             commandLine = [SEQ_SLAVE_ID, LENGTH].concat(DATA);
