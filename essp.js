@@ -244,7 +244,7 @@ export default class eSSP extends EventEmitter {
         return [(crc & 0xFF), ((crc >> 8) & 0xFF)];
     }
 
-    toPackets(command, args) {
+    toPackets(command, args = []) {
         var self = this;
         var commandLine
         var STX = 0x7F
