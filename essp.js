@@ -59,12 +59,17 @@ export default class eSSP extends EventEmitter {
             parser: serialport.parsers.raw
         }, false);
 
-        port.open(function (err) {
-            console.log(err)
-        })
-        console.log(port.isOpen())
-
         this.port = port;
+
+        return new Promise((resolve, reject) => {
+            port.open(function (err) {
+                console.log(err)
+            })
+            port.on('open', function(){
+                resolve(true);
+            })
+        });
+
     }
 
     initiateKeys() {
