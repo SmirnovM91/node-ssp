@@ -61,7 +61,7 @@ export default class eSSP extends EventEmitter {
         return new Promise((resolve, reject) => {
             var interval = setInterval(()=> {
                 console.log(port.isOpen())
-                if (port.isOpen()){
+                if (port.isOpen()) {
                     clearInterval(interval)
                     resolve(true)
                 }
@@ -86,7 +86,7 @@ export default class eSSP extends EventEmitter {
         this.keys.hostIntKey = this.keys.generatorKey ^ this.keys.hostRandom % this.keys.modulusKey
         this.keys.negotiateKeys = true;
 
-        (async function (){
+        (async() => {
             let data = await this.sendGenerator()
             console.log(data)
         })();
