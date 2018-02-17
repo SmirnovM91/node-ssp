@@ -122,11 +122,11 @@ export default class eSSP extends EventEmitter {
         return new Promise((resolve, reject) => {
             setTimeout(()=>[
                 this.port.write(buff)
-            ], 300)
+            ], 1000)
 
             this.port.once('data', (data) => {
                 console.log(0x11, "once",data)
-                resolve(data.toString());
+                resolve(data);
             });
             this.port.on('error', (err) => {
                 reject(err);
@@ -141,7 +141,7 @@ export default class eSSP extends EventEmitter {
         return new Promise((resolve, reject) => {
             setTimeout(()=>[
                 this.port.write(buff)
-            ], 300)
+            ], 1000)
             this.port.once('data', function(data){
                 console.log(0x4A, "once",data)
                 resolve(data.toString());
@@ -159,7 +159,7 @@ export default class eSSP extends EventEmitter {
         return new Promise((resolve, reject) => {
             setTimeout(()=>[
                 this.port.write(buff)
-            ], 300)
+            ], 1000)
             this.port.once('data', function(data){
                 console.log(0x4B, "once",data)
                 resolve(data.toString());
@@ -177,7 +177,7 @@ export default class eSSP extends EventEmitter {
         return new Promise((resolve, reject) => {
             setTimeout(()=>[
                 this.port.write(buff)
-            ], 300)
+            ], 1000)
             this.port.once('data', function(data){
                 console.log(0x4C, "once",data)
                 resolve(data.toString());
