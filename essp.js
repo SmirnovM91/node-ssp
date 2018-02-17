@@ -75,7 +75,7 @@ export default class eSSP extends EventEmitter {
         })
     }
 
-    async initiateKeys() {
+    initiateKeys() {
         var getRandomInt = function (min, max) {
             return Math.floor(Math.random() * (max - min)) + min;
         }
