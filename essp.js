@@ -12,6 +12,7 @@ export default class eSSP extends EventEmitter {
         this.options = {};
         this.port = null;
         this.commands = null
+        this.count = 0
         this.keys = {
             generatorKey: null,
             modulusKey: null,
@@ -194,7 +195,7 @@ export default class eSSP extends EventEmitter {
             var STEX = 0x7E
             var eLENGTH = DATA.length;
             self.count++
-            var eCOUNT = this.parseHexString(this.count.toString(16), 4)
+            var eCOUNT = this.parseHexString(self.count.toString(16), 4)
             var eDATA = DATA
             var ePACKING = 0x00
             var eCommandLine = [eLENGTH].concat(eCOUNT, eDATA, ePACKING)
