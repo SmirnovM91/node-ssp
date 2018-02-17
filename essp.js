@@ -299,7 +299,7 @@ export default class eSSP extends EventEmitter {
         var hex = commandLine.map(function (item) {
             return item.toString(16).toUpperCase()
         })
-        console.log("COM1 => ", hex, "| UNENCRYPTED |", arguments[0])
+        // console.log("COM1 => ", hex, "| UNENCRYPTED |", arguments[0])
 
         commandLine = [SEQ_SLAVE_ID, LENGTH].concat(DATA);
         crc = this.CRC16(commandLine);
