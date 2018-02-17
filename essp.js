@@ -60,21 +60,10 @@ export default class eSSP extends EventEmitter {
         }, false);
 
         this.port = port;
-        console.log(this.port)
-        port.on('close', function () {
-            self.emit('close');
-            console.log('close:');
-        });
-        port.on('error', function (err) {
-            self.emit('error', err);
-            console.log('error:', err);
-        });
-        port.on('readable', function () {
-            console.log('Data:', port.read());
-        });
         port.open(function (err) {
             console.log(err)
         })
+        return port;
     }
 
     initiateKeys() {
@@ -105,19 +94,33 @@ export default class eSSP extends EventEmitter {
         return a;
     }
 
+    sync(){
+        var packet = this.toPackets(0x11)
+        console.log(packet)
+        var buff = new Buffer(packet)
+        return new Promise((resolve, reject) => {
+            this.port.write(buff);
+            this.port.once('data', (data) => {
+                resolve(data.toString());
+            });
+            this.port.once('error', (err) => {
+                reject(err);
+            });
+        });
+    }
     sendGenerator() {
         var generatorArray = this.parseHexString(this.keys.generatorKey.toString(16), 8)
         console.log(generatorArray);
         this.keys.set_generator = true;
-        var packet = this.toPackets(0x11,generatorArray)
+        var packet = this.toPackets(0x4A,generatorArray)
         console.log(packet)
         var buff = new Buffer(packet)
         return new Promise((resolve, reject) => {
-            port.write(buff);
-            port.once('data', (data) => {
+            this.port.write(buff);
+            this.port.once('data', (data) => {
                 resolve(data.toString());
             });
-            port.once('error', (err) => {
+            this.port.once('error', (err) => {
                 reject(err);
             });
         });
