@@ -228,6 +228,7 @@ export default class eSSP extends EventEmitter {
 
     getSequence() {
         var seq = this.ID | (this.sequence = (this.sequence === this.sequenceNumber ? 0x00 : this.sequenceNumber));
+        console.log(seq)
         return seq
     }
     toPackets(command, args = []) {
