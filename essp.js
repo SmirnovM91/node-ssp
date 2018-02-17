@@ -13,6 +13,8 @@ export default class eSSP extends EventEmitter {
         this.port = null;
         this.commands = null
         this.count = 0
+        this.sequence = this.sequenceNumber = sequence || 0x80;
+
         this.keys = {
             generatorKey: null,
             modulusKey: null,
@@ -121,6 +123,7 @@ export default class eSSP extends EventEmitter {
         var buff = new Buffer(packet)
         return new Promise((resolve, reject) => {
             setTimeout(()=> {
+                console.log("write", buff)
                 this.port.write(buff, ()=> {
                     this.port.drain()
                 })
@@ -271,12 +274,16 @@ export default class eSSP extends EventEmitter {
         return [(crc & 0xFF), ((crc >> 8) & 0xFF)];
     }
 
+    getSequence() {
+        var seq = this.ID | (this.sequence = (this.sequence === this.sequenceNumber ? 0x00 : this.sequenceNumber));
+        return seq
+    }
     toPackets(command, args = []) {
         var self = this;
         var commandLine
         var STX = 0x7F
         var LENGTH = args.length + 1
-        var SEQ_SLAVE_ID = 0x00 //this.getSequence()
+        var SEQ_SLAVE_ID = this.getSequence()
         var DATA = [command].concat(args)
 
         commandLine = [SEQ_SLAVE_ID, LENGTH].concat(DATA);
