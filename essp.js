@@ -87,8 +87,70 @@ export default class eSSP extends EventEmitter {
         this.keys.hostIntKey = this.keys.generatorKey ^ this.keys.hostRandom % this.keys.modulusKey
         this.keys.negotiateKeys = true
 
-        let data = await this.sendGenerator()
+        let data = this.sendGenerator()
         console.log(data)
+    }
+
+    parseHexString(str, count) {
+        var a = [];
+        for (var i = str.length; i > 0; i -= 2) {
+            a.push(parseInt(str.substr(i - 2, 2), 16));
+        }
+        for (var i = a.length; i < count; i++) {
+            a.push(0)
+        }
+        return a;
+    }
+
+    sendGenerator() {
+        var generatorArray = this.parseHexString(this.keys.generatorKey.toString(16), 8)
+        this.keys.set_generator = true;
+        var packet = this.toPackets(0x11,generatorArray)
+        console.log(packet)
+        var buff = new Buffer(packet)
+        return new Promise((resolve, reject) => {
+            port.write(buff);
+            port.once('data', (data) => {
+                resolve(data.toString());
+            });
+            port.once('error', (err) => {
+                reject(err);
+            });
+        });
+    }
+
+    sendModulus() {
+        var modulusArray = this.parseHexString(this.keys.modulusKey.toString(16), 8)
+        this.keys.set_modulus = true;
+    }
+
+    sendRequestKeyExchange() {
+        var hostIntArray = this.parseHexString(this.keys.hostIntKey.toString(16), 8)
+        this.keys.request_key_exchange = true;
+    }
+
+    createHostEncryptionKeys(data) {
+        if (this.keys.key == null) {
+            data.shift()
+            var hexString = convertHex.bytesToHex(data.reverse());
+
+            var slaveIntKey = bigInt(hexString, 16);
+            var slaveIntKeyString = ""
+            if (!slaveIntKey.isSmall) {
+                var values = slaveIntKey.value.reverse();
+                for (var i = 0; i < values.length; i++) {
+                    slaveIntKeyString += "" + values[i]
+                }
+            } else {
+                slaveIntKeyString = slaveIntKey.value
+            }
+            this.keys.slaveIntKey = slaveIntKeyString
+            this.keys.key = this.keys.slaveIntKey ^ this.keys.hostRandom % this.keys.modulusKey
+            this.keys.variableKey = self.keys.key
+            this.keys.finishEncryption = true
+            this.emit("ready");
+
+        }
     }
 
     CRC16(command) {
@@ -110,7 +172,7 @@ export default class eSSP extends EventEmitter {
         return [(crc & 0xFF), ((crc >> 8) & 0xFF)];
     }
 
-    exec(command, args) {
+    toPackets(command, args) {
         var self = this;
         var commandLine
         var STX = 0x7F
@@ -161,72 +223,11 @@ export default class eSSP extends EventEmitter {
             var hex = commandLine.map(function (item) {
                 return item.toString(16).toUpperCase()
             })
-            console.log("COM1 =>", hex, "| ENCRYPTED |", arguments[0])
+            console.log("COM1 =>", hex, "| ENCRYPTED |", args[0])
         }
-        console.log(commandline)
+        console.log(commandLine)
+        return commandLine
     }
 
-    parseHexString(str, count) {
-        var a = [];
-        for (var i = str.length; i > 0; i -= 2) {
-            a.push(parseInt(str.substr(i - 2, 2), 16));
-        }
-        for (var i = a.length; i < count; i++) {
-            a.push(0)
-        }
-        return a;
-    }
-
-    async sendGenerator() {
-        var generatorArray = this.parseHexString(this.keys.generatorKey.toString(16), 8)
-        this.keys.set_generator = true;
-        var packet = this.exec(0x11,generatorArray)
-        console.log(packet)
-        var buf = new Buffer(packet)
-        return new Promise((resolve, reject) => {
-            port.write(src);
-            port.once('data', (data) => {
-                resolve(data.toString());
-            });
-
-            port.once('error', (err) => {
-                reject(err);
-            });
-        });
-    }
-
-    sendModulus() {
-        var modulusArray = this.parseHexString(this.keys.modulusKey.toString(16), 8)
-        this.keys.set_modulus = true;
-    }
-
-    sendRequestKeyExchange() {
-        var hostIntArray = this.parseHexString(this.keys.hostIntKey.toString(16), 8)
-        this.keys.request_key_exchange = true;
-    }
-
-    createHostEncryptionKeys(data) {
-        if (this.keys.key == null) {
-            data.shift()
-            var hexString = convertHex.bytesToHex(data.reverse());
-
-            var slaveIntKey = bigInt(hexString, 16);
-            var slaveIntKeyString = ""
-            if (!slaveIntKey.isSmall) {
-                var values = slaveIntKey.value.reverse();
-                for (var i = 0; i < values.length; i++) {
-                    slaveIntKeyString += "" + values[i]
-                }
-            } else {
-                slaveIntKeyString = slaveIntKey.value
-            }
-            this.keys.slaveIntKey = slaveIntKeyString
-            this.keys.key = this.keys.slaveIntKey ^ this.keys.hostRandom % this.keys.modulusKey
-            this.keys.variableKey = self.keys.key
-            this.keys.finishEncryption = true
-            this.emit("ready");
-
-        }
-    }
 }
 
