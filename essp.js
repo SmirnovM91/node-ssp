@@ -322,7 +322,6 @@ export default class eSSP extends EventEmitter {
             var uint8Array = aesCtr.encrypt(eCommandLine);
             eCommandLine = [STEX].concat([].slice.call(uint8Array))
             DATA = eCommandLine
-            console.log(DATA, DATA.length)
             LENGTH = DATA.length
         }
 
