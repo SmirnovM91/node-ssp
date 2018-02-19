@@ -163,7 +163,7 @@ export default class eSSP extends EventEmitter {
         var buff = new Buffer(packet)
         return new Promise((resolve, reject) => {
             setTimeout(()=> {
-                let date = moment(new Date()).format('MM/DD/YYYY HH:mm:ss.SSS');
+                let date = moment(new Date()).format('HH:mm:ss.SSS');
                 console.log(chalk.cyan(date), "COM1 => ", chalk.yellow(Array.prototype.slice.call(buff, 0).map(function (item) {
                     return item.toString(16).toUpperCase()
                 })))
@@ -183,7 +183,7 @@ export default class eSSP extends EventEmitter {
         var buff = new Buffer(packet)
         return new Promise((resolve, reject) => {
             setTimeout(()=> {
-                let date = moment(new Date()).format('MM/DD/YYYY HH:mm:ss.SSS');
+                let date = moment(new Date()).format('HH:mm:ss.SSS');
                 console.log(chalk.cyan(date), "COM1 => ", chalk.yellow(Array.prototype.slice.call(buff, 0).map(function (item) {
                     return item.toString(16).toUpperCase()
                 })), "SET GENERATOR")
@@ -202,7 +202,7 @@ export default class eSSP extends EventEmitter {
         var buff = new Buffer(packet)
         return new Promise((resolve, reject) => {
             setTimeout(()=> {
-                let date = moment(new Date()).format('MM/DD/YYYY HH:mm:ss.SSS');
+                let date = moment(new Date()).format('HH:mm:ss.SSS');
                 console.log(chalk.cyan(date), "COM1 => ", chalk.yellow(Array.prototype.slice.call(buff, 0).map(function (item) {
                     return item.toString(16).toUpperCase()
                 })), "SET MODULUS")
@@ -221,7 +221,7 @@ export default class eSSP extends EventEmitter {
         var buff = new Buffer(packet)
         return new Promise((resolve, reject) => {
             setTimeout(()=> {
-                let date = moment(new Date()).format('MM/DD/YYYY HH:mm:ss.SSS');
+                let date = moment(new Date()).format('HH:mm:ss.SSS');
                 console.log(chalk.cyan(date), "COM1 => ", chalk.yellow(Array.prototype.slice.call(buff, 0).map(function (item) {
                     return item.toString(16).toUpperCase()
                 })), "REQUEST KEY EXCHANGE")
@@ -262,7 +262,7 @@ export default class eSSP extends EventEmitter {
         var buff = new Buffer(packet)
         return new Promise((resolve, reject) => {
             setTimeout(()=> {
-                let date = moment(new Date()).format('MM/DD/YYYY HH:mm:ss.SSS');
+                let date = moment(new Date()).format('HH:mm:ss.SSS');
                 console.log(chalk.cyan(date), "COM1 => ", chalk.yellow(Array.prototype.slice.call(buff, 0).map(function (item) {
                     return item.toString(16).toUpperCase()
                 })), "SET DENOMINATION ROUTE")
