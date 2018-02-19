@@ -128,12 +128,9 @@ export default class eSSP extends EventEmitter {
 
         console.log(this.keys)
         let data = await this.sync()
-        //
-        // data = await this.sendGenerator()
-        //
-        // data = await this.sendModulus()
-        //
-        // data = await this.sendRequestKeyExchange()
+        data = await this.sendGenerator()
+        data = await this.sendModulus()
+        data = await this.sendRequestKeyExchange()
     }
 
     parseHexString(str, count) {
