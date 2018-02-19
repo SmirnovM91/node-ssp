@@ -80,7 +80,7 @@ export default class eSSP extends EventEmitter {
                     let date = moment(new Date()).format('HH:mm:ss.SSS');
                     console.log(chalk.cyan(date), "COM1 <= ", chalk.green(Array.prototype.slice.call(buffer, 0).map(function (item) {
                         return item.toString(16).toUpperCase()
-                    }), chalk.magenta(data))
+                    })), chalk.magenta(data))
 
                     if (!this.keys.finishEncryption && data.length == 9) {
                         this.createHostEncryptionKeys(data)
@@ -159,7 +159,7 @@ export default class eSSP extends EventEmitter {
 
         return new Promise((resolve, reject) => {
             setTimeout(()=> {
-                var packet = this.toPackets(0x11,[], "SYNCE")
+                var packet = this.toPackets(0x11, [], "SYNCE")
                 var buff = new Buffer(packet)
                 this.port.write(buff, ()=> {
                     this.port.drain()
@@ -175,7 +175,7 @@ export default class eSSP extends EventEmitter {
         return new Promise((resolve, reject) => {
             setTimeout(()=> {
                 var generatorArray = this.parseHexString(this.keys.generatorKey.toString(16), 8)
-                var packet = this.toPackets(0x4A, generatorArray,  "SET GENERATOR")
+                var packet = this.toPackets(0x4A, generatorArray, "SET GENERATOR")
                 var buff = new Buffer(packet)
                 this.port.write(buff, ()=> {
                     this.keys.set_generator = true
