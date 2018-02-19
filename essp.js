@@ -125,6 +125,7 @@ export default class eSSP extends EventEmitter {
         data = await this.sendModulus()
         data = await this.sendModulus()
         data = await this.sendRequestKeyExchange()
+        data = await this.sendRequestKeyExchange()
     }
 
     parseHexString(str, count) {
