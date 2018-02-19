@@ -7,7 +7,7 @@ import convertHex from "convert-hex"
 import bigInt from "big-integer"
 import EventEmitter from "event-emitter-es6"
 import chalk from 'chalk'
-import momment from 'moment'
+import moment from 'moment'
 export default class eSSP extends EventEmitter {
     constructor() {
         super()
