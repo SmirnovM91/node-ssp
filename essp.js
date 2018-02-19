@@ -320,6 +320,13 @@ export default class eSSP extends EventEmitter {
         return this.sequence
     }
 
+    generatePacking(commandLine){
+        var a = [];
+        for (var i = commandLine.length; i < 14; i++) {
+            a.push(0)
+        }
+        return a;
+    }
     toPackets(command, args = [], commandName) {
 
         var commandLine
@@ -344,8 +351,9 @@ export default class eSSP extends EventEmitter {
             this.count++
             var eCOUNT = this.parseHexString(this.count.toString(16), 4)
             var eDATA = DATA
-            var ePACKING = 0x00
-            var eCommandLine = [eLENGTH].concat(eCOUNT, eDATA, ePACKING)
+            var eCommandLine = [eLENGTH].concat(eCOUNT, eDATA)
+            var ePACKING = this.generatePacking(eCommandLine)
+            eCommandLine = eCommandLine.concat(ePACKING)
             var eCRC = this.CRC16(eCommandLine);
             eCommandLine = eCommandLine.concat(eCRC)
 
