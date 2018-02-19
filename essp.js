@@ -6,6 +6,8 @@ import forge from 'node-forge'
 import convertHex from "convert-hex"
 import bigInt from "big-integer"
 import EventEmitter from "event-emitter-es6"
+import chalk from 'chalk'
+
 export default class eSSP extends EventEmitter {
     constructor() {
         super()
@@ -69,10 +71,10 @@ export default class eSSP extends EventEmitter {
                     data = buf.slice(3, 3 + buffer[2]);
                     crc = this.CRC16(buf.slice(1, buf[2] + 3));
                     if (buf[buf.length - 2] !== crc[0] && buf[buf.length - 1] !== crc[1]) {
-                        console.log('Wrong CRC from validator')
+                        console.log(chalk.red('Wrong CRC from validator'))
                         return;
                     }
-                    console.log("parse ",buffer, data)
+                    console.log(chalk.green(buffer), chalk.green(data))
 
                 } else {
                     self.emit('unregistered_data', buffer);
@@ -80,9 +82,10 @@ export default class eSSP extends EventEmitter {
             }
 
             port.on('data', function (buffer) {
-                console.log("COM1 <= ", Array.prototype.slice.call(buffer, 0).map(function (item) {
+                let stringBuffer = Array.prototype.slice.call(buffer, 0).map(function (item) {
                     return item.toString(16).toUpperCase()
-                }))
+                })
+                console.log("COM1 <= ", chalk.yellow(stringBuffer))
                 var ix = 0;
                 do {
                     var len = buffer[2] + 5;
@@ -95,7 +98,7 @@ export default class eSSP extends EventEmitter {
 
         })
         port.on('error', (err) => {
-            console.log(err);
+            console.log(chalk.red(err));
         });
 
         this.port = port;
@@ -124,7 +127,6 @@ export default class eSSP extends EventEmitter {
     }
 
     parseHexString(str, count) {
-        console.log(str)
         var a = [];
         for (var i = str.length; i > 0; i -= 2) {
             a.push(parseInt(str.substr(i - 2, 2), 16));
@@ -140,7 +142,7 @@ export default class eSSP extends EventEmitter {
         var buff = new Buffer(packet)
         return new Promise((resolve, reject) => {
             setTimeout(()=> {
-                console.log(buff)
+                console.log("COM1 => ", chalk.blue(buff))
                 this.port.write(buff, ()=> {
                     this.port.drain()
                 })
@@ -162,11 +164,10 @@ export default class eSSP extends EventEmitter {
 
     sync() {
         var packet = this.toPackets(0x11)
-        console.log(packet)
         var buff = new Buffer(packet)
         return new Promise((resolve, reject) => {
             setTimeout(()=> {
-                console.log(buff)
+                console.log("COM1 => ", chalk.blue(buff))
                 this.port.write(buff, ()=> {
                     this.port.drain()
                     resolve(true)
@@ -194,7 +195,7 @@ export default class eSSP extends EventEmitter {
         var buff = new Buffer(packet)
         return new Promise((resolve, reject) => {
             setTimeout(()=> {
-                console.log(buff)
+                console.log("COM1 => ", chalk.blue(buff))
                 this.port.write(buff, ()=> {
                     this.port.drain()
                     resolve(true)
@@ -220,7 +221,7 @@ export default class eSSP extends EventEmitter {
         var buff = new Buffer(packet)
         return new Promise((resolve, reject) => {
             setTimeout(()=> {
-                console.log(buff)
+                console.log("COM1 => ", chalk.blue(buff))
                 this.port.write(buff, ()=> {
                     this.port.drain()
                     resolve(true)
@@ -246,7 +247,7 @@ export default class eSSP extends EventEmitter {
         var buff = new Buffer(packet)
         return new Promise((resolve, reject) => {
             setTimeout(()=> {
-                console.log(buff)
+                console.log("COM1 => ", chalk.blue(buff))
                 this.port.write(buff, ()=> {
                     this.port.drain()
                     resolve(true)
