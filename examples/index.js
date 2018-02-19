@@ -17,8 +17,8 @@ esspInstance.initialize({
 })
 esspInstance.on("ready", async()=> {
     await esspInstance.enable()
-    // await esspInstance.enablePayoutDevice()
-    for (let i = 0, p = Promise.resolve(); i < 10; i++) {
+    // await
+    for (let i = 0, p = esspInstance.enablePayoutDevice(); i < 10; i++) {
         p = p.then(_ => esspInstance.poll());
     }
     // await esspInstance.setDenominationRoute()
