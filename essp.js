@@ -79,16 +79,12 @@ export default class eSSP extends EventEmitter {
                     })), chalk.magenta(data))
 
                     if (!this.keys.set_generator) {
-                        // console.log("data ", data)
                         await this.sendGenerator()
-                    } else if (!self.keys.set_modulus) {
-                        // console.log("data ", data)
+                    } else if (!this.keys.set_modulus) {
                         await this.sendModulus()
-                    } else if (!self.keys.request_key_exchange) {
-                        // console.log("data ", data)
+                    } else if (!this.keys.request_key_exchange) {
                         await this.sendRequestKeyExchange()
-                    } else if (!self.keys.finishEncryption && data.length == 9) {
-                        // console.log("data ", data)
+                    } else if (!this.keys.finishEncryption && data.length == 9) {
                         await this.createHostEncryptionKeys(data)
                     }
                 } else {
