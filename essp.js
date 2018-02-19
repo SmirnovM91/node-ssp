@@ -158,7 +158,7 @@ export default class eSSP extends EventEmitter {
 
         return new Promise((resolve, reject) => {
             setTimeout(()=> {
-                var packet = this.toPackets(0x11, [], "SYNCE")
+                var packet = this.toPackets(0x11, [], "SYNC")
                 var buff = new Buffer(packet)
                 this.port.write(buff, ()=> {
                     this.port.drain()
