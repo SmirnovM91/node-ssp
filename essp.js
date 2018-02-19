@@ -87,7 +87,7 @@ export default class eSSP extends EventEmitter {
             }
 
             port.on('data', function (buffer) {
-                let date = moment(new Date()).format('MM/DD/YYYY HH:mm:ss.SSS');
+                let date = moment(new Date()).format('HH:mm:ss.SSS');
                 console.log(chalk.cyan(date), "COM1 <= ", chalk.green(Array.prototype.slice.call(buffer, 0).map(function (item) {
                     return item.toString(16).toUpperCase()
                 })))
