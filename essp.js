@@ -85,7 +85,7 @@ export default class eSSP extends EventEmitter {
             }
 
             port.on('data', function (buffer) {
-                console.log("COM1 <= ", chalk.green(Array.prototype.slice.call(buffer, 0).map(function (item) {
+                console.log(chalk.cyan(new Date()),"COM1 <= ", chalk.green(Array.prototype.slice.call(buffer, 0).map(function (item) {
                     return item.toString(16).toUpperCase()
                 })))
                 var ix = 0;
