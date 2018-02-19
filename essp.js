@@ -120,7 +120,7 @@ export default class eSSP extends EventEmitter {
 
         console.log(this.keys)
         let data = await this.sync()
-        data = await this.sync()
+        this.sequence = 0x80
         data = await this.sendGenerator()
         data = await this.sendGenerator()
         data = await this.sendModulus()
