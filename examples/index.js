@@ -15,6 +15,9 @@ esspInstance.initialize({
     type: "nv200", //device type
     currencies: [1, 1, 1, 1, 1, 1] //currencies types acceptable. Here all but 100USD
 })
+esspInstance.on("ready",function(){
+    esspInstance.setDenominationRoute()
+})
 setTimeout(()=> {
     esspInstance.initiateKeys()
 }, 2000)

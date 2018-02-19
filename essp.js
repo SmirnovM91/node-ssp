@@ -60,8 +60,8 @@ export default class eSSP extends EventEmitter {
         }, false);
 
 
-        port.open(() =>{
-            let parseBuffer = async (buffer) => {
+        port.open(() => {
+            let parseBuffer = async(buffer) => {
                 var data, buf, error, crc;
                 if (buffer[0] === 0x7F) {
                     buf = buffer.toJSON();
@@ -78,15 +78,9 @@ export default class eSSP extends EventEmitter {
                         return item.toString(16).toUpperCase()
                     })), chalk.magenta(data))
 
-                    // if (!this.keys.set_generator) {
-                    //     await this.sendGenerator()
-                    // } else if (!this.keys.set_modulus) {
-                    //     await this.sendModulus()
-                    // } else if (!this.keys.request_key_exchange) {
-                    //     await this.sendRequestKeyExchange()
-                    // } else if (!this.keys.finishEncryption && data.length == 9) {
-                    //     await this.createHostEncryptionKeys(data)
-                    // }
+                    if (this.keys.finishEncryption) {
+                        console.log(data)
+                    }
                 } else {
                     self.emit('unregistered_data', buffer);
                 }
@@ -253,8 +247,23 @@ export default class eSSP extends EventEmitter {
             this.keys.variableKey = this.keys.key
             this.keys.finishEncryption = true
             this.emit("ready");
-
         }
+    }
+
+    setDenominationRoute() {
+        var packet = this.toPackets(0x3B, 0x00, 0x64, 0x00, 0x00, 0x00, 0x55, 0x53, 0x44)
+        var buff = new Buffer(packet)
+        return new Promise((resolve, reject) => {
+            setTimeout(()=> {
+                console.log("COM1 => ", chalk.yellow(Array.prototype.slice.call(buff, 0).map(function (item) {
+                    return item.toString(16).toUpperCase()
+                })))
+                this.port.write(buff, ()=> {
+                    this.port.drain()
+                    resolve(true)
+                })
+            }, 200)
+        });
     }
 
     CRC16(command) {
