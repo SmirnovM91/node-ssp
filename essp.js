@@ -72,6 +72,7 @@ export default class eSSP extends EventEmitter {
                         console.log('Wrong CRC from validator')
                         return;
                     }
+                    console.log("parse ",buffer, data)
 
                 } else {
                     self.emit('unregistered_data', buffer);
@@ -168,6 +169,7 @@ export default class eSSP extends EventEmitter {
                 console.log(buff)
                 this.port.write(buff, ()=> {
                     this.port.drain()
+                    resolve(true)
                 })
                 // this.port.once('data', function (buffer) {
                 //     var ix = 0;
@@ -195,6 +197,7 @@ export default class eSSP extends EventEmitter {
                 console.log(buff)
                 this.port.write(buff, ()=> {
                     this.port.drain()
+                    resolve(true)
                 })
                 // this.port.once('data', function (buffer) {
                 //     var ix = 0;
@@ -220,6 +223,7 @@ export default class eSSP extends EventEmitter {
                 console.log(buff)
                 this.port.write(buff, ()=> {
                     this.port.drain()
+                    resolve(true)
                 })
                 // this.port.once('data', function (buffer) {
                 //     var ix = 0;
@@ -245,6 +249,7 @@ export default class eSSP extends EventEmitter {
                 console.log(buff)
                 this.port.write(buff, ()=> {
                     this.port.drain()
+                    resolve(true)
                 })
                 // this.port.once('data', function (buffer) {
                 //     var ix = 0;
