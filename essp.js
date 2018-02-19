@@ -152,7 +152,7 @@ export default class eSSP extends EventEmitter {
                 this.port.write(buff, ()=> {
                     this.port.drain()
                 })
-            }, 2000)
+            }, 500)
         });
     }
 
@@ -169,7 +169,7 @@ export default class eSSP extends EventEmitter {
                     this.port.drain()
                     resolve(true)
                 })
-            }, 1000)
+            }, 500)
 
 
         });
@@ -181,7 +181,8 @@ export default class eSSP extends EventEmitter {
         var buff = new Buffer(packet)
         return new Promise((resolve, reject) => {
             setTimeout(()=> {
-                console.log("COM1 => ", chalk.yellow(Array.prototype.slice.call(buff, 0).map(function (item) {
+                let date = moment(new Date()).format('MM/DD/YYYY HH:mm:ss.SSS');
+                console.log(chalk.cyan(date),"COM1 => ", chalk.yellow(Array.prototype.slice.call(buff, 0).map(function (item) {
                     return item.toString(16).toUpperCase()
                 })))
                 this.port.write(buff, ()=> {
@@ -189,7 +190,7 @@ export default class eSSP extends EventEmitter {
                     this.port.drain()
                     resolve(true)
                 })
-            }, 1000)
+            }, 500)
         });
     }
 
@@ -207,7 +208,7 @@ export default class eSSP extends EventEmitter {
                     this.port.drain()
                     resolve(true)
                 })
-            }, 1000)
+            }, 500)
         });
     }
 
@@ -217,7 +218,8 @@ export default class eSSP extends EventEmitter {
         var buff = new Buffer(packet)
         return new Promise((resolve, reject) => {
             setTimeout(()=> {
-                console.log("COM1 => ", chalk.yellow(Array.prototype.slice.call(buff, 0).map(function (item) {
+                let date = moment(new Date()).format('MM/DD/YYYY HH:mm:ss.SSS');
+                console.log(chalk.cyan(date),"COM1 => ", chalk.yellow(Array.prototype.slice.call(buff, 0).map(function (item) {
                     return item.toString(16).toUpperCase()
                 })))
                 this.port.write(buff, ()=> {
@@ -225,7 +227,7 @@ export default class eSSP extends EventEmitter {
                     this.port.drain()
                     resolve(true)
                 })
-            }, 1000)
+            }, 500)
         });
     }
 
