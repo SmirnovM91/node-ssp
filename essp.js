@@ -8,6 +8,8 @@ import bigInt from "big-integer"
 import EventEmitter from "event-emitter-es6"
 import chalk from 'chalk'
 import moment from 'moment'
+import aesjs from 'aes-js';
+
 export default class eSSP extends EventEmitter {
     constructor() {
         super()
@@ -76,7 +78,7 @@ export default class eSSP extends EventEmitter {
                     }
                     console.log(chalk.magenta(data))
 
-                    if (!this.keys.finishEncryption && data.length ==9) {
+                    if (!this.keys.finishEncryption && data.length == 9) {
                         this.createHostEncryptionKeys(data)
                     }
                 } else {
@@ -86,7 +88,7 @@ export default class eSSP extends EventEmitter {
 
             port.on('data', function (buffer) {
                 let date = moment(new Date()).format('MM/DD/YYYY HH:mm:ss.SSS');
-                console.log(chalk.cyan(date),"COM1 <= ", chalk.green(Array.prototype.slice.call(buffer, 0).map(function (item) {
+                console.log(chalk.cyan(date), "COM1 <= ", chalk.green(Array.prototype.slice.call(buffer, 0).map(function (item) {
                     return item.toString(16).toUpperCase()
                 })))
                 var ix = 0;
@@ -162,7 +164,7 @@ export default class eSSP extends EventEmitter {
         return new Promise((resolve, reject) => {
             setTimeout(()=> {
                 let date = moment(new Date()).format('MM/DD/YYYY HH:mm:ss.SSS');
-                console.log(chalk.cyan(date),"COM1 => ", chalk.yellow(Array.prototype.slice.call(buff, 0).map(function (item) {
+                console.log(chalk.cyan(date), "COM1 => ", chalk.yellow(Array.prototype.slice.call(buff, 0).map(function (item) {
                     return item.toString(16).toUpperCase()
                 })))
                 this.port.write(buff, ()=> {
@@ -182,9 +184,9 @@ export default class eSSP extends EventEmitter {
         return new Promise((resolve, reject) => {
             setTimeout(()=> {
                 let date = moment(new Date()).format('MM/DD/YYYY HH:mm:ss.SSS');
-                console.log(chalk.cyan(date),"COM1 => ", chalk.yellow(Array.prototype.slice.call(buff, 0).map(function (item) {
+                console.log(chalk.cyan(date), "COM1 => ", chalk.yellow(Array.prototype.slice.call(buff, 0).map(function (item) {
                     return item.toString(16).toUpperCase()
-                })))
+                })), "SET GENERATOR")
                 this.port.write(buff, ()=> {
                     this.keys.set_generator = true
                     this.port.drain()
@@ -200,9 +202,10 @@ export default class eSSP extends EventEmitter {
         var buff = new Buffer(packet)
         return new Promise((resolve, reject) => {
             setTimeout(()=> {
-                console.log("COM1 => ", chalk.yellow(Array.prototype.slice.call(buff, 0).map(function (item) {
+                let date = moment(new Date()).format('MM/DD/YYYY HH:mm:ss.SSS');
+                console.log(chalk.cyan(date), "COM1 => ", chalk.yellow(Array.prototype.slice.call(buff, 0).map(function (item) {
                     return item.toString(16).toUpperCase()
-                })))
+                })), "SET MODULUS")
                 this.port.write(buff, ()=> {
                     this.keys.set_modulus = true
                     this.port.drain()
@@ -219,9 +222,9 @@ export default class eSSP extends EventEmitter {
         return new Promise((resolve, reject) => {
             setTimeout(()=> {
                 let date = moment(new Date()).format('MM/DD/YYYY HH:mm:ss.SSS');
-                console.log(chalk.cyan(date),"COM1 => ", chalk.yellow(Array.prototype.slice.call(buff, 0).map(function (item) {
+                console.log(chalk.cyan(date), "COM1 => ", chalk.yellow(Array.prototype.slice.call(buff, 0).map(function (item) {
                     return item.toString(16).toUpperCase()
-                })))
+                })), "REQUEST KEY EXCHANGE")
                 this.port.write(buff, ()=> {
                     this.keys.request_key_exchange = true
                     this.port.drain()
@@ -259,9 +262,10 @@ export default class eSSP extends EventEmitter {
         var buff = new Buffer(packet)
         return new Promise((resolve, reject) => {
             setTimeout(()=> {
-                console.log("COM1 => ", chalk.yellow(Array.prototype.slice.call(buff, 0).map(function (item) {
+                let date = moment(new Date()).format('MM/DD/YYYY HH:mm:ss.SSS');
+                console.log(chalk.cyan(date), "COM1 => ", chalk.yellow(Array.prototype.slice.call(buff, 0).map(function (item) {
                     return item.toString(16).toUpperCase()
-                })))
+                })), "SET DENOMINATION ROUTE")
                 this.port.write(buff, ()=> {
                     this.port.drain()
                     resolve(true)
@@ -304,6 +308,32 @@ export default class eSSP extends EventEmitter {
         var LENGTH = args.length + 1
         var SEQ_SLAVE_ID = this.getSequence()
         var DATA = [command].concat(args)
+
+        if (this.keys != null) {
+            var STEX = 0x7E
+            var eLENGTH = DATA.length;
+            this.count++
+            var eCOUNT = this.parseHexString(this.count.toString(16), 4)
+            var eDATA = DATA
+            var ePACKING = 0x00
+            var eCommandLine = [eLENGTH].concat(eCOUNT, eDATA, ePACKING)
+            var eCRC = this.CRC16(eCommandLine);
+            eCommandLine = eCommandLine.concat(eCRC)
+
+            var parse = function (a, count) {
+                for (var i = a.length; i < count; i++) {
+                    a.push(0)
+                }
+                return a;
+            }
+            var key = parse(Array.prototype.slice.call(this.keys.fixedKey, 0).reverse(), 8).concat(this.parseHexString(this.keys.key, 8))
+
+            var aesCtr = new aesjs.ModeOfOperation.ctr(key);
+            var uint8Array = aesCtr.encrypt(eCommandLine);
+            eCommandLine = [STEX].concat([].slice.call(uint8Array))
+            DATA = eCommandLine
+            LENGTH = DATA.length
+        }
 
         commandLine = [SEQ_SLAVE_ID, LENGTH].concat(DATA);
         var crc = this.CRC16(commandLine);
