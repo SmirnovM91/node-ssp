@@ -7,7 +7,7 @@ import convertHex from "convert-hex"
 import bigInt from "big-integer"
 import EventEmitter from "event-emitter-es6"
 import chalk from 'chalk'
-
+import momment from 'moment'
 export default class eSSP extends EventEmitter {
     constructor() {
         super()
@@ -85,7 +85,8 @@ export default class eSSP extends EventEmitter {
             }
 
             port.on('data', function (buffer) {
-                console.log(chalk.cyan(new Date()),"COM1 <= ", chalk.green(Array.prototype.slice.call(buffer, 0).map(function (item) {
+                let date = moment(new Date()).format('MM/DD/YYYY HH:mm:ss.SSS');
+                console.log(chalk.cyan(date),"COM1 <= ", chalk.green(Array.prototype.slice.call(buffer, 0).map(function (item) {
                     return item.toString(16).toUpperCase()
                 })))
                 var ix = 0;
@@ -160,7 +161,8 @@ export default class eSSP extends EventEmitter {
         var buff = new Buffer(packet)
         return new Promise((resolve, reject) => {
             setTimeout(()=> {
-                console.log("COM1 => ", chalk.yellow(Array.prototype.slice.call(buff, 0).map(function (item) {
+                let date = moment(new Date()).format('MM/DD/YYYY HH:mm:ss.SSS');
+                console.log(chalk.cyan(date),"COM1 => ", chalk.yellow(Array.prototype.slice.call(buff, 0).map(function (item) {
                     return item.toString(16).toUpperCase()
                 })))
                 this.port.write(buff, ()=> {
