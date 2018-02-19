@@ -74,7 +74,9 @@ export default class eSSP extends EventEmitter {
                         console.log(chalk.red('Wrong CRC from validator'))
                         return;
                     }
-                    console.log(chalk.green(buffer), chalk.green(data))
+                    console.log(chalk.green(Array.prototype.slice.call(buffer, 0).map(function (item) {
+                        return item.toString(16).toUpperCase()
+                    })), chalk.magenta(data))
 
                 } else {
                     self.emit('unregistered_data', buffer);
@@ -82,10 +84,9 @@ export default class eSSP extends EventEmitter {
             }
 
             port.on('data', function (buffer) {
-                let stringBuffer = Array.prototype.slice.call(buffer, 0).map(function (item) {
+                console.log("COM1 <= ", chalk.yellow(Array.prototype.slice.call(buffer, 0).map(function (item) {
                     return item.toString(16).toUpperCase()
-                })
-                console.log("COM1 <= ", chalk.yellow(stringBuffer))
+                })))
                 var ix = 0;
                 do {
                     var len = buffer[2] + 5;
@@ -142,7 +143,9 @@ export default class eSSP extends EventEmitter {
         var buff = new Buffer(packet)
         return new Promise((resolve, reject) => {
             setTimeout(()=> {
-                console.log("COM1 => ", chalk.blue(buff))
+                console.log("COM1 => ", chalk.blue(Array.prototype.slice.call(buff, 0).map(function (item) {
+                    return item.toString(16).toUpperCase()
+                })))
                 this.port.write(buff, ()=> {
                     this.port.drain()
                 })
@@ -167,7 +170,9 @@ export default class eSSP extends EventEmitter {
         var buff = new Buffer(packet)
         return new Promise((resolve, reject) => {
             setTimeout(()=> {
-                console.log("COM1 => ", chalk.blue(buff))
+                console.log("COM1 => ", chalk.blue(Array.prototype.slice.call(buff, 0).map(function (item) {
+                    return item.toString(16).toUpperCase()
+                })))
                 this.port.write(buff, ()=> {
                     this.port.drain()
                     resolve(true)
@@ -195,7 +200,9 @@ export default class eSSP extends EventEmitter {
         var buff = new Buffer(packet)
         return new Promise((resolve, reject) => {
             setTimeout(()=> {
-                console.log("COM1 => ", chalk.blue(buff))
+                console.log("COM1 => ", chalk.blue(Array.prototype.slice.call(buff, 0).map(function (item) {
+                    return item.toString(16).toUpperCase()
+                })))
                 this.port.write(buff, ()=> {
                     this.port.drain()
                     resolve(true)
@@ -221,7 +228,9 @@ export default class eSSP extends EventEmitter {
         var buff = new Buffer(packet)
         return new Promise((resolve, reject) => {
             setTimeout(()=> {
-                console.log("COM1 => ", chalk.blue(buff))
+                console.log("COM1 => ", chalk.blue(Array.prototype.slice.call(buff, 0).map(function (item) {
+                    return item.toString(16).toUpperCase()
+                })))
                 this.port.write(buff, ()=> {
                     this.port.drain()
                     resolve(true)
