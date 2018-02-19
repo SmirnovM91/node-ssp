@@ -80,8 +80,7 @@ export default class eSSP extends EventEmitter {
                     let date = moment(new Date()).format('HH:mm:ss.SSS');
                     console.log(chalk.cyan(date), "COM1 <= ", chalk.green(Array.prototype.slice.call(buffer, 0).map(function (item) {
                         return item.toString(16).toUpperCase()
-                    })), chalk.magenta(data))
-
+                    })), "|", chalk.magenta(data))
                     if (!this.keys.finishEncryption && data.length == 9) {
                         this.createHostEncryptionKeys(data)
                     }
@@ -90,7 +89,7 @@ export default class eSSP extends EventEmitter {
                 }
             }
 
-            port.on('data', function (buffer) {)
+            port.on('data', function (buffer) {
                 var ix = 0;
                 do {
                     var len = buffer[2] + 5;
@@ -298,7 +297,7 @@ export default class eSSP extends EventEmitter {
         let date = moment(new Date()).format('HH:mm:ss.SSS');
         console.log(chalk.cyan(date), "COM1 => ", chalk.yellow(Array.prototype.slice.call(commandLine, 0).map(function (item) {
             return item.toString(16).toUpperCase()
-        })), commandName, "unecrypted")
+        })), "|", commandName, "|", "unecrypted")
 
         if (this.keys.key != null) {
             var STEX = 0x7E
@@ -334,7 +333,7 @@ export default class eSSP extends EventEmitter {
             let date = moment(new Date()).format('HH:mm:ss.SSS');
             console.log(chalk.cyan(date), "COM1 => ", chalk.yellow(Array.prototype.slice.call(commandLine, 0).map(function (item) {
                 return item.toString(16).toUpperCase()
-            })), commandName, "encrypted")
+            })), "|", commandName, "|", "encrypted")
         }
 
         return commandLine
