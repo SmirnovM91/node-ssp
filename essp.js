@@ -154,8 +154,34 @@ export default class eSSP extends EventEmitter {
         });
     }
 
-    sync() {
+    enable() {
+        return new Promise((resolve, reject) => {
+            setTimeout(()=> {
+                var packet = this.toPackets(0x0A,[], "ENABLE")
+                var buff = new Buffer(packet)
+                this.port.write(buff, ()=> {
+                    this.port.drain()
+                    resolve(true)
 
+                })
+            }, 200)
+        });
+    }
+
+    enablePayoutDevice() {
+        return new Promise((resolve, reject) => {
+            setTimeout(()=> {
+                var packet = this.toPackets(0x5C,[], "ENABLE_PAYOUT_DEVICE")
+                var buff = new Buffer(packet)
+                this.port.write(buff, ()=> {
+                    this.port.drain()
+                    resolve(true)
+
+                })
+            }, 200)
+        });
+    }
+    sync() {
         return new Promise((resolve, reject) => {
             setTimeout(()=> {
                 var packet = this.toPackets(0x11, [], "SYNC")

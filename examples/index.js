@@ -15,8 +15,10 @@ esspInstance.initialize({
     type: "nv200", //device type
     currencies: [1, 1, 1, 1, 1, 1] //currencies types acceptable. Here all but 100USD
 })
-esspInstance.on("ready",function(){
-    esspInstance.setDenominationRoute()
+esspInstance.on("ready", async()=> {
+    await esspInstance.enable()
+    await esspInstance.enablePayoutDevice()
+    await esspInstance.setDenominationRoute()
 })
 setTimeout(()=> {
     esspInstance.initiateKeys()
