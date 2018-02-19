@@ -76,7 +76,11 @@ export default class eSSP extends EventEmitter {
                         console.log(chalk.red('Wrong CRC from validator'))
                         return;
                     }
-                    console.log(chalk.magenta(data))
+
+                    let date = moment(new Date()).format('HH:mm:ss.SSS');
+                    console.log(chalk.cyan(date), "COM1 <= ", chalk.green(Array.prototype.slice.call(buffer, 0).map(function (item) {
+                        return item.toString(16).toUpperCase()
+                    }), chalk.magenta(data))
 
                     if (!this.keys.finishEncryption && data.length == 9) {
                         this.createHostEncryptionKeys(data)
@@ -86,11 +90,7 @@ export default class eSSP extends EventEmitter {
                 }
             }
 
-            port.on('data', function (buffer) {
-                let date = moment(new Date()).format('HH:mm:ss.SSS');
-                console.log(chalk.cyan(date), "COM1 <= ", chalk.green(Array.prototype.slice.call(buffer, 0).map(function (item) {
-                    return item.toString(16).toUpperCase()
-                })))
+            port.on('data', function (buffer) {)
                 var ix = 0;
                 do {
                     var len = buffer[2] + 5;
@@ -125,11 +125,8 @@ export default class eSSP extends EventEmitter {
         let data = await this.sync()
         this.sequence = 0x80
         data = await this.sendGenerator()
-        // data = await this.sendGenerator()
         data = await this.sendModulus()
-        // data = await this.sendModulus()
         data = await this.sendRequestKeyExchange()
-        // data = await this.sendRequestKeyExchange()
     }
 
     parseHexString(str, count) {
@@ -159,14 +156,11 @@ export default class eSSP extends EventEmitter {
     }
 
     sync() {
-        var packet = this.toPackets(0x11)
-        var buff = new Buffer(packet)
+
         return new Promise((resolve, reject) => {
             setTimeout(()=> {
-                let date = moment(new Date()).format('HH:mm:ss.SSS');
-                console.log(chalk.cyan(date), "COM1 => ", chalk.yellow(Array.prototype.slice.call(buff, 0).map(function (item) {
-                    return item.toString(16).toUpperCase()
-                })))
+                var packet = this.toPackets(0x11,[], "SYNCE")
+                var buff = new Buffer(packet)
                 this.port.write(buff, ()=> {
                     this.port.drain()
                     resolve(true)
@@ -178,15 +172,11 @@ export default class eSSP extends EventEmitter {
     }
 
     sendGenerator() {
-        var generatorArray = this.parseHexString(this.keys.generatorKey.toString(16), 8)
-        var packet = this.toPackets(0x4A, generatorArray)
-        var buff = new Buffer(packet)
         return new Promise((resolve, reject) => {
             setTimeout(()=> {
-                let date = moment(new Date()).format('HH:mm:ss.SSS');
-                console.log(chalk.cyan(date), "COM1 => ", chalk.yellow(Array.prototype.slice.call(buff, 0).map(function (item) {
-                    return item.toString(16).toUpperCase()
-                })), "SET GENERATOR")
+                var generatorArray = this.parseHexString(this.keys.generatorKey.toString(16), 8)
+                var packet = this.toPackets(0x4A, generatorArray,  "SET GENERATOR")
+                var buff = new Buffer(packet)
                 this.port.write(buff, ()=> {
                     this.keys.set_generator = true
                     this.port.drain()
@@ -197,15 +187,12 @@ export default class eSSP extends EventEmitter {
     }
 
     sendModulus() {
-        var modulusArray = this.parseHexString(this.keys.modulusKey.toString(16), 8)
-        var packet = this.toPackets(0x4B, modulusArray)
-        var buff = new Buffer(packet)
+
         return new Promise((resolve, reject) => {
             setTimeout(()=> {
-                let date = moment(new Date()).format('HH:mm:ss.SSS');
-                console.log(chalk.cyan(date), "COM1 => ", chalk.yellow(Array.prototype.slice.call(buff, 0).map(function (item) {
-                    return item.toString(16).toUpperCase()
-                })), "SET MODULUS")
+                var modulusArray = this.parseHexString(this.keys.modulusKey.toString(16), 8)
+                var packet = this.toPackets(0x4B, modulusArray, "SET MODULUS")
+                var buff = new Buffer(packet)
                 this.port.write(buff, ()=> {
                     this.keys.set_modulus = true
                     this.port.drain()
@@ -216,15 +203,12 @@ export default class eSSP extends EventEmitter {
     }
 
     sendRequestKeyExchange() {
-        var hostIntArray = this.parseHexString(this.keys.hostIntKey.toString(16), 8)
-        var packet = this.toPackets(0x4C, hostIntArray)
-        var buff = new Buffer(packet)
+
         return new Promise((resolve, reject) => {
             setTimeout(()=> {
-                let date = moment(new Date()).format('HH:mm:ss.SSS');
-                console.log(chalk.cyan(date), "COM1 => ", chalk.yellow(Array.prototype.slice.call(buff, 0).map(function (item) {
-                    return item.toString(16).toUpperCase()
-                })), "REQUEST KEY EXCHANGE")
+                var hostIntArray = this.parseHexString(this.keys.hostIntKey.toString(16), 8)
+                var packet = this.toPackets(0x4C, hostIntArray, "REQUEST KEY EXCHANGE")
+                var buff = new Buffer(packet)
                 this.port.write(buff, ()=> {
                     this.keys.request_key_exchange = true
                     this.port.drain()
@@ -258,14 +242,10 @@ export default class eSSP extends EventEmitter {
     }
 
     setDenominationRoute() {
-        var packet = this.toPackets(0x3B, [0x00, 0x64, 0x00, 0x00, 0x00, 0x55, 0x53, 0x44])
-        var buff = new Buffer(packet)
         return new Promise((resolve, reject) => {
             setTimeout(()=> {
-                let date = moment(new Date()).format('HH:mm:ss.SSS');
-                console.log(chalk.cyan(date), "COM1 => ", chalk.yellow(Array.prototype.slice.call(buff, 0).map(function (item) {
-                    return item.toString(16).toUpperCase()
-                })), "SET DENOMINATION ROUTE")
+                var packet = this.toPackets(0x3B, [0x00, 0x64, 0x00, 0x00, 0x00, 0x55, 0x53, 0x44], "SET DENOMINATION_ROUTE")
+                var buff = new Buffer(packet)
                 this.port.write(buff, ()=> {
                     this.port.drain()
                     resolve(true)
@@ -302,12 +282,23 @@ export default class eSSP extends EventEmitter {
         return this.sequence
     }
 
-    toPackets(command, args = []) {
+    toPackets(command, args = [], commandName) {
+
         var commandLine
         var STX = 0x7F
         var LENGTH = args.length + 1
         var SEQ_SLAVE_ID = this.getSequence()
         var DATA = [command].concat(args)
+
+        commandLine = [SEQ_SLAVE_ID, LENGTH].concat(DATA);
+        var crc = this.CRC16(commandLine);
+        commandLine = [STX].concat(commandLine, crc);
+
+
+        let date = moment(new Date()).format('HH:mm:ss.SSS');
+        console.log(chalk.cyan(date), "COM1 => ", chalk.yellow(Array.prototype.slice.call(commandLine, 0).map(function (item) {
+            return item.toString(16).toUpperCase()
+        })), commandName, "unecrypted")
 
         if (this.keys.key != null) {
             var STEX = 0x7E
@@ -336,10 +327,18 @@ export default class eSSP extends EventEmitter {
         }
 
         commandLine = [SEQ_SLAVE_ID, LENGTH].concat(DATA);
-        var crc = this.CRC16(commandLine);
+        crc = this.CRC16(commandLine);
         commandLine = [STX].concat(commandLine, crc);
 
+        if (this.keys.key != null) {
+            let date = moment(new Date()).format('HH:mm:ss.SSS');
+            console.log(chalk.cyan(date), "COM1 => ", chalk.yellow(Array.prototype.slice.call(commandLine, 0).map(function (item) {
+                return item.toString(16).toUpperCase()
+            })), commandName, "encrypted")
+        }
+
         return commandLine
+
     }
 
 }
