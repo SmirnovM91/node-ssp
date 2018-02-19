@@ -309,7 +309,7 @@ export default class eSSP extends EventEmitter {
         var SEQ_SLAVE_ID = this.getSequence()
         var DATA = [command].concat(args)
 
-        if (this.keys != null) {
+        if (this.keys.key != null) {
             var STEX = 0x7E
             var eLENGTH = DATA.length;
             this.count++
