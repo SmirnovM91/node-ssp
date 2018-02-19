@@ -85,7 +85,7 @@ export default class eSSP extends EventEmitter {
                         this.createHostEncryptionKeys(data)
                     }
                 } else {
-                    self.emit('unregistered_data', buffer);
+                    this.emit('unregistered_data', buffer);
                 }
             }
 
@@ -322,7 +322,7 @@ export default class eSSP extends EventEmitter {
 
     generatePacking(commandLine){
         var a = [];
-        for (var i = commandLine.length; i < 14; i++) {
+        for (var i = commandLine.length; i < 10; i++) {
             a.push(0)
         }
         return a;
