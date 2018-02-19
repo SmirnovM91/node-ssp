@@ -193,6 +193,7 @@ export default class eSSP extends EventEmitter {
             }, 200)
         });
     }
+
     sync() {
         return new Promise((resolve, reject) => {
             setTimeout(()=> {
