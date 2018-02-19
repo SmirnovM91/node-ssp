@@ -20,7 +20,7 @@ esspInstance.on("ready",function(){
 })
 setTimeout(()=> {
     esspInstance.initiateKeys()
-}, 2000)
+}, 200)
 
 
 //
