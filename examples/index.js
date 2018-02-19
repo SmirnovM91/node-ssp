@@ -18,6 +18,9 @@ esspInstance.initialize({
 esspInstance.on("ready", async()=> {
     await esspInstance.enable()
     await esspInstance.enablePayoutDevice()
+    setInterval(async()=> {
+        await esspInstance.poll()
+    })
     await esspInstance.setDenominationRoute()
 })
 setTimeout(()=> {
