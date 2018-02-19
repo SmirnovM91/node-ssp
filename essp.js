@@ -127,7 +127,7 @@ export default class eSSP extends EventEmitter {
         this.keys.negotiateKeys = true;
 
         console.log(this.keys)
-        await this.sync()
+        let data = await this.sync()
         //
         // data = await this.sendGenerator()
         //
