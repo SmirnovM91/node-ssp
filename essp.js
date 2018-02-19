@@ -256,7 +256,9 @@ export default class eSSP extends EventEmitter {
         var buff = new Buffer(packet)
         return new Promise((resolve, reject) => {
             setTimeout(()=> {
-                console.log("COM1 => ", chalk.blue(buff))
+                console.log("COM1 => ", chalk.blue(Array.prototype.slice.call(buff, 0).map(function (item) {
+                    return item.toString(16).toUpperCase()
+                })))
                 this.port.write(buff, ()=> {
                     this.port.drain()
                     resolve(true)
