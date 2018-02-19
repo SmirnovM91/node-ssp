@@ -78,22 +78,22 @@ export default class eSSP extends EventEmitter {
                         return item.toString(16).toUpperCase()
                     })), chalk.magenta(data))
 
-                    if (!this.keys.set_generator) {
-                        await this.sendGenerator()
-                    } else if (!this.keys.set_modulus) {
-                        await this.sendModulus()
-                    } else if (!this.keys.request_key_exchange) {
-                        await this.sendRequestKeyExchange()
-                    } else if (!this.keys.finishEncryption && data.length == 9) {
-                        await this.createHostEncryptionKeys(data)
-                    }
+                    // if (!this.keys.set_generator) {
+                    //     await this.sendGenerator()
+                    // } else if (!this.keys.set_modulus) {
+                    //     await this.sendModulus()
+                    // } else if (!this.keys.request_key_exchange) {
+                    //     await this.sendRequestKeyExchange()
+                    // } else if (!this.keys.finishEncryption && data.length == 9) {
+                    //     await this.createHostEncryptionKeys(data)
+                    // }
                 } else {
                     self.emit('unregistered_data', buffer);
                 }
             }
 
             port.on('data', function (buffer) {
-                console.log("COM1 <= ", chalk.yellow(Array.prototype.slice.call(buffer, 0).map(function (item) {
+                console.log("COM1 <= ", chalk.green(Array.prototype.slice.call(buffer, 0).map(function (item) {
                     return item.toString(16).toUpperCase()
                 })))
                 var ix = 0;
@@ -248,7 +248,7 @@ export default class eSSP extends EventEmitter {
             }
             this.keys.slaveIntKey = slaveIntKeyString
             this.keys.key = this.keys.slaveIntKey ^ this.keys.hostRandom % this.keys.modulusKey
-            this.keys.variableKey = self.keys.key
+            this.keys.variableKey = this.keys.key
             this.keys.finishEncryption = true
             this.emit("ready");
 
