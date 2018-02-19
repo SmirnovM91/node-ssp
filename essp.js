@@ -61,7 +61,7 @@ export default class eSSP extends EventEmitter {
 
 
         port.open(() =>{
-            let parseBuffer = (buffer) => {
+            let parseBuffer = async (buffer) => {
                 var data, buf, error, crc;
                 if (buffer[0] === 0x7F) {
                     buf = buffer.toJSON();
@@ -78,6 +78,19 @@ export default class eSSP extends EventEmitter {
                         return item.toString(16).toUpperCase()
                     })), chalk.magenta(data))
 
+                    if (!this.keys.set_generator) {
+                        // console.log("data ", data)
+                        await this.sendGenerator()
+                    } else if (!self.keys.set_modulus) {
+                        // console.log("data ", data)
+                        await this.sendModulus()
+                    } else if (!self.keys.request_key_exchange) {
+                        // console.log("data ", data)
+                        await this.sendRequestKeyExchange()
+                    } else if (!self.keys.finishEncryption && data.length == 9) {
+                        // console.log("data ", data)
+                        await this.createHostEncryptionKeys(data)
+                    }
                 } else {
                     self.emit('unregistered_data', buffer);
                 }
@@ -204,6 +217,7 @@ export default class eSSP extends EventEmitter {
                     return item.toString(16).toUpperCase()
                 })))
                 this.port.write(buff, ()=> {
+                    this.keys.set_generator = true
                     this.port.drain()
                     resolve(true)
                 })
@@ -232,6 +246,7 @@ export default class eSSP extends EventEmitter {
                     return item.toString(16).toUpperCase()
                 })))
                 this.port.write(buff, ()=> {
+                    this.keys.set_modulus = true
                     this.port.drain()
                     resolve(true)
                 })
@@ -260,6 +275,7 @@ export default class eSSP extends EventEmitter {
                     return item.toString(16).toUpperCase()
                 })))
                 this.port.write(buff, ()=> {
+                    this.keys.request_key_exchange = true
                     this.port.drain()
                     resolve(true)
                 })
