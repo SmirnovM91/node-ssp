@@ -78,8 +78,8 @@ export default class eSSP extends EventEmitter {
                         return item.toString(16).toUpperCase()
                     })), chalk.magenta(data))
 
-                    if (this.keys.finishEncryption) {
-                        console.log(data)
+                    if (!this.keys.finishEncryption && data.length ==9) {
+                        this.createHostEncryptionKeys(data)
                     }
                 } else {
                     self.emit('unregistered_data', buffer);

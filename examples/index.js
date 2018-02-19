@@ -16,6 +16,7 @@ esspInstance.initialize({
     currencies: [1, 1, 1, 1, 1, 1] //currencies types acceptable. Here all but 100USD
 })
 esspInstance.on("ready",function(){
+    console.log("test")
     esspInstance.setDenominationRoute()
 })
 setTimeout(()=> {
