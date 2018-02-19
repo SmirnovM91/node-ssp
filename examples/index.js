@@ -18,7 +18,7 @@ esspInstance.initialize({
 esspInstance.on("ready", async()=> {
     await esspInstance.enable()
     await esspInstance.enablePayoutDevice()
-    (async function loop() {
+    (async () =>{
         for (let i = 0; i < 10; i++) {
             await esspInstance.poll()
             console.log(i);
