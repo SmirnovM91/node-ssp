@@ -166,7 +166,7 @@ export default class eSSP extends EventEmitter {
                     this.port.drain()
                     resolve(true)
                 })
-            }, 200)
+            }, 1000)
 
 
         });
@@ -186,7 +186,7 @@ export default class eSSP extends EventEmitter {
                     this.port.drain()
                     resolve(true)
                 })
-            }, 200)
+            }, 1000)
         });
     }
 
@@ -204,7 +204,7 @@ export default class eSSP extends EventEmitter {
                     this.port.drain()
                     resolve(true)
                 })
-            }, 200)
+            }, 1000)
         });
     }
 
@@ -222,7 +222,7 @@ export default class eSSP extends EventEmitter {
                     this.port.drain()
                     resolve(true)
                 })
-            }, 200)
+            }, 1000)
         });
     }
 
@@ -261,7 +261,7 @@ export default class eSSP extends EventEmitter {
                     this.port.drain()
                     resolve(true)
                 })
-            }, 200)
+            }, 1000)
         });
     }
 
