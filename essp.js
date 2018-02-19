@@ -322,7 +322,7 @@ export default class eSSP extends EventEmitter {
 
     generatePacking(commandLine){
         var a = [];
-        for (var i = commandLine.length; i < 10; i++) {
+        for (var i = commandLine.length; i < 12; i++) {
             a.push(0)
         }
         return a;
