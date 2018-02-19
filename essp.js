@@ -290,7 +290,7 @@ export default class eSSP extends EventEmitter {
         });
     }
 
-    createHostEncryptionKeys() {
+    createHostEncryptionKeys(data) {
         if (this.keys.key == null) {
             data.shift()
             var hexString = convertHex.bytesToHex(data.reverse());
