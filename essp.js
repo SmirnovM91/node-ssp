@@ -74,9 +74,7 @@ export default class eSSP extends EventEmitter {
                         console.log(chalk.red('Wrong CRC from validator'))
                         return;
                     }
-                    console.log(chalk.green(Array.prototype.slice.call(buffer, 0).map(function (item) {
-                        return item.toString(16).toUpperCase()
-                    })), chalk.magenta(data))
+                    console.log(chalk.magenta(data))
 
                     if (!this.keys.finishEncryption && data.length ==9) {
                         this.createHostEncryptionKeys(data)
@@ -251,7 +249,7 @@ export default class eSSP extends EventEmitter {
     }
 
     setDenominationRoute() {
-        var packet = this.toPackets(0x3B, 0x00, 0x64, 0x00, 0x00, 0x00, 0x55, 0x53, 0x44)
+        var packet = this.toPackets(0x3B, [0x00, 0x64, 0x00, 0x00, 0x00, 0x55, 0x53, 0x44])
         var buff = new Buffer(packet)
         return new Promise((resolve, reject) => {
             setTimeout(()=> {
@@ -295,7 +293,6 @@ export default class eSSP extends EventEmitter {
     }
 
     toPackets(command, args = []) {
-        var self = this;
         var commandLine
         var STX = 0x7F
         var LENGTH = args.length + 1
@@ -304,15 +301,6 @@ export default class eSSP extends EventEmitter {
 
         commandLine = [SEQ_SLAVE_ID, LENGTH].concat(DATA);
         var crc = this.CRC16(commandLine);
-
-        commandLine = [STX].concat(commandLine, crc);
-        // var hex = commandLine.map(function (item) {
-        //     return item.toString(16).toUpperCase()
-        // })
-        // console.log("COM1 => ", hex, "| UNENCRYPTED |", arguments[0])
-
-        commandLine = [SEQ_SLAVE_ID, LENGTH].concat(DATA);
-        crc = this.CRC16(commandLine);
         commandLine = [STX].concat(commandLine, crc);
 
         return commandLine
