@@ -63,44 +63,16 @@ export default class eSSP extends EventEmitter {
 
 
         port.open(() => {
-            let parseBuffer = async(buffer) => {
-                var data, buf, error, crc;
-                if (buffer[0] === 0x7F) {
-                    buf = buffer.toJSON();
-                    if (buf.data) {
-                        buf = buf.data;
-                    }
-                    data = buf.slice(3, 3 + buffer[2]);
-                    crc = this.CRC16(buf.slice(1, buf[2] + 3));
-                    if (buf[buf.length - 2] !== crc[0] && buf[buf.length - 1] !== crc[1]) {
-                        console.log(chalk.red('Wrong CRC from validator'))
-                        return;
-                    }
-
-                    let date = moment(new Date()).format('HH:mm:ss.SSS');
-                    console.log(chalk.cyan(date), "COM1 <= ", chalk.green(Array.prototype.slice.call(buffer, 0).map(function (item) {
-                        return item.toString(16).toUpperCase()
-                    })), "|", chalk.magenta(data), this.currentCommand)
-                    if (!this.finishEncryption && data.length == 9) {
-                        this.createHostEncryptionKeys(data)
-                    }
-                    console.log("-")
-                } else {
-                    this.emit('unregistered_data', buffer);
-                }
-            }
-
-            port.on('data', function (buffer) {
+            port.on('data',  (buffer) => {
                 var ix = 0;
                 do {
                     var len = buffer[2] + 5;
                     var buf = new Buffer(len);
                     buffer.copy(buf, 0, ix, ix + len);
-                    parseBuffer(buf);
+                    this.parseBuffer(buf);
                     ix += len;
                 } while (ix < buffer.length);
             });
-
             this.emit("ready");
         })
         port.on('error', (err) => {
@@ -406,5 +378,30 @@ export default class eSSP extends EventEmitter {
 
     }
 
+    parseBuffer(buffer) {
+        let data, buf, error, crc;
+        if (buffer[0] === 0x7F) {
+            buf = buffer.toJSON();
+            if (buf.data) {
+                buf = buf.data;
+            }
+            data = buf.slice(3, 3 + buffer[2]);
+            crc = this.CRC16(buf.slice(1, buf[2] + 3));
+            if (buf[buf.length - 2] !== crc[0] && buf[buf.length - 1] !== crc[1]) {
+                console.log(chalk.red('Wrong CRC from validator'))
+                return;
+            }
+
+            let date = moment(new Date()).format('HH:mm:ss.SSS');
+            console.log(chalk.cyan(date), "COM1 <= ", chalk.green(Array.prototype.slice.call(buffer, 0).map(function (item) {
+                return item.toString(16).toUpperCase()
+            })), "|", chalk.magenta(data), this.currentCommand)
+            if (!this.finishEncryption && data.length == 9) {
+                this.createHostEncryptionKeys(data)
+            }
+        } else {
+            this.emit('unregistered_data', buffer);
+        }
+    }
 }
 
