@@ -365,7 +365,7 @@ export default class eSSP extends EventEmitter {
                 return a;
             }
 
-            var key = parse(Array.prototype.slice.call(this.keys.fixedKey, 0).reverse(), 8).concat(this.parseHexString(this.keys.key.toString(16), 8))
+            var key = parse(Array.prototype.slice.call(this.keys.fixedKey, 0), 8).concat(this.parseHexString(this.keys.key.toString(16), 8))
 
             console.log(this.keys.fixedKey, this.keys.key.toString(16), key)
             var aesCtr = new aesjs.AES(key);
