@@ -152,17 +152,21 @@ export default class eSSP extends EventEmitter {
         });
     }
 
+    doPolling(){
+        this.poll()
+    }
     poll() {
-        return new Promise((resolve, reject) => {
+        let polling = async(resolve, reject) => {
             setTimeout(()=> {
                 var packet = this.toPackets(0x07, [], "POLL")
                 var buff = new Buffer(packet)
                 this.port.write(buff, ()=> {
                     this.port.drain()
-                    resolve(true)
+                    polling()
                 })
             }, 200)
-        });
+        }
+        return new Promise(polling);
     }
 
     enable() {
@@ -204,8 +208,6 @@ export default class eSSP extends EventEmitter {
                     resolve(true)
                 })
             }, 200)
-
-
         });
     }
 

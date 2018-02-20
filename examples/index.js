@@ -16,15 +16,14 @@ esspInstance.initialize({
     currencies: [1, 1, 1, 1, 1, 1] //currencies types acceptable. Here all but 100USD
 })
 esspInstance.on("ready", async()=> {
-    await esspInstance.enable()
-    // await
     for (let i = 0, p = Promise.resolve(); i < 10; i++) {
         p = p.then(_ => esspInstance.poll());
     }
     // await esspInstance.setDenominationRoute()
 })
-setTimeout(()=> {
-    esspInstance.sync()
+setTimeout(async ()=> {
+    await esspInstance.sync()
+    await esspInstance.enable()
     // esspInstance.initiateKeys()
 }, 200)
 
