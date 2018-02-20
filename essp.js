@@ -24,16 +24,16 @@ export default class eSSP extends EventEmitter {
         this.set_generator = false
         this.set_modulus = false
         this.request_key_exchange = false,
-        this.currentCommand = "",
-        this.keys = {
-            generatorKey: null,
-            modulusKey: null,
-            hostRandom: null,
-            hostIntKey: null,
-            slaveIntKey: null,
-            fixedKey: Buffer.from("0123456701234567", "hex"),
-            key: null,
-        }
+            this.currentCommand = "",
+            this.keys = {
+                generatorKey: null,
+                modulusKey: null,
+                hostRandom: null,
+                hostIntKey: null,
+                slaveIntKey: null,
+                fixedKey: Buffer.from("0123456701234567", "hex"),
+                key: null,
+            }
     }
 
     initialize(opts) {
@@ -64,7 +64,7 @@ export default class eSSP extends EventEmitter {
 
 
         port.open(() => {
-            port.on('data',  (buffer) => {
+            port.on('data', (buffer) => {
                 var ix = 0;
                 do {
                     var len = buffer[2] + 5;
@@ -317,7 +317,7 @@ export default class eSSP extends EventEmitter {
 
     toPackets(command, args = [], commandName) {
 
-        this.currentCommand  = commandName;
+        this.currentCommand = commandName;
         var commandLine
         var STX = 0x7F
         var LENGTH = args.length + 1
@@ -399,13 +399,19 @@ export default class eSSP extends EventEmitter {
             })), "|", chalk.magenta(data), this.currentCommand)
             if (this.currentCommand == "REQUEST KEY EXCHANGE") {
                 this.createHostEncryptionKeys(data)
-            }else if(this.currentCommand == "SETUP_REQUEST"){
+            } else if (this.currentCommand == "SETUP_REQUEST") {
 
-                let  details =hex2ascii(data[6].toString(16)+ data[7].toString(16)+data[8].toString(16))
-
-                let event = ["setup_request", details]
+                let currency = hex2ascii(data[6].toString(16) + data[7].toString(16) + data[8].toString(16))
+                let firmwareversion = hex2ascii(data[11].toString(16))
+                let channels = hex2ascii(data[12].toString(16))
+                let denominations = []
+                for (let i = 0; i < channels; i++) {
+                    let denomination = hex2ascii(data[13 + i].toString(16))
+                    denominations.push(denomination)
+                }
+                let event = ["setup_request", {currency, firmwareversion, channels, denominations}]
                 this.emit.apply(this, event);
-            }else{
+            } else {
                 this.emitEvent(data, buffer);
             }
         } else {
