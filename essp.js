@@ -18,6 +18,11 @@ export default class eSSP extends EventEmitter {
         this.commands = null
         this.count = 0
         this.sequence = 0x80;
+        this.finishEncryption = false
+        this.negotiateKeys = false
+        this.set_generator = false
+        this.set_modulus = false
+        this.request_key_exchange = false
         this.keys = {
             generatorKey: null,
             modulusKey: null,
@@ -25,13 +30,7 @@ export default class eSSP extends EventEmitter {
             hostIntKey: null,
             slaveIntKey: null,
             fixedKey: Buffer.from("0123456701234567", "hex"),
-            variableKey: null,
             key: null,
-            negotiateKeys: false,
-            set_generator: false,
-            set_modulus: false,
-            request_key_exchange: false,
-            finishEncryption: false
         }
     }
 
@@ -81,7 +80,7 @@ export default class eSSP extends EventEmitter {
                     console.log(chalk.cyan(date), "COM1 <= ", chalk.green(Array.prototype.slice.call(buffer, 0).map(function (item) {
                         return item.toString(16).toUpperCase()
                     })), "|", chalk.magenta(data))
-                    if (!this.keys.finishEncryption && data.length == 9) {
+                    if (!this.finishEncryption && data.length == 9) {
                         this.createHostEncryptionKeys(data)
                     }
                     console.log("-")
@@ -119,7 +118,7 @@ export default class eSSP extends EventEmitter {
         this.keys.modulusKey = keyPair.privateKey.q;
         this.keys.hostRandom = getRandomInt(1, 5);
         this.keys.hostIntKey = this.keys.generatorKey ^ this.keys.hostRandom % this.keys.modulusKey
-        this.keys.negotiateKeys = true;
+        this.negotiateKeys = true;
 
         let data = await this.sync()
         this.sequence = 0x80
@@ -157,7 +156,7 @@ export default class eSSP extends EventEmitter {
     poll() {
         return new Promise((resolve, reject) => {
             setTimeout(()=> {
-                var packet = this.toPackets(0x07,[], "POLL")
+                var packet = this.toPackets(0x07, [], "POLL")
                 var buff = new Buffer(packet)
                 this.port.write(buff, ()=> {
                     this.port.drain()
@@ -166,10 +165,11 @@ export default class eSSP extends EventEmitter {
             }, 200)
         });
     }
+
     enable() {
         return new Promise((resolve, reject) => {
             setTimeout(()=> {
-                var packet = this.toPackets(0x0A,[], "ENABLE")
+                var packet = this.toPackets(0x0A, [], "ENABLE")
                 var buff = new Buffer(packet)
                 this.port.write(buff, ()=> {
                     this.port.drain()
@@ -183,7 +183,7 @@ export default class eSSP extends EventEmitter {
     enablePayoutDevice() {
         return new Promise((resolve, reject) => {
             setTimeout(()=> {
-                var packet = this.toPackets(0x5C,[], "ENABLE_PAYOUT_DEVICE")
+                var packet = this.toPackets(0x5C, [], "ENABLE_PAYOUT_DEVICE")
                 var buff = new Buffer(packet)
                 this.port.write(buff, ()=> {
                     this.port.drain()
@@ -216,7 +216,7 @@ export default class eSSP extends EventEmitter {
                 var packet = this.toPackets(0x4A, generatorArray, "SET GENERATOR")
                 var buff = new Buffer(packet)
                 this.port.write(buff, ()=> {
-                    this.keys.set_generator = true
+                    this.set_generator = true
                     this.port.drain()
                     resolve(true)
                 })
@@ -232,7 +232,7 @@ export default class eSSP extends EventEmitter {
                 var packet = this.toPackets(0x4B, modulusArray, "SET MODULUS")
                 var buff = new Buffer(packet)
                 this.port.write(buff, ()=> {
-                    this.keys.set_modulus = true
+                    this.set_modulus = true
                     this.port.drain()
                     resolve(true)
                 })
@@ -248,7 +248,7 @@ export default class eSSP extends EventEmitter {
                 var packet = this.toPackets(0x4C, hostIntArray, "REQUEST KEY EXCHANGE")
                 var buff = new Buffer(packet)
                 this.port.write(buff, ()=> {
-                    this.keys.request_key_exchange = true
+                    this.request_key_exchange = true
                     this.port.drain()
                     resolve(true)
                 })
@@ -273,8 +273,7 @@ export default class eSSP extends EventEmitter {
             }
             this.keys.slaveIntKey = slaveIntKeyString
             this.keys.key = this.keys.slaveIntKey ^ this.keys.hostRandom % this.keys.modulusKey
-            this.keys.variableKey = this.keys.key
-            this.keys.finishEncryption = true
+            this.finishEncryption = true
             console.log(this.keys)
             this.emit("ready");
         }
@@ -321,13 +320,14 @@ export default class eSSP extends EventEmitter {
         return this.sequence
     }
 
-    generatePacking(commandLine){
+    generatePacking(commandLine) {
         var a = [];
         for (var i = commandLine.length; i < 14; i++) {
             a.push(0)
         }
         return a;
     }
+
     toPackets(command, args = [], commandName) {
 
         var commandLine
