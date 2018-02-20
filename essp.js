@@ -402,11 +402,11 @@ export default class eSSP extends EventEmitter {
             } else if (this.currentCommand == "SETUP_REQUEST") {
 
                 let currency = hex2ascii(data[6].toString(16) + data[7].toString(16) + data[8].toString(16))
-                let firmwareversion = hex2ascii(data[11].toString(16))
-                let channels = hex2ascii(data[12].toString(16))
+                let firmwareversion = data[11]
+                let channels = data[12]
                 let denominations = []
-                for (let i = 0; i < channels; i++) {
-                    let denomination = hex2ascii(data[13 + i].toString(16))
+                for (let i = 0; i < channels*1; i++) {
+                    let denomination = data[13 + i]
                     denominations.push(denomination)
                 }
                 let event = ["setup_request", {currency, firmwareversion, channels, denominations}]
