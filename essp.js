@@ -354,11 +354,11 @@ export default class eSSP extends EventEmitter {
             var eDATA = DATA
             var eCommandLine = [eLENGTH].concat(eCOUNT, eDATA)
             var ePACKING = this.generatePacking(eCommandLine)
-            console.log(eCommandLine, ePACKING)
             eCommandLine = eCommandLine.concat(ePACKING)
             var eCRC = this.CRC16(eCommandLine);
             eCommandLine = eCommandLine.concat(eCRC)
 
+            console.log(eCommandLine)
             var parse = function (a, count) {
                 for (var i = a.length; i < count; i++) {
                     a.push(0)
