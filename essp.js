@@ -9,6 +9,7 @@ import EventEmitter from "event-emitter-es6"
 import chalk from 'chalk'
 import moment from 'moment'
 import aesjs from 'aes-js';
+import hex2ascii from 'hex2ascii'
 
 export default class eSSP extends EventEmitter {
     constructor() {
@@ -399,7 +400,12 @@ export default class eSSP extends EventEmitter {
             if (this.currentCommand == "REQUEST KEY EXCHANGE") {
                 this.createHostEncryptionKeys(data)
             }else if(this.currentCommand == "SETUP_REQUEST"){
-                console.log(data.shift())
+
+                let data =hex2ascii( "0x"+Array.prototype.slice.call(buffer, 0).map(function (item) {
+                    return item.toString(16).toUpperCase()
+                }).join(""))
+                let event = ["setup_request", data]
+                this.emit.apply(this, event);
             }else{
                 this.emitEvent(data, buffer);
             }
@@ -439,7 +445,7 @@ export default class eSSP extends EventEmitter {
                 error.message = "Unknown error";
         }
         if (error.code !== 0xF0) {
-            self.emit("error", error, buffer);
+            this.emit("error", error, buffer);
         } else if (data.length > 1) {
             var event;
             switch (data[1]) {

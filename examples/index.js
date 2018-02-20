@@ -55,6 +55,9 @@ esspInstance.on("note_rejected", function (reason) {
 esspInstance.on("error", function (err) {
     console.log(err.code, err.message);
 });
+esspInstance.on("setup_request", function (data) {
+    console.log("data", data);
+});
 
 
 setTimeout(async()=> {
