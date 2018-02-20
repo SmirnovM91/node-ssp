@@ -375,6 +375,7 @@ export default class eSSP extends EventEmitter {
             LENGTH = DATA.length
         }
 
+
         commandLine = [SEQ_SLAVE_ID, LENGTH].concat(DATA);
         crc = this.CRC16(commandLine);
         commandLine = [STX].concat(commandLine, crc);
