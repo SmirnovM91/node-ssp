@@ -401,9 +401,8 @@ export default class eSSP extends EventEmitter {
                 this.createHostEncryptionKeys(data)
             }else if(this.currentCommand == "SETUP_REQUEST"){
 
-                let data =hex2ascii( "0x"+Array.prototype.slice.call(buffer, 0).map(function (item) {
-                    return item.toString(16).toUpperCase()
-                }).join(""))
+                let data =hex2ascii(data[5].toString(16)+ data[6].toString(16)+data[7].toString(16))
+
                 let event = ["setup_request", data]
                 this.emit.apply(this, event);
             }else{
