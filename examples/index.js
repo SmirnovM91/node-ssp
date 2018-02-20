@@ -22,6 +22,7 @@ esspInstance.on("ready", async()=> {
 setTimeout(async ()=> {
     await esspInstance.sync()
     await esspInstance.enable()
+    await esspInstance.setup_request()
     // esspInstance.initiateKeys()
 }, 200)
 
