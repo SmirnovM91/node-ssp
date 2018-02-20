@@ -22,7 +22,8 @@ export default class eSSP extends EventEmitter {
         this.negotiateKeys = false
         this.set_generator = false
         this.set_modulus = false
-        this.request_key_exchange = false
+        this.request_key_exchange = false,
+        this.currentCommand = "",
         this.keys = {
             generatorKey: null,
             modulusKey: null,
@@ -79,7 +80,7 @@ export default class eSSP extends EventEmitter {
                     let date = moment(new Date()).format('HH:mm:ss.SSS');
                     console.log(chalk.cyan(date), "COM1 <= ", chalk.green(Array.prototype.slice.call(buffer, 0).map(function (item) {
                         return item.toString(16).toUpperCase()
-                    })), "|", chalk.magenta(data))
+                    })), "|", chalk.magenta(data), this.currentCommand)
                     if (!this.finishEncryption && data.length == 9) {
                         this.createHostEncryptionKeys(data)
                     }
@@ -343,6 +344,7 @@ export default class eSSP extends EventEmitter {
 
     toPackets(command, args = [], commandName) {
 
+        this.currentCommand  = commandName;
         var commandLine
         var STX = 0x7F
         var LENGTH = args.length + 1
