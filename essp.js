@@ -100,6 +100,7 @@ export default class eSSP extends EventEmitter {
                 } while (ix < buffer.length);
             });
 
+            this.emit("ready");
         })
         port.on('error', (err) => {
             console.log(chalk.red(err));
@@ -120,9 +121,7 @@ export default class eSSP extends EventEmitter {
         this.keys.hostIntKey = this.keys.generatorKey ^ this.keys.hostRandom % this.keys.modulusKey
         this.negotiateKeys = true;
 
-        let data = await this.sync()
-        this.sequence = 0x80
-        data = await this.sendGenerator()
+        let data = await this.sendGenerator()
         data = await this.sendModulus()
         data = await this.sendRequestKeyExchange()
     }
@@ -201,6 +200,7 @@ export default class eSSP extends EventEmitter {
                 var buff = new Buffer(packet)
                 this.port.write(buff, ()=> {
                     this.port.drain()
+                    this.sequence = 0x80
                     resolve(true)
                 })
             }, 200)

@@ -24,7 +24,8 @@ esspInstance.on("ready", async()=> {
     // await esspInstance.setDenominationRoute()
 })
 setTimeout(()=> {
-    esspInstance.initiateKeys()
+    esspInstance.sync()
+    // esspInstance.initiateKeys()
 }, 200)
 
 
