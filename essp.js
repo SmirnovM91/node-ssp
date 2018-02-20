@@ -152,9 +152,6 @@ export default class eSSP extends EventEmitter {
         });
     }
 
-    doPolling(){
-        this.poll()
-    }
     poll() {
         let polling = async(resolve, reject) => {
             setTimeout(()=> {
@@ -164,7 +161,7 @@ export default class eSSP extends EventEmitter {
                     this.port.drain()
                     polling()
                 })
-            }, 200)
+            }, 1000)
         }
         return new Promise(polling);
     }
