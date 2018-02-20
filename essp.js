@@ -84,6 +84,7 @@ export default class eSSP extends EventEmitter {
                     if (!this.keys.finishEncryption && data.length == 9) {
                         this.createHostEncryptionKeys(data)
                     }
+                    console.log("-")
                 } else {
                     this.emit('unregistered_data', buffer);
                 }
