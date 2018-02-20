@@ -367,7 +367,7 @@ export default class eSSP extends EventEmitter {
 
             var key = parse(Array.prototype.slice.call(this.keys.fixedKey, 0), 8).concat(this.parseHexString(this.keys.key.toString(16), 8))
 
-            console.log(this.keys.fixedKey, this.keys.key.toString(16), key)
+            console.log("ENCRYPTIONS KEY = ", key)
             var aesCtr = new aesjs.AES(key);
             var uint8Array = aesCtr.encrypt(eCommandLine);
             eCommandLine = [STEX].concat([].slice.call(uint8Array))
