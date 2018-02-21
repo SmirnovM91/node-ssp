@@ -375,7 +375,7 @@ export default class eSSP extends EventEmitter {
             var eDATA = [].slice.call(uint8Array)
             eCommandLine = [STEX].concat(eDATA)
             DATA = eCommandLine
-            LENGTH = eDATA.length
+            LENGTH = DATA.length
         }
 
 
