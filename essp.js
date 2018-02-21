@@ -111,6 +111,17 @@ export default class eSSP extends EventEmitter {
         return a;
     }
 
+    parseCountString(str, count) {
+        var a = [];
+        for (var i = str.length; i > 0; i -= 2) {
+            a.unshift(parseInt(str.substr(i - 2, 2), 16));
+        }
+        for (var i = a.length; i < count; i++) {
+            a.unshift(0)
+        }
+        return a;
+    }
+
     disable() {
         var packet = this.toPackets(0x09)
         var buff = new Buffer(packet)
@@ -338,7 +349,7 @@ export default class eSSP extends EventEmitter {
             var STEX = 0x7E
             var eLENGTH = DATA.length;
             this.count++
-            var eCOUNT = this.parseHexString(this.count.toString(16), 4)
+            var eCOUNT = this.parseCountString(this.count.toString(16), 4)
             var eDATA = DATA
             var eCommandLine = [eLENGTH].concat(eCOUNT, eDATA)
             var ePACKING = this.generatePacking(eCommandLine)
