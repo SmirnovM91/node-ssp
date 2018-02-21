@@ -411,7 +411,8 @@ export default class eSSP extends EventEmitter {
             console.log(chalk.cyan(date), "COM1 <= ", chalk.green(Array.prototype.slice.call(buffer, 0).map(function (item) {
                 return item.toString(16).toUpperCase()
             })), "|", chalk.magenta(data), this.currentCommand)
-            if (this.currentCommand == "REQUEST KEY EXCHANGE") {
+            console.log("")
+            if (this.currentCommand == "REQUEST_KEY_EXCHANGE") {
                 this.createHostEncryptionKeys(data)
             } else if (this.currentCommand == "SETUP_REQUEST") {
 
