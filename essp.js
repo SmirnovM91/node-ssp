@@ -364,6 +364,10 @@ export default class eSSP extends EventEmitter {
                 return a;
             }
 
+            console.log(chalk.cyan(date), "COM1 => ", chalk.yellow(Array.prototype.slice.call(v, 0).map(function (item) {
+                return item.toString(16).toUpperCase()
+            })), "|", commandName, "|", "raw")
+
             var key = parse(Array.prototype.slice.call(this.keys.fixedKey, 0), 8).concat(this.parseHexString(this.keys.key.toString(16), 8))
 
             console.log("ENCRYPTIONS KEY = ", key)
