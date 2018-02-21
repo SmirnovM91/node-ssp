@@ -90,6 +90,7 @@ export default class eSSP extends EventEmitter {
         var keyPair = forge.pki.rsa.generateKeyPair(64);
         this.keys.generatorKey = keyPair.privateKey.p;
         this.keys.modulusKey = keyPair.privateKey.q;
+        console.log(keyPair.privateKey.p > keyPair.privateKey.q)
         this.keys.hostRandom = getRandomInt(1, 5);
         this.keys.hostIntKey = this.keys.generatorKey ^ this.keys.hostRandom % this.keys.modulusKey
         this.negotiateKeys = true;
