@@ -372,9 +372,10 @@ export default class eSSP extends EventEmitter {
             console.log("ENCRYPTIONS KEY = ", key)
             var aesCtr = new aesjs.AES(key);
             var uint8Array = aesCtr.encrypt(eCommandLine);
-            eCommandLine = [STEX].concat([].slice.call(uint8Array))
+            var eDATA = [].slice.call(uint8Array)
+            eCommandLine = [STEX].concat(eDATA)
             DATA = eCommandLine
-            LENGTH = DATA.length
+            LENGTH = eDATA.length
         }
 
 
@@ -415,7 +416,6 @@ export default class eSSP extends EventEmitter {
             if (this.currentCommand == "REQUEST_KEY_EXCHANGE") {
                 this.createHostEncryptionKeys(data)
             } else if (this.currentCommand == "SETUP_REQUEST") {
-
                 let currency = hex2ascii(data[6].toString(16) + data[7].toString(16) + data[8].toString(16))
                 let firmwareversion = data[11]
                 let channels = data[12]
