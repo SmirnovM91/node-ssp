@@ -414,19 +414,24 @@ export default class eSSP extends EventEmitter {
                 return item.toString(16).toUpperCase()
             })), "|", chalk.magenta(data), this.currentCommand)
             console.log("")
+            if(data[0]){
+
+            }
             if (this.currentCommand == "REQUEST_KEY_EXCHANGE") {
-                this.createHostEncryptionKeys(data)
+                if(data[0] == 240) this.createHostEncryptionKeys(data)
             } else if (this.currentCommand == "SETUP_REQUEST") {
-                let currency = hex2ascii(data[6].toString(16) + data[7].toString(16) + data[8].toString(16))
-                let firmwareversion = data[11]
-                let channels = data[12]
-                let denominations = []
-                for (let i = 0; i < channels*1; i++) {
-                    let denomination = data[13 + i]
-                    denominations.push(denomination)
+                if(data[0] == 240){
+                    let currency = hex2ascii(data[6].toString(16) + data[7].toString(16) + data[8].toString(16))
+                    let firmwareversion = data[11]
+                    let channels = data[12]
+                    let denominations = []
+                    for (let i = 0; i < channels*1; i++) {
+                        let denomination = data[13 + i]
+                        denominations.push(denomination)
+                    }
+                    let event = ["setup_request", {currency, firmwareversion, channels, denominations}]
+                    this.emit.apply(this, event);
                 }
-                let event = ["setup_request", {currency, firmwareversion, channels, denominations}]
-                this.emit.apply(this, event);
             } else {
                 this.emitEvent(data, buffer);
             }
