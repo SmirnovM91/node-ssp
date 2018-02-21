@@ -363,7 +363,7 @@ export default class eSSP extends EventEmitter {
                 return a;
             }
 
-            console.log(chalk.cyan(date), "COM1 => ", chalk.yellow(Array.prototype.slice.call(v, 0).map(function (item) {
+            console.log(chalk.cyan(date), "COM1 => ", chalk.yellow(Array.prototype.slice.call(eCommandLine, 0).map(function (item) {
                 return item.toString(16).toUpperCase()
             })), "|", commandName, "|", "raw")
 
