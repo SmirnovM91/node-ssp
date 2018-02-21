@@ -33,6 +33,7 @@
   "homepage": "https://github.com/soulman-is-good/node-ssp",
   "dependencies": {
     "aes-js": "^3.1.0",
+    "babel-polyfill": "^6.26.0",
     "big-integer": "^1.6.26",
     "bit-converter": "^1.0.0",
     "chalk": "^2.3.1",
@@ -47,7 +48,6 @@
   "devDependencies": {
     "babel": "^6.23.0",
     "babel-cli": "^6.26.0",
-    "babel-polyfill": "^6.26.0",
     "babel-preset-env": "^1.6.1",
     "babel-preset-es2015": "^6.24.1",
     "babel-preset-stage-2": "^6.24.1"
