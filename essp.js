@@ -270,9 +270,9 @@ export default class eSSP extends EventEmitter {
                 slaveIntKeyString = slaveIntKey.value
             }
             this.keys.slaveIntKey = slaveIntKeyString
-            this.keys.key = this.keys.slaveIntKey ^ this.keys.hostRandom % this.keys.modulusKey
+            this.keys.key2 = this.keys.slaveIntKey ^ this.keys.hostRandom % this.keys.modulusKey
             this.finishEncryption = true
-            this.keys.key2 = this.XpowYmodN(this.keys.slaveIntKey, this.keys.hostRandom, this.keys.modulusKey)
+            this.keys.key = this.XpowYmodN(this.keys.slaveIntKey, this.keys.hostRandom, this.keys.modulusKey)
             console.log(this.keys)
             console.log()
 
