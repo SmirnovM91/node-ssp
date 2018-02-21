@@ -1,4 +1,5 @@
 "use strict";
+import 'babel-polyfill'
 import fs from 'fs'
 import serialport from 'serialport'
 import Commands from './commands'
