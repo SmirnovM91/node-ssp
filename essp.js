@@ -74,7 +74,6 @@ export default class eSSP extends EventEmitter {
                     ix += len;
                 } while (ix < buffer.length);
             });
-            this.emit("ready");
         })
         port.on('error', (err) => {
             console.log(chalk.red(err));
@@ -173,7 +172,7 @@ export default class eSSP extends EventEmitter {
                 this.port.write(buff, ()=> {
                     this.port.drain()
                     resolve(true)
-
+                    this.emit("ready");
                 })
             }, 200)
         });
