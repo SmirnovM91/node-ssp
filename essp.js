@@ -160,6 +160,7 @@ export default class eSSP extends EventEmitter {
                 this.port.write(buff, ()=> {
                     this.port.drain()
                     resolve(true)
+                    this.emit("ready");
                 })
             }, 200)
         });
@@ -173,7 +174,6 @@ export default class eSSP extends EventEmitter {
                 this.port.write(buff, ()=> {
                     this.port.drain()
                     resolve(true)
-                    this.emit("ready");
                 })
             }, 200)
         });
@@ -276,7 +276,6 @@ export default class eSSP extends EventEmitter {
             console.log(this.keys)
             console.log()
 
-            this.emit("ready");
         }
     }
     XpowYmodN(x, y, N) {
