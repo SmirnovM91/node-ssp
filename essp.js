@@ -272,11 +272,24 @@ export default class eSSP extends EventEmitter {
             this.keys.slaveIntKey = slaveIntKeyString
             this.keys.key = this.keys.slaveIntKey ^ this.keys.hostRandom % this.keys.modulusKey
             this.finishEncryption = true
+            this.keys.key2 = this.XpowYmodN(this.keys.slaveIntKey, this.keys.hostRandom, this.keys.modulusKey)
             console.log(this.keys)
+            console.log()
+
             this.emit("ready");
         }
     }
-
+    XpowYmodN(x, y, N) {
+        var result = 1;
+        var oneShift63 = 1 << 63;
+        for (var i = 0; i < 64; y <<= 1, i++) {
+            result = result * result % N;
+            if ((y & oneShift63) !== 0)
+                result = result * x % N;
+        }
+        ;
+        return result;
+    }
     setDenominationRoute() {
         return new Promise((resolve, reject) => {
             setTimeout(()=> {
