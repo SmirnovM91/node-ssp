@@ -66,6 +66,7 @@ setTimeout(async()=> {
 
     await esspInstance.enable()
     await esspInstance.setup_request()
+    await esspInstance.hold()
 }, 200)
 
 
