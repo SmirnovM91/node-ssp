@@ -3,31 +3,12 @@ var serialport = require('serialport'),
     fs = require('fs'),
     EventEmitter = require('events').EventEmitter,
     Commands = require('./commands'),
-    Class = require('./class'),
-    forge = require('node-forge'),
-    convertHex = require("convert-hex"),
-    bigInt = require("big-integer"),
-    crypto = require("crypto")
+    Class = require('./class');
 
 var SSPInstance = Class.extend({
     options: {},
     port: null,
     commands: null,
-    keys: {
-        generatorKey: null,
-        modulusKey: null,
-        hostRandom: null,
-        hostIntKey: null,
-        slaveIntKey: null,
-        fixedKey: Buffer.from('0123456701234567', "hex"),
-        variableKey: null,
-        key: null,
-        negotiateKeys: false,
-        set_generator: false,
-        set_modulus: false,
-        request_key_exchange: false,
-        finishEncryption: false
-    },
     initialize: function (opts) {
         var self = this;
         var options = this.options = {
@@ -39,7 +20,7 @@ var SSPInstance = Class.extend({
             currencies: opts.currencies || [1, 0, 1],
             type: opts.type || "nv10usb",
             sspID: opts.sspID || 0,
-            seqence: opts.sequence || 0x80
+            sequence: opts.sequence || 0x80
         };
         if (fs.readdirSync(__dirname + '/commands').map(function (item) {
                 return item.replace(/\..+$/, '');
@@ -47,77 +28,13 @@ var SSPInstance = Class.extend({
             throw new Error("Unknown device type '" + options.type + "'");
         }
     },
-    initiateKeys: function () {
-        var commands = this.commands, self = this;
-        var getRandomInt = function (min, max) {
-            return Math.floor(Math.random() * (max - min)) + min;
-        }
-
-        var keyPair = forge.pki.rsa.generateKeyPair(64);
-        self.keys.generatorKey = keyPair.privateKey.p;
-        self.keys.modulusKey = keyPair.privateKey.q;
-        self.keys.hostRandom = getRandomInt(1, 5);
-        self.keys.hostIntKey = self.keys.generatorKey ^ self.keys.hostRandom % self.keys.modulusKey
-        self.keys.negotiateKeys = true
-
-    },
-    parse: function (a, count) {
-        for (var i = a.length; i < count; i++) {
-            a.push(0)
-        }
-        return a;
-    },
-    sendGenerator: function () {
-        var commands = this.commands, self = this;
-        var generatorArray = commands.parseHexString(self.keys.generatorKey.toString(16), 8)
-        self.keys.set_generator = true;
-        commands.set_generator.apply(this, generatorArray)
-
-    },
-    sendModulus: function () {
-        var commands = this.commands, self = this;
-        var modulusArray = commands.parseHexString(self.keys.modulusKey.toString(16), 8)
-        self.keys.set_modulus = true;
-        commands.set_modulus.apply(this, modulusArray)
-    },
-    sendRequestKeyExchange: function () {
-        var commands = this.commands, self = this;
-        var hostIntArray = commands.parseHexString(self.keys.hostIntKey.toString(16), 8)
-        self.keys.request_key_exchange = true;
-        commands.request_key_exchange.apply(this, hostIntArray)
-
-    },
-    createHostEncryptionKeys: function (data) {
-        var commands = this.commands, self = this;
-        if (self.keys.key == null) {
-            data.shift()
-            var hexString = convertHex.bytesToHex(data.reverse());
-
-            var slaveIntKey = bigInt(hexString, 16);
-            var slaveIntKeyString = ""
-            if (!slaveIntKey.isSmall) {
-                var values = slaveIntKey.value.reverse();
-                for (var i = 0; i < values.length; i++) {
-                    slaveIntKeyString += "" + values[i]
-                }
-            } else {
-                slaveIntKeyString = slaveIntKey.value
-            }
-            self.keys.slaveIntKey = slaveIntKeyString
-            self.keys.key = self.keys.slaveIntKey ^ self.keys.hostRandom % self.keys.modulusKey
-            self.keys.variableKey = self.keys.key
-            self.keys.finishEncryption = true
-            commands.setKeys(self.keys)
-
-        }
-    },
     enable: function (cb) {
         var commands = this.commands, self = this;
         var wait = function () {
             self.pollID = setTimeout(function () {
                 commands.exec("poll", wait);
-            }, 4000);
-        }
+            }, 400);
+        };
         commands.exec("enable", function () {
             cb && cb();
             wait();
@@ -130,10 +47,10 @@ var SSPInstance = Class.extend({
             cb && cb();
         });
     },
-    reset: function (cb) {
+    reset: function(cb) {
         var self = this;
         self.pollID && clearTimeout(self.pollID);
-        this.commands.exec("reset", function () {
+        this.commands.exec("reset", function() {
             self.port.close();
             cb && cb();
         });
@@ -147,25 +64,23 @@ var SSPInstance = Class.extend({
             cb = enableOnInit;
             enableOnInit = false;
         }
-        cb = cb || function () {
-            };
-
+        cb = cb || function(){};
         if (this.port && this.port.isOpen()) {
             this.port.close(function () {
                 initializeDevice();
             });
-        } else if (!options.device) {
-            serialport.list(function (err, ports) {
-                if (err || ports.length === 0) {
+        } else if(!options.device) {
+            serialport.list(function(err, ports) {
+                if(err || ports.length === 0) {
                     cb(err || new Error("No devices found"));
                 } else {
-                    for (var i in ports) {
-                        if (ports[i].vendorId === '0x191c' || (ports[i].pnpId && ports[i].pnpId.indexOf('Innovative_Technology') > -1)) {
+                    for(var i in ports) {
+                        if(ports[i].vendorId === '0x191c' || (ports[i].pnpId && ports[i].pnpId.indexOf('Innovative_Technology') > -1)) {
                             options.device = ports[i].comName;
                             //TODO: device autodetection
                         }
                     }
-                    if (!options.device) {
+                    if(!options.device) {
                         cb(new Error("Device not found, try define manually"));
                     } else {
                         initializeDevice();
@@ -175,7 +90,7 @@ var SSPInstance = Class.extend({
         } else {
             initializeDevice();
         }
-        function initializeDevice() {
+        function initializeDevice () {
             port = new serialport.SerialPort(options.device, {
                 baudrate: options.baudrate,
                 databits: options.databits,
@@ -183,19 +98,13 @@ var SSPInstance = Class.extend({
                 parity: options.parity,
                 parser: serialport.parsers.raw
             }, false);
-
             self.port = port;
             commands = self.commands = new Commands(port, options.type, options.sspID, options.sequence);
             port.on('close', function () {
                 self.emit('close');
-                console.log('close:');
             });
             port.on('error', function (err) {
                 self.emit('error', err);
-                console.log('error:', err);
-            });
-            port.on('readable', function () {
-                console.log('Data:', port.read());
             });
             port.open(function (err) {
                 function parseBuffer(buffer) {
@@ -206,11 +115,8 @@ var SSPInstance = Class.extend({
                             buf = buf.data;
                         }
                         data = buf.slice(3, 3 + buffer[2]);
-
                         crc = self.commands.CRC16(buf.slice(1, buf[2] + 3));
-
-                        if (buf[buf.length - 2] !== crc[0] && buf[buf.length - 1] !== crc[1]) {
-                            console.log('Wrong CRC from validator')
+                        if(buf[buf.length - 2] !== crc[0] && buf[buf.length - 1] !== crc[1]) {
                             self.emit('error', new Error('Wrong CRC from validator'), buffer, crc);
                             return;
                         }
@@ -243,26 +149,8 @@ var SSPInstance = Class.extend({
                             default:
                                 error.message = "Unknown error";
                         }
-                        if (error.code == 0xFA) {
-                            // self.keys.finishEncryption = false
-                            // self.sendRequestKeyExchange()
-                        }
                         if (error.code !== 0xF0) {
                             self.emit("error", error, buffer);
-                        } else if (self.keys.negotiateKeys) {
-                            if (!self.keys.set_generator) {
-                                // console.log("data ", data)
-                                self.sendGenerator()
-                            } else if (!self.keys.set_modulus) {
-                                // console.log("data ", data)
-                                self.sendModulus()
-                            } else if (!self.keys.request_key_exchange) {
-                                // console.log("data ", data)
-                                self.sendRequestKeyExchange()
-                            } else if (!self.keys.finishEncryption && data.length == 9) {
-                                // console.log("data ", data)
-                                self.createHostEncryptionKeys(data)
-                            }
                         } else if (data.length > 1) {
                             var event;
                             switch (data[1]) {
@@ -459,14 +347,13 @@ var SSPInstance = Class.extend({
                         self.emit('unregistered_data', buffer);
                     }
                 }
-
                 if (err) {
                     cb(err);
                 } else {
+                    var low = self.options.currencies.reduce(function (p, c, i) {
+                        return c === 1 ? p += Math.pow(2, i) : p;
+                    }, 0);
                     port.on('data', function (buffer) {
-                        console.log("COM1 <= ", Array.prototype.slice.call(buffer, 0).map(function (item) {
-                            return item.toString(16).toUpperCase()
-                        }))
                         var ix = 0;
                         do {
                             var len = buffer[2] + 5;
@@ -474,14 +361,12 @@ var SSPInstance = Class.extend({
                             buffer.copy(buf, 0, ix, ix + len);
                             parseBuffer(buf);
                             ix += len;
-                        } while (ix < buffer.length);
+                        } while(ix < buffer.length);
                     });
-
                     //wait a bit for port buffer to empty
-
-                    setTimeout(function () {
+                    setTimeout(function() {
                         commands.sync().enable_higher_protocol()
-                        // self.initiateKeys();
+                            .set_channel_inhibits(low, 0x00);
                         if (enableOnInit) {
                             cb && cb();
                             self.enable(function () {
@@ -493,7 +378,7 @@ var SSPInstance = Class.extend({
                                 self.emit("ready");
                             });
                         }
-                    }, 2000);
+                    }, 100);
                 }
             });
         }
