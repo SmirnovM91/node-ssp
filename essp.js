@@ -396,7 +396,7 @@ export default class eSSP extends EventEmitter {
                 return item.toString(16).toUpperCase()
             })), "|", commandName, "|", "raw")
 
-            var key = this.parseKeyString(this.keys.key.toString(16), 8).concat(parse(Array.prototype.slice.call(this.keys.fixedKey, 0), 8))
+            var key = parse(Array.prototype.slice.call(this.keys.fixedKey, 0), 8).concat(this.parseKeyString(this.keys.key.toString(16), 8))
 
             console.log(key)
             var aesCtr = new aesjs.ModeOfOperation.ecb(key);
