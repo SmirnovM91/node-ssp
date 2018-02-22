@@ -20,21 +20,16 @@ export default class eSSP extends EventEmitter {
         this.commands = null
         this.count = 0
         this.sequence = 0x80;
-        this.finishEncryption = false
-        this.negotiateKeys = false
-        this.set_generator = false
-        this.set_modulus = false
-        this.request_key_exchange = false,
-            this.currentCommand = "",
-            this.keys = {
-                generatorKey: null,
-                modulusKey: null,
-                hostRandom: null,
-                hostIntKey: null,
-                slaveIntKey: null,
-                fixedKey: Buffer.from("0123456701234567", "hex"),
-                key: null,
-            }
+        this.currentCommand = ""
+        this.keys = {
+            generatorKey: null,
+            modulusKey: null,
+            hostRandom: null,
+            hostIntKey: null,
+            slaveIntKey: null,
+            fixedKey: Buffer.from("0123456701234567", "hex"),
+            key: null,
+        }
     }
 
     initialize(opts) {
@@ -91,10 +86,8 @@ export default class eSSP extends EventEmitter {
         var keyPair = forge.pki.rsa.generateKeyPair(64);
         this.keys.generatorKey = keyPair.privateKey.p;
         this.keys.modulusKey = keyPair.privateKey.q;
-        console.log(keyPair.privateKey.p > keyPair.privateKey.q)
         this.keys.hostRandom = getRandomInt(1, 5);
         this.keys.hostIntKey = this.keys.generatorKey ^ this.keys.hostRandom % this.keys.modulusKey
-        this.negotiateKeys = true;
 
         let data = await this.sendGenerator()
         data = await this.sendModulus()
@@ -228,7 +221,6 @@ export default class eSSP extends EventEmitter {
                 var packet = this.toPackets(0x4A, generatorArray, "SET_GENERATOR")
                 var buff = new Buffer(packet)
                 this.port.write(buff, ()=> {
-                    this.set_generator = true
                     this.port.drain()
                     resolve(true)
                 })
@@ -244,7 +236,6 @@ export default class eSSP extends EventEmitter {
                 var packet = this.toPackets(0x4B, modulusArray, "SET_MODULUS")
                 var buff = new Buffer(packet)
                 this.port.write(buff, ()=> {
-                    this.set_modulus = true
                     this.port.drain()
                     resolve(true)
                 })
@@ -260,7 +251,19 @@ export default class eSSP extends EventEmitter {
                 var packet = this.toPackets(0x4C, hostIntArray, "REQUEST_KEY_EXCHANGE")
                 var buff = new Buffer(packet)
                 this.port.write(buff, ()=> {
-                    this.request_key_exchange = true
+                    this.port.drain()
+                    resolve(true)
+                })
+            }, 200)
+        });
+    }
+
+    setDenominationRoute() {
+        return new Promise((resolve, reject) => {
+            setTimeout(()=> {
+                var packet = this.toPackets(0x3B, [0x00, 0x64, 0x00, 0x00, 0x00, 0x55, 0x53, 0x44], "SET_DENOMINATION_ROUTE")
+                var buff = new Buffer(packet)
+                this.port.write(buff, ()=> {
                     this.port.drain()
                     resolve(true)
                 })
@@ -285,13 +288,13 @@ export default class eSSP extends EventEmitter {
             }
             this.keys.slaveIntKey = slaveIntKeyString
             this.keys.key2 = this.keys.slaveIntKey ^ this.keys.hostRandom % this.keys.modulusKey
-            this.finishEncryption = true
             this.keys.key = this.XpowYmodN(this.keys.slaveIntKey, this.keys.hostRandom, this.keys.modulusKey)
             console.log(this.keys)
             console.log()
 
         }
     }
+
     XpowYmodN(x, y, N) {
         var result = 1;
         var oneShift63 = 1 << 63;
@@ -302,18 +305,6 @@ export default class eSSP extends EventEmitter {
         }
         ;
         return result;
-    }
-    setDenominationRoute() {
-        return new Promise((resolve, reject) => {
-            setTimeout(()=> {
-                var packet = this.toPackets(0x3B, [0x00, 0x64, 0x00, 0x00, 0x00, 0x55, 0x53, 0x44], "SET_DENOMINATION_ROUTE")
-                var buff = new Buffer(packet)
-                this.port.write(buff, ()=> {
-                    this.port.drain()
-                    resolve(true)
-                })
-            }, 200)
-        });
     }
 
     CRC16(command) {
@@ -394,7 +385,7 @@ export default class eSSP extends EventEmitter {
                 return item.toString(16).toUpperCase()
             })), "|", commandName, "|", "raw")
 
-            var key = parse(Array.prototype.slice.call(this.keys.fixedKey, 0), 8).concat(this.parseHexString(this.keys.key.toString(16), 8))
+            var key = parse(Array.prototype.slice.call(this.keys.fixedKey, 0).reverse(), 8).concat(this.parseHexString(this.keys.key.toString(16), 8))
 
             var aesCtr = new aesjs.ModeOfOperation.ecb(key);
             var uint8Array = aesCtr.encrypt(eCommandLine);
@@ -439,18 +430,18 @@ export default class eSSP extends EventEmitter {
                 return item.toString(16).toUpperCase()
             })), "|", chalk.magenta(data), this.currentCommand)
             console.log("")
-            if(data[0]){
+            if (data[0]) {
 
             }
             if (this.currentCommand == "REQUEST_KEY_EXCHANGE") {
-                if(data[0] == 240) this.createHostEncryptionKeys(data)
+                if (data[0] == 240) this.createHostEncryptionKeys(data)
             } else if (this.currentCommand == "SETUP_REQUEST") {
-                if(data[0] == 240){
+                if (data[0] == 240) {
                     let currency = hex2ascii(data[6].toString(16) + data[7].toString(16) + data[8].toString(16))
                     let firmwareversion = data[11]
                     let channels = data[12]
                     let denominations = []
-                    for (let i = 0; i < channels*1; i++) {
+                    for (let i = 0; i < channels * 1; i++) {
                         let denomination = data[13 + i]
                         denominations.push(denomination)
                     }

@@ -75,11 +75,8 @@ var eSSP = function (_EventEmitter) {
         _this.commands = null;
         _this.count = 0;
         _this.sequence = 0x80;
-        _this.finishEncryption = false;
-        _this.negotiateKeys = false;
-        _this.set_generator = false;
-        _this.set_modulus = false;
-        _this.request_key_exchange = false, _this.currentCommand = "", _this.keys = {
+        _this.currentCommand = "";
+        _this.keys = {
             generatorKey: null,
             modulusKey: null,
             hostRandom: null,
@@ -156,28 +153,26 @@ var eSSP = function (_EventEmitter) {
 
                                 this.keys.generatorKey = keyPair.privateKey.p;
                                 this.keys.modulusKey = keyPair.privateKey.q;
-                                console.log(keyPair.privateKey.p > keyPair.privateKey.q);
                                 this.keys.hostRandom = getRandomInt(1, 5);
                                 this.keys.hostIntKey = this.keys.generatorKey ^ this.keys.hostRandom % this.keys.modulusKey;
-                                this.negotiateKeys = true;
 
-                                _context.next = 10;
+                                _context.next = 8;
                                 return this.sendGenerator();
 
-                            case 10:
+                            case 8:
                                 data = _context.sent;
-                                _context.next = 13;
+                                _context.next = 11;
                                 return this.sendModulus();
 
-                            case 13:
+                            case 11:
                                 data = _context.sent;
-                                _context.next = 16;
+                                _context.next = 14;
                                 return this.sendRequestKeyExchange();
 
-                            case 16:
+                            case 14:
                                 data = _context.sent;
 
-                            case 17:
+                            case 15:
                             case 'end':
                                 return _context.stop();
                         }
@@ -360,7 +355,6 @@ var eSSP = function (_EventEmitter) {
                     var packet = _this10.toPackets(0x4A, generatorArray, "SET_GENERATOR");
                     var buff = new Buffer(packet);
                     _this10.port.write(buff, function () {
-                        _this10.set_generator = true;
                         _this10.port.drain();
                         resolve(true);
                     });
@@ -378,7 +372,6 @@ var eSSP = function (_EventEmitter) {
                     var packet = _this11.toPackets(0x4B, modulusArray, "SET_MODULUS");
                     var buff = new Buffer(packet);
                     _this11.port.write(buff, function () {
-                        _this11.set_modulus = true;
                         _this11.port.drain();
                         resolve(true);
                     });
@@ -396,8 +389,23 @@ var eSSP = function (_EventEmitter) {
                     var packet = _this12.toPackets(0x4C, hostIntArray, "REQUEST_KEY_EXCHANGE");
                     var buff = new Buffer(packet);
                     _this12.port.write(buff, function () {
-                        _this12.request_key_exchange = true;
                         _this12.port.drain();
+                        resolve(true);
+                    });
+                }, 200);
+            });
+        }
+    }, {
+        key: 'setDenominationRoute',
+        value: function setDenominationRoute() {
+            var _this13 = this;
+
+            return new Promise(function (resolve, reject) {
+                setTimeout(function () {
+                    var packet = _this13.toPackets(0x3B, [0x00, 0x64, 0x00, 0x00, 0x00, 0x55, 0x53, 0x44], "SET_DENOMINATION_ROUTE");
+                    var buff = new Buffer(packet);
+                    _this13.port.write(buff, function () {
+                        _this13.port.drain();
                         resolve(true);
                     });
                 }, 200);
@@ -422,7 +430,6 @@ var eSSP = function (_EventEmitter) {
                 }
                 this.keys.slaveIntKey = slaveIntKeyString;
                 this.keys.key2 = this.keys.slaveIntKey ^ this.keys.hostRandom % this.keys.modulusKey;
-                this.finishEncryption = true;
                 this.keys.key = this.XpowYmodN(this.keys.slaveIntKey, this.keys.hostRandom, this.keys.modulusKey);
                 console.log(this.keys);
                 console.log();
@@ -439,22 +446,6 @@ var eSSP = function (_EventEmitter) {
             }
             ;
             return result;
-        }
-    }, {
-        key: 'setDenominationRoute',
-        value: function setDenominationRoute() {
-            var _this13 = this;
-
-            return new Promise(function (resolve, reject) {
-                setTimeout(function () {
-                    var packet = _this13.toPackets(0x3B, [0x00, 0x64, 0x00, 0x00, 0x00, 0x55, 0x53, 0x44], "SET_DENOMINATION_ROUTE");
-                    var buff = new Buffer(packet);
-                    _this13.port.write(buff, function () {
-                        _this13.port.drain();
-                        resolve(true);
-                    });
-                }, 200);
-            });
         }
     }, {
         key: 'CRC16',
@@ -541,7 +532,7 @@ var eSSP = function (_EventEmitter) {
                     return item.toString(16).toUpperCase();
                 })), "|", commandName, "|", "raw");
 
-                var key = parse(Array.prototype.slice.call(this.keys.fixedKey, 0), 8).concat(this.parseHexString(this.keys.key.toString(16), 8));
+                var key = parse(Array.prototype.slice.call(this.keys.fixedKey, 0).reverse(), 8).concat(this.parseHexString(this.keys.key.toString(16), 8));
 
                 var aesCtr = new _aesJs2.default.ModeOfOperation.ecb(key);
                 var uint8Array = aesCtr.encrypt(eCommandLine);
