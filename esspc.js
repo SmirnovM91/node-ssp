@@ -76,6 +76,7 @@ var eSSP = function (_EventEmitter) {
         _this.count = 0;
         _this.sequence = 0x80;
         _this.currentCommand = "";
+        _this.held = false;
         _this.keys = {
             generatorKey: null,
             modulusKey: null,
@@ -199,6 +200,18 @@ var eSSP = function (_EventEmitter) {
             return a;
         }
     }, {
+        key: 'parseKeyString',
+        value: function parseKeyString(str, count) {
+            var a = [];
+            for (var i = 0; i < str.length; i += 2) {
+                a.push(parseInt(str.substr(i, 2), 16));
+            }
+            for (var i = a.length; i < count; i++) {
+                a.push(0);
+            }
+            return a;
+        }
+    }, {
         key: 'parseCountString',
         value: function parseCountString(str, count) {
             var a = [];
@@ -244,7 +257,7 @@ var eSSP = function (_EventEmitter) {
                                         var buff = new Buffer(packet);
                                         _this4.port.write(buff, function () {
                                             _this4.port.drain();
-                                            polling();
+                                            if (!_this4.held) polling();
                                         });
                                     }, 1000);
 
@@ -285,6 +298,7 @@ var eSSP = function (_EventEmitter) {
             var _this6 = this;
 
             return new Promise(function (resolve, reject) {
+                _this6.held = true;
                 setTimeout(function () {
                     var packet = _this6.toPackets(0x18, [], "HOLD");
                     var buff = new Buffer(packet);
@@ -532,8 +546,9 @@ var eSSP = function (_EventEmitter) {
                     return item.toString(16).toUpperCase();
                 })), "|", commandName, "|", "raw");
 
-                var key = parse(Array.prototype.slice.call(this.keys.fixedKey, 0).reverse(), 8).concat(this.parseHexString(this.keys.key.toString(16), 8));
+                var key = parse(Array.prototype.slice.call(this.keys.fixedKey, 0), 8).concat(this.parseKeyString(this.keys.key.toString(16), 8));
 
+                console.log(key);
                 var aesCtr = new _aesJs2.default.ModeOfOperation.ecb(key);
                 var uint8Array = aesCtr.encrypt(eCommandLine);
                 var eDATA = [].slice.call(uint8Array);
