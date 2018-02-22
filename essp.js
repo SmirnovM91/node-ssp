@@ -111,7 +111,7 @@ export default class eSSP extends EventEmitter {
             a.push(parseInt(str.substr(i - 2, 2), 16));
         }
         for (var i = a.length; i < count; i++) {
-            a.unshift(0)
+            a.push(0)
         }
         return a;
     }
