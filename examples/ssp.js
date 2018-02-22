@@ -19,10 +19,11 @@ ssp.init(function () {
     ssp.on('ready', function () {
         console.log('Device is ready')
         ssp.enable()
+        ssp.commands.exec('hold')
+
     })
     ssp.on('read_note', function (note) {
         if (note > 0) {
-            ssp.commands.exec('hold')
             console.log('GOT', notes[note])
         }
     })
