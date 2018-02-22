@@ -107,8 +107,8 @@ export default class eSSP extends EventEmitter {
 
     parseKeyString(str, count) {
         var a = [];
-        for (var i = str.length; i > 0; i -= 2) {
-            a.push(parseInt(str.substr(i - 2, 2), 16));
+        for (var i = 0; i < str.length; i += 2) {
+            a.push(parseInt(str.substr(i, i+2), 16));
         }
         for (var i = a.length; i < count; i++) {
             a.unshift(0)
