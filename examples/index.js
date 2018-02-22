@@ -1,5 +1,4 @@
 "use strict";
-var ssp = require('../');
 import essp from '../essp';
 var notes = {
     1: "1USD",
