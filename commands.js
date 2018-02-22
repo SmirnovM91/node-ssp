@@ -1,17 +1,10 @@
 "use strict";
-var aesjs = require("aes-js")
+
 var Class = require('./class');
 
 var Commands = Class.extend({
     command_list: null,
     exec_stack: [],
-    keys: null,
-    count: 0,
-    setKeys: function (keys) {
-        var self = this;
-        self.keys = keys
-        console.log(keys)
-    },
     initialize: function (socket, type, ID, sequence) {
         var self = this;
         this.exec_stack = [];
@@ -31,31 +24,31 @@ var Commands = Class.extend({
         this.sequence = this.sequenceNumber = sequence || 0x80;
     },
     getSequence: function () {
-        var seq = this.ID | (this.sequence = (this.sequence === this.sequenceNumber ? 0x00 : this.sequenceNumber));
-        return seq
+        return this.ID | (this.sequence = (this.sequence === this.sequenceNumber ? 0x00 : this.sequenceNumber));
     },
-
     CRC16: function (command) {
         var length = command.length,
             seed = 0xFFFF,
             poly = 0x8005,
             crc = seed;
 
+
         for (var i = 0; i < length; i++) {
             crc ^= (command[i] << 8);
+
             for (var j = 0; j < 8; j++) {
+
                 if (crc & 0x8000) {
                     crc = ((crc << 1) & 0xffff) ^ poly;
                 } else {
                     crc <<= 1;
                 }
+
             }
         }
         return [(crc & 0xFF), ((crc >> 8) & 0xFF)];
     },
-
     stack: function (commandName) {
-        var self = this;
         var command,
             commandLine,
             args = Array.prototype.slice.call(arguments, 1);
@@ -63,7 +56,6 @@ var Commands = Class.extend({
             throw new Error("Unknown command '" + commandName + "'");
         }
         if (commandName instanceof Array) {
-            console.log("commandName", commandName)
             for (var i in commandName) {
                 this.stack(commandName[i]);
             }
@@ -74,116 +66,34 @@ var Commands = Class.extend({
             } else {
                 command = this.command_list[commandName];
             }
-            var STX = 0x7F
-            var LENGTH = args.length + 1
-            var SEQ_SLAVE_ID = this.getSequence()
-            var DATA = [command].concat(args)
-
-            commandLine = [SEQ_SLAVE_ID, LENGTH].concat(DATA);
-            var crc = this.CRC16(commandLine);
-
-            commandLine = [STX].concat(commandLine, crc);
-            var hex = commandLine.map(function (item) {
-                return item.toString(16).toUpperCase()
-            })
-            console.log("COM1 => ", hex, "| UNENCRYPTED |", arguments[0])
-
-            if (self.keys != null) {
-                var STEX = 0x7E
-                var eLENGTH = DATA.length;
-                self.count++
-                var eCOUNT = this.parseHexString(this.count.toString(16), 4)
-                var eDATA = DATA
-                var ePACKING = 0x00
-                var eCommandLine = [eLENGTH].concat(eCOUNT, eDATA, ePACKING)
-                var eCRC = this.CRC16(eCommandLine);
-                eCommandLine = eCommandLine.concat(eCRC)
-
-                var parse = function (a, count) {
-                    for (var i = a.length; i < count; i++) {
-                        a.push(0)
-                    }
-                    return a;
-                }
-                var key = parse(Array.prototype.slice.call(self.keys.fixedKey, 0).reverse(), 8).concat(this.parseHexString(self.keys.key, 8))
-
-                var aesCtr = new aesjs.ModeOfOperation.ctr(key);
-                var uint8Array = aesCtr.encrypt(eCommandLine);
-                eCommandLine = [STEX].concat([].slice.call(uint8Array))
-                DATA = eCommandLine
-                LENGTH = DATA.length
-            }
-
-            commandLine = [SEQ_SLAVE_ID, LENGTH].concat(DATA);
-            crc = this.CRC16(commandLine);
-            commandLine = [STX].concat(commandLine, crc);
-
-            if (self.keys != null) {
-                var hex = commandLine.map(function (item) {
-                    return item.toString(16).toUpperCase()
-                })
-                console.log("COM1 =>", hex, "| ENCRYPTED |", arguments[0])
-            }
+            commandLine = [this.getSequence(), args.length + 1, command].concat(args);
+            commandLine = [0x7F].concat(commandLine, this.CRC16(commandLine));
             this.exec_stack.push(commandLine);
         }
         return this;
     },
     exec: function (command, cb) {
         var typeCmd = typeof command;
-        if ("function" === typeCmd) {
-            console.log("command function", command)
+        if("function" === typeCmd) {
             cb = command;
             command = null;
-        } else if ("string" === typeCmd) {
-            console.log("command String", command)
+        } else if("string" === typeCmd) {
             this.stack(command);
-        } else if (command instanceof Array) {
-            console.log("command array", command)
+        } else if(command instanceof Array) {
             this.exec_stack.push(command);
         }
         if (this.exec_stack.length === 0) {
             cb && cb();
         } else {
             var buf = new Buffer(this.exec_stack.shift()), self = this;
-            console.log("exec", buf)
             this.client.write(buf, function () {
                 self.client.drain(function () {
-                    setTimeout(function () {
+                    setTimeout(function() {
                         self.exec(cb);
                     }, 100);
                 });
             });
         }
-    },
-    byteToHexString: function (uint8arr) {
-
-        var hexStr = '';
-        for (var i = 0; i < uint8arr.length; i++) {
-            var hex = (uint8arr[i] & 0xff).toString(16);
-            hex = (hex.length === 1) ? '0' + hex : hex;
-            hexStr += hex;
-        }
-        return hexStr.toUpperCase();
-    },
-    parseHexString: function (str, count) {
-        var a = [];
-        for (var i = str.length; i > 0; i -= 2) {
-            a.push(parseInt(str.substr(i - 2, 2), 16));
-        }
-        for (var i = a.length; i < count; i++) {
-            a.push(0)
-        }
-        return a;
-    },
-    parseHexStringReverse: function (str, count) {
-        var a = [];
-        for (var i = str.length; i > 0; i -= 2) {
-            a.push(parseInt(str.substr(i - 2, 2), 16));
-        }
-        for (var i = a.length; i < count; i++) {
-            a.push(0)
-        }
-        return a;
     }
 });
 
