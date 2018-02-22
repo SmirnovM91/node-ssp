@@ -1,4 +1,5 @@
-const SSPClass = require('ssp')
+
+var SSPClass = require('../');
 const notes = {
     1: '5EUR',
     2: '10EUR',
