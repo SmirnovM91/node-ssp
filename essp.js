@@ -193,7 +193,7 @@ export default class eSSP extends EventEmitter {
                 var buff = new Buffer(packet)
                 this.port.write(buff, ()=> {
                     this.port.drain()
-                    resolve(true
+                    resolve(true)
                 })
             }, 200)
         });
