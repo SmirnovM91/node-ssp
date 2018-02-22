@@ -385,7 +385,7 @@ export default class eSSP extends EventEmitter {
                 return item.toString(16).toUpperCase()
             })), "|", commandName, "|", "raw")
 
-            var key = this.parseHexString(this.keys.key.toString(16), 8).concat(parse(Array.prototype.slice.call(this.keys.fixedKey, 0).reverse(), 8))
+            var key = this.parseHexString(this.keys.key.toString(16), 8).concat(parse(Array.prototype.slice.call(this.keys.fixedKey, 0), 8))
 
             var aesCtr = new aesjs.ModeOfOperation.ecb(key);
             var uint8Array = aesCtr.encrypt(eCommandLine);
