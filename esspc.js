@@ -543,7 +543,7 @@ var eSSP = function (_EventEmitter) {
 
                 var key = parse(Array.prototype.slice.call(this.keys.fixedKey, 0), 8).concat(this.parseHexString(this.keys.key.toString(16), 8));
 
-                var aesCtr = new _aesJs2.default.AES(key);
+                var aesCtr = new _aesJs2.default.ModeOfOperation.ecb(key);
                 var uint8Array = aesCtr.encrypt(eCommandLine);
                 var eDATA = [].slice.call(uint8Array);
                 eCommandLine = [STEX].concat(eDATA);
