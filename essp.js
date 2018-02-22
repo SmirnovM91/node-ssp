@@ -174,13 +174,13 @@ export default class eSSP extends EventEmitter {
 
     hold() {
         return new Promise((resolve, reject) => {
+            this.held = true
             setTimeout(()=> {
                 var packet = this.toPackets(0x18, [], "HOLD")
                 var buff = new Buffer(packet)
                 this.port.write(buff, ()=> {
                     this.port.drain()
                     resolve(true)
-                    this.held = true
                 })
             }, 200)
         });
