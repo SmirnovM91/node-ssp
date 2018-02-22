@@ -21,6 +21,7 @@ export default class eSSP extends EventEmitter {
         this.count = 0
         this.sequence = 0x80;
         this.currentCommand = ""
+        this.held = false
         this.keys = {
             generatorKey: null,
             modulusKey: null,
@@ -149,7 +150,7 @@ export default class eSSP extends EventEmitter {
                 var buff = new Buffer(packet)
                 this.port.write(buff, ()=> {
                     this.port.drain()
-                    polling()
+                    if(!this.held) polling()
                 })
             }, 1000)
         }
@@ -179,6 +180,7 @@ export default class eSSP extends EventEmitter {
                 this.port.write(buff, ()=> {
                     this.port.drain()
                     resolve(true)
+                    this.held = true
                 })
             }, 200)
         });
@@ -191,7 +193,7 @@ export default class eSSP extends EventEmitter {
                 var buff = new Buffer(packet)
                 this.port.write(buff, ()=> {
                     this.port.drain()
-                    resolve(true)
+                    resolve(true
                 })
             }, 200)
         });
