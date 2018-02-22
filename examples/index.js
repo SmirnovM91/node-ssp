@@ -62,7 +62,7 @@ esspInstance.on("setup_request", function (data) {
 
 setTimeout(async()=> {
     await esspInstance.sync()
-    await esspInstance.initiateKeys()
+    // await esspInstance.initiateKeys()
 
     await esspInstance.enable()
     await esspInstance.setup_request()
