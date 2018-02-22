@@ -9,7 +9,7 @@
   "scripts": {
     "test": "node ./test/index.js",
     "example": "babel-node --presets es2015 ./examples/index.js",
-    "dist": "babel ./essp.js -d dist --presets es2015,stage-2"
+    "dist": "babel ./essp.js --out-file ./esspc.js --presets es2015,stage-2"
   },
   "repository": {
     "type": "git",
@@ -33,6 +33,7 @@
   "homepage": "https://github.com/soulman-is-good/node-ssp",
   "dependencies": {
     "aes-js": "^3.1.0",
+    "babel-polyfill": "^6.26.0",
     "big-integer": "^1.6.26",
     "bit-converter": "^1.0.0",
     "chalk": "^2.3.1",
