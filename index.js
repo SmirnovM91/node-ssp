@@ -1,6 +1,5 @@
 'use strict';
 var SerialPort = require('serialport'),
-	Delimiter = require('@serialport/parser-delimiter'),
 	fs = require('fs'),
 	EventEmitter = require('events').EventEmitter,
 	Commands = require('./commands'),
