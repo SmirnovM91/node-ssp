@@ -1,6 +1,6 @@
 {
-  "name": "ssp",
-  "version": "0.1.5",
+  "name": "beton-ssp",
+  "version": "30.0.0",
   "description": "Smiley Secure Protocol, node.js implementation",
   "main": "index.js",
   "directories": {
