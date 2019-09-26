@@ -96,14 +96,14 @@ var eSSP = function (_EventEmitter) {
 
             var options = this.options = {
                 device: opts.device || null,
-                baudrate: opts.baudrate || 9600,
-                databits: opts.databits || 8,
-                stopbits: opts.stopbits || 2,
+                baudRate: opts.baudRate || 9600,
+                dataBits: opts.dataBits || 8,
+                stopBits: opts.stopBits || 2,
                 parity: opts.parity && ['even', 'mark', 'odd', 'space'].indexOf(opts.parity.toString().toLowerCase()) > -1 ? opts.parity : 'none',
                 currencies: opts.currencies || [1, 0, 1],
                 type: opts.type || "nv10usb",
                 sspID: opts.sspID || 0,
-                seqence: opts.sequence || 0x80
+                sequence: opts.sequence || 0x80
             };
             if (_fs2.default.readdirSync(__dirname + '/commands').map(function (item) {
                 return item.replace(/\..+$/, '');
@@ -111,10 +111,10 @@ var eSSP = function (_EventEmitter) {
                 throw new Error("Unknown device type '" + options.type + "'");
             }
 
-            var port = new _serialport2.default.SerialPort(options.device, {
-                baudrate: options.baudrate,
-                databits: options.databits,
-                stopbits: options.stopbits,
+            var port = new _serialport2.default(options.device, {
+                baudRate: options.baudRate || 9600,
+                dataBits: options.dataBits || 8,
+                stopBits: options.stopBits || 2,
                 parity: options.parity,
                 parser: _serialport2.default.parsers.raw
             }, false);

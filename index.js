@@ -1,5 +1,5 @@
 "use strict";
-var serialport = require('serialport'),
+var SerialPort = require('serialport'),
     fs = require('fs'),
     EventEmitter = require('events').EventEmitter,
     Commands = require('./commands'),
@@ -13,9 +13,9 @@ var SSPInstance = Class.extend({
         var self = this;
         var options = this.options = {
             device: opts.device || null,
-            baudrate: opts.baudrate || 9600,
-            databits: opts.databits || 8,
-            stopbits: opts.stopbits || 2,
+            baudRate: opts.baudRate || 9600,
+            dataBits: opts.dataBits || 8,
+            stopBits: opts.stopBits || 2,
             parity: opts.parity && ['even', 'mark', 'odd', 'space'].indexOf(opts.parity.toString().toLowerCase()) > -1 ? opts.parity : 'none',
             currencies: opts.currencies || [1, 0, 1],
             type: opts.type || "nv10usb",
@@ -65,12 +65,12 @@ var SSPInstance = Class.extend({
             enableOnInit = false;
         }
         cb = cb || function(){};
-        if (this.port && this.port.isOpen()) {
+        if (this.port && this.port.isOpen) {
             this.port.close(function () {
                 initializeDevice();
             });
         } else if(!options.device) {
-            serialport.list(function(err, ports) {
+            SerialPort.list(function(err, ports) {
                 if(err || ports.length === 0) {
                     cb(err || new Error("No devices found"));
                 } else {
@@ -91,12 +91,12 @@ var SSPInstance = Class.extend({
             initializeDevice();
         }
         function initializeDevice () {
-            port = new serialport.SerialPort(options.device, {
-                baudrate: options.baudrate,
-                databits: options.databits,
-                stopbits: options.stopbits,
+            port = new SerialPort(options.device, {
+                baudRate: options.baudRate || 9600,
+                dataBits: options.dataBits || 8,
+                stopBits: options.stopBits || 2,
                 parity: options.parity,
-                parser: serialport.parsers.raw
+                parser: SerialPort.parsers.raw
             }, false);
             self.port = port;
             commands = self.commands = new Commands(port, options.type, options.sspID, options.sequence);

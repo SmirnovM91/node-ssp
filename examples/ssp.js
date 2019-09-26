@@ -11,7 +11,7 @@ const notes = {
 }
 
 const ssp = new SSPClass({
-    device: 'COM1', // device address
+    device: '/dev/tty6 ', // device address
     type: 'nv9usb', // device type
     currencies: [1, 1, 1, 1, 1, 1, 1], // currencies types acceptable. Here all but 100USD
 })
