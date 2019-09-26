@@ -1,5 +1,5 @@
 
-var SSPClass = require('../');
+var SSPInstance = require('../');
 const notes = {
     1: '5EUR',
     2: '10EUR',
@@ -10,8 +10,8 @@ const notes = {
     7: '500EUR',
 }
 
-const ssp = new SSPClass({
-    device: '/dev/tty6 ', // device address
+const ssp = new SSPInstance({
+    device: '/dev/ttyS0 ', // device address
     type: 'nv9usb', // device type
     currencies: [1, 1, 1, 1, 1, 1, 1], // currencies types acceptable. Here all but 100USD
 })
