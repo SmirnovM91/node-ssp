@@ -44,7 +44,7 @@
     "hex2ascii": "0.0.3",
     "moment": "^2.20.1",
     "node-forge": "^0.7.1",
-    "serialport": "^3.0.0"
+    "serialport": "^7.1.5"
   },
   "devDependencies": {
     "babel": "^6.23.0",
